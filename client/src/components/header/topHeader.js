@@ -1,16 +1,17 @@
-import React, { useState } from "react";
-import { Badge, Button, Avatar, Dropdown, Menu, Row, Col } from "antd";
+import React from "react";
+import { Badge, Avatar, Dropdown, Menu, Row, Col } from "antd";
+import { Link } from 'react-router-dom';
 import searchIcon from "./img/cart.svg";
 
-const TopHeader = () => {
+const TopHeader = ({ openLogin, openRegister }) => {
   const menu = (
     <Menu className="menu-account">
       <Menu.Item key="0">
-        <a href="/account">Account setting</a>
+        <Link to='/account'>Account setting</Link>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="1">
-        <a href="/logout">Logout</a>
+        <Link to='/logout'>Logout</Link>
       </Menu.Item>
     </Menu>
   );
@@ -27,7 +28,7 @@ const TopHeader = () => {
             </Col>
             <Col span={18}>
               <div className='product-detail'>
-                <a href='' className='title'>New Balance Men's Street Backpack</a>
+                <Link to='/product' className='title'>New Balance Men's Street Backpack</Link>
 
                 <div className='description'>
                   <div className='price'>$485</div>
@@ -38,7 +39,7 @@ const TopHeader = () => {
           </Row>
         </div>
       </Menu.Item>
-      <button className='reset-button cart-button'>View cart</button>
+      <Link to='/cart' className='reset-button cart-button'>View cart</Link>
     </Menu>
   )
 
@@ -51,9 +52,9 @@ const TopHeader = () => {
         </button>
       </form>
 
-      <a href="/">
+      <Link to='/'>
         <img src="/imgs/logo.svg" className="Logo" />
-      </a>
+      </Link>
 
       <div className="widgets">
         <Dropdown overlay={menu} trigger={["click"]} placement="bottomRight">
@@ -63,8 +64,8 @@ const TopHeader = () => {
         </Dropdown>
 
         {/* <Link to="/register">Register</Link> */}
-        <a href="/register">Register</a>
-        <a href="/login" className="round-button">
+        <a onClick={(e) => { e.preventDefault(); openRegister() }} href="/register">Register</a>
+        <a onClick={(e) => { e.preventDefault(); openLogin() }} href="/login" className="round-button">
           Log In
         </a>
 

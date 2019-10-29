@@ -1,20 +1,21 @@
 import React from 'react';
 import { Dropdown, Icon, Menu } from 'antd';
+import { Link } from 'react-router-dom';
 
 const NavBar = () => {
   const menu = (
     <ul className='sub-menu'>
       <li className='item'>
-        <a href='#'>Tops</a>
+        <Link to='/categories/id'>Tops</Link>
       </li>
       <li className='item'>
-        <a href='#'>Bottoms</a>
+        <Link to='/categories/id'>Tops</Link>
       </li>
       <li className='item'>
-        <a href='#'>Dresses</a>
+        <Link to='/categories/id'>Tops</Link>
       </li>
       <li className='item'>
-        <a href='#'>Jackets</a>
+        <Link to='/categories/id'>Tops</Link>
       </li>
     </ul>
   )

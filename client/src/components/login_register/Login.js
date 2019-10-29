@@ -1,8 +1,8 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Button } from 'antd';
 import './index.scss'
 
-const Register = ({ form, isOpen, close }) => {
+const Login = ({ form, isOpen, close }) => {
   const { getFieldDecorator } = form;
 
   if (isOpen) {
@@ -12,21 +12,7 @@ const Register = ({ form, isOpen, close }) => {
           <button onClick={close} className='reset-button exit-button'><img src='/imgs/cross.svg' /></button>
 
           <Form className='form'>
-            <h2 className='form-title'>Register</h2>
-            <Form.Item label="Name" colon={false} className='form-item'>
-              {getFieldDecorator('name', {
-                rules: [
-                  {
-                    validator: function (rule, value, cb) {
-                      if (value.includes(' ')) {
-                        return cb('Please enter a valid name!')
-                      }
-                      cb();
-                    }
-                  }
-                ]
-              })(<input className='input-field' type='text' placeholder='Enter your name...' />)}
-            </Form.Item>
+            <h2 className='form-title'>Log In</h2>
             <Form.Item label="Email" colon={false} className='form-item'>
               {getFieldDecorator('email', {
                 rules: [
@@ -53,14 +39,10 @@ const Register = ({ form, isOpen, close }) => {
               })(<input className='input-field' type='password' placeholder='Enter your password...' />)}
             </Form.Item>
 
-            <div className='text'>
-              By creating an account you agree to the <a href='#' className='highlight'>Terms of Service</a> and <a href='#' className='highlight'>Privacy Policy</a>
-            </div>
-
             <Button size='large' className='button-submit'>Register</Button>
 
             <div className='bottom-form'>
-              <div className='text'>Do you have an account? <a className='highlight' href='#'>Log In</a></div>
+              <div className='text'>Don't have an account? <a className='highlight' href='#'>Register</a></div>
             </div>
           </Form>
         </div>
@@ -70,6 +52,6 @@ const Register = ({ form, isOpen, close }) => {
   return <></>
 };
 
-const WrappedRegister = Form.create('form_Register')(Register);
+const WrappedLogin = Form.create('form_Login')(Login);
 
-export default WrappedRegister;
+export default WrappedLogin;
