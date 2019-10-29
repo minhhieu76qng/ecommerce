@@ -35,6 +35,30 @@
       right: 10px;
     }
     .form {
+      .extra-login {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+
+        .ant-checkbox-checked .ant-checkbox-inner {
+          background-color: var(--pale-orange);
+          border-color: var(--pale-orange);
+        }
+
+        .forgot-password {
+          a {
+            color: var(--greyish-brown);
+            font-weight: 600;
+          }
+        }
+      }
+      .message-error {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--strawberry);
+        text-align: center;
+      }
+
       .form-title {
         margin-top: 47px;
         text-align: center;
@@ -96,6 +120,10 @@
         border-radius: 0;
         font-weight: 700;
         font-size: 16px;
+      }
+
+      .button-submit.disable {
+        background-color: var(--white-four);
       }
 
       .bottom-form {

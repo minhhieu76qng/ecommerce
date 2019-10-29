@@ -1,57 +1,82 @@
-import React from 'react';
-import { Form, Button } from 'antd';
-import './index.scss'
+import React, { useState } from "react";
+import { Form, Button, Checkbox } from "antd";
+import "./index.scss";
 
-const Login = ({ form, isOpen, close }) => {
+const Login = ({ form, isOpen, close, openForgotPw, openRegister }) => {
   const { getFieldDecorator } = form;
 
   if (isOpen) {
     return (
-      <div className='form_wrapper'>
-        <div className='wrapper'>
-          <button onClick={close} className='reset-button exit-button'><img src='/imgs/cross.svg' /></button>
+      <div className="form_wrapper">
+        <div className="wrapper">
+          <button onClick={close} className="reset-button exit-button">
+            <img src="/imgs/cross.svg" />
+          </button>
 
-          <Form className='form'>
-            <h2 className='form-title'>Log In</h2>
-            <Form.Item label="Email" colon={false} className='form-item'>
-              {getFieldDecorator('email', {
-                rules: [
-                  {
-                    validator: function (rule, value, cb) {
-                      const pattern = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
-                      if (!pattern.test(value)) {
-                        return cb('Please enter a valid e-mail!')
-                      }
-                      cb();
-                    }
-                  }
-                ]
-              })(<input className='input-field' type='text' placeholder='Enter your email...' />)}
+          <Form className="form">
+            <h2 className="form-title">Log In</h2>
+            <p className="message-error">error</p>
+            <Form.Item label="Email" colon={false} className="form-item">
+              {getFieldDecorator("email", {})(
+                <input
+                  className="input-field"
+                  type="text"
+                  placeholder="Enter your email..."
+                />
+              )}
             </Form.Item>
-            <Form.Item label="Password" colon={false} className='form-item'>
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    min: 6,
-                    message: 'Your passwords must be more than 6 characters!'
-                  }
-                ]
-              })(<input className='input-field' type='password' placeholder='Enter your password...' />)}
+            <Form.Item label="Password" colon={false} className="form-item">
+              {getFieldDecorator("password", {})(
+                <input
+                  className="input-field"
+                  type="password"
+                  placeholder="Enter your password..."
+                />
+              )}
             </Form.Item>
-
-            <Button size='large' className='button-submit'>Register</Button>
-
-            <div className='bottom-form'>
-              <div className='text'>Don't have an account? <a className='highlight' href='#'>Register</a></div>
+            <div className="extra-login">
+              <div className="remember-me">
+                <Checkbox checked={true}>Remember password</Checkbox>
+              </div>
+              <div className="forgot-password">
+                <a
+                  onClick={e => {
+                    e.preventDefault();
+                    openForgotPw();
+                  }}
+                  href=""
+                >
+                  Forgot your password?
+                </a>
+              </div>
+            </div>
+            <Button size="large" className={`button-submit`}>
+              Log In
+            </Button>
+            openRegister
+            <div className="bottom-form">
+              <div className="text">
+                Don't have an account?{" "}
+                <a
+                  onClick={e => {
+                    e.preventDefault();
+                    openRegister();
+                  }}
+                  className="highlight"
+                  href="#"
+                >
+                  Register
+                </a>
+              </div>
             </div>
           </Form>
         </div>
       </div>
     );
   }
-  return <></>
+  return <></>;
 };
 
-const WrappedLogin = Form.create('form_Login')(Login);
+const WrappedLogin = Form.create("form_Login")(Login);
 
 export default WrappedLogin;

@@ -1,24 +1,26 @@
-import { connect } from 'react-redux';
-import TopHeader from '../components/header/topHeader';
-import { openLogin, openRegister } from '../actions/loginRegisterAction';
+import { connect } from "react-redux";
+import TopHeader from "../components/header/topHeader";
+import { openLogin, openRegister } from "../actions/loginRegisterAction";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     isOpenLogin: state.loginRegister.openLogin,
     isOpenRegister: state.loginRegister.openRegister
-  }
-}
+  };
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     openLogin: () => {
-      dispatch(openLogin())
+      dispatch(openLogin());
     },
     openRegister: () => {
-      dispatch(openRegister())
-    },
-  }
-}
+      dispatch(openRegister());
+    }
+  };
+};
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(TopHeader);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TopHeader);

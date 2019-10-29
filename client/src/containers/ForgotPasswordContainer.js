@@ -1,17 +1,17 @@
 import { connect } from "react-redux";
-import Register from "../components/login_register/Register";
-import { closeRegister, openLogin } from "../actions/loginRegisterAction";
+import ForgotPassword from "../components/login_register/ForgotPassword";
+import { openLogin, closeForgotPassword } from "../actions/loginRegisterAction";
 
 const mapStateToProps = state => {
   return {
-    isOpen: state.loginRegister.openRegister
+    isOpen: state.loginRegister.openForgotPw
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     close: () => {
-      dispatch(closeRegister());
+      dispatch(closeForgotPassword());
     },
     openLogin: () => {
       dispatch(openLogin());
@@ -22,4 +22,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Register);
+)(ForgotPassword);
