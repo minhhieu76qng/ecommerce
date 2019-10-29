@@ -1,0 +1,121 @@
+.form_wrapper {
+  max-width: 555px;
+  width: 100%;
+  position: fixed;
+  // top: 110px;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+
+  &:before {
+    z-index: -10;
+    content: "";
+    position: absolute;
+    top: -99999px;
+    left: -99999px;
+    right: -99999px;
+    bottom: -99999px;
+    opacity: 0.4;
+    background-color: var(--dark-grey);
+  }
+
+  .wrapper {
+    position: relative;
+    background-color: #fff;
+    padding: 0 80px;
+    font-family: "Montserrat";
+    font-size: 14px;
+    color: var(--dark-grey);
+    overflow: hidden;
+
+    .exit-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .form {
+      .form-title {
+        margin-top: 47px;
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+      }
+      .form-item {
+        margin-bottom: 5px;
+
+        .has-error {
+          .input-field {
+            border: solid 1px var(--strawberry);
+            background-color: rgba(246, 63, 69, 0.04);
+          }
+          .ant-form-explain {
+            font-size: 10px;
+            color: var(--strawberry);
+            font-weight: 500;
+            line-height: 2.2;
+          }
+        }
+
+        .ant-form-item-label {
+          text-transform: uppercase;
+          font-size: 12px;
+          font-weight: bold;
+          color: var(--dark-grey);
+        }
+        .input-field {
+          width: 100%;
+          border: solid 1px var(--greyish-two);
+          outline: none;
+          background-color: var(--white-two);
+          padding: 0 25px;
+          color: var(--dark-grey);
+          font-weight: 500;
+        }
+      }
+
+      .text {
+        // max-width: 276px;
+        margin: 20px auto 0;
+        text-align: center;
+        font-size: 14px;
+        color: var(--dark-grey);
+        .highlight {
+          font-weight: bold;
+          color: var(--pumpkin-orange);
+          text-decoration: underline;
+        }
+      }
+
+      .button-submit {
+        margin-top: 40px;
+        width: 100%;
+        box-shadow: 0 6px 18px 0 rgba(0, 0, 0, 0.12);
+        background-color: var(--pale-orange);
+        color: #fff;
+        border-radius: 0;
+        font-weight: 700;
+        font-size: 16px;
+      }
+
+      .bottom-form {
+        position: relative;
+        margin-top: 50px;
+        padding: 20px 0;
+        &:before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -99999px;
+          right: -99999px;
+          height: 1px;
+          background-color: var(--white-three);
+        }
+
+        .text {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}

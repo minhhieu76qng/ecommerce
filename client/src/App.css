@@ -7,10 +7,18 @@
   --greyish-brown: #4d4d4d;
   --dark-grey: #202124;
   --white: #fff;
+  --white-two: #f6f6f6;
+  --strawberry: #f63f45;
+  --pumpkin-orange: #ff7413;
+  --white-three: #ededed;
 }
 
 .App {
   /* width: 100%; */
   width: 1180px;
   margin: 0 auto;
+}
+
+.wrapper-content {
+  margin: 20px 0;
 }

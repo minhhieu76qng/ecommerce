@@ -16,7 +16,7 @@ const Homepage = () => {
         </Col>
       </Row>
 
-      <Row gutter={20} style={{ marginTop: '20px', marginBottom: '20px' }}>
+      <Row gutter={20} style={{ marginTop: '20px' }}>
         <Col span={6}>
           <div className='box-img'>
             <img src='http://assets.myntassets.com/assets/images/1862801/2018/2/9/11518155061506-Roadster-Men-Maroon--Navy-Blue-Regular-Fit-Checked-Casual-Shirt-8861518155061131-1.jpg' />
@@ -48,7 +48,6 @@ const Homepage = () => {
             <button className='btn-shop'>Shop now</button>
           </div>
         </Col>
-
       </Row>
     </div>
   );
