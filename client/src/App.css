@@ -6,10 +6,11 @@
   --pale-orange: #ffa15f;
   --greyish-brown: #4d4d4d;
   --dark-grey: #202124;
+  --white: #fff;
 }
 
 .App {
   /* width: 100%; */
-  width: 1440px;
+  width: 1180px;
   margin: 0 auto;
 }
