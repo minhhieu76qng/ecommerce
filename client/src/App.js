@@ -1,10 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
+import './general.scss';
 import Home from './scenes/Home';
 import PageLayout from './layout/PageLayout';
 import AdminLayout from './layout/AdminLayout';
 import ProductList from './scenes/ProductList';
+import ProductDetail from './scenes/ProductDetail';
+import Cart from './components/cart';
 
 function App() {
   return (
@@ -13,6 +16,8 @@ function App() {
         <Switch>
           <AdminLayout path='/admin' component={() => <div>admin</div>} />
           <PageLayout path='/category/:id' component={ProductList} />
+          <PageLayout path='/product/:id' component={ProductDetail} />
+          <PageLayout exact path='/cart' component={Cart} />
           <PageLayout exact path='/' component={Home} />
         </Switch>
       </Router>

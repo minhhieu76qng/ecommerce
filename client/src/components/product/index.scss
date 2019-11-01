@@ -1,0 +1,266 @@
+.product-item {
+  display: inline-block;
+  margin-right: 20px;
+
+  .ant-card-cover {
+    height: 269px;
+
+    .wrapper-img {
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+
+      &:hover .add-cart {
+        height: 54px;
+        opacity: 1;
+      }
+
+      .add-cart {
+        position: absolute;
+        display: block;
+        opacity: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 0;
+        background-color: var(--pale-orange);
+        z-index: 100;
+        transition: all 0.3s;
+        color: #fff;
+        line-height: 54px;
+        text-align: center;
+      }
+
+      .sold-out {
+        background-color: #808080;
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+        font-weight: 700;
+        width: 60px;
+        height: 22px;
+        line-height: 22px;
+        position: absolute;
+        left: -3px;
+        bottom: 10px;
+      }
+
+      img {
+        position: relative;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .ant-card-body {
+    padding: 15px 0 10px;
+
+    .product-title {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.43;
+      color: var(--dark-grey);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .product-price {
+      font-size: 12px;
+      line-height: 1.83;
+      color: var(--greyish-brown);
+    }
+  }
+
+  &:nth-child(2n + 5) {
+    margin-right: 0;
+  }
+}
+
+.product-detail {
+  .btn {
+    border: 0;
+    border-radius: 0;
+    font-weight: 700;
+  }
+  .btn-size {
+    border: solid 1px #808080;
+    font-size: 14px;
+    color: var(--dark-grey);
+    border-radius: 0 !important;
+    background-color: #fff;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    margin-right: 15px;
+    transition: all 0.5s;
+
+    &:hover {
+      background-color: var(--pale-orange);
+      color: var(--white);
+      border: 0;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .product-thumbnail {
+    margin-bottom: 20px;
+    height: 116px;
+  }
+  .product-image {
+    height: 537px;
+  }
+
+  .product-info {
+    .product-title {
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1.33;
+      color: var(--dark-grey);
+    }
+
+    .product-price {
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.33;
+      color: var(--dark-grey);
+      margin-bottom: 5px;
+    }
+
+    .order-box {
+      .field {
+        margin-top: 20px;
+        .header {
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 1.57;
+          color: var(--dark-grey);
+          margin-bottom: 10px;
+        }
+      }
+    }
+
+    .description {
+      border-top: solid 0.5px #979797;
+      margin-top: 25px;
+      padding-top: 20px;
+      color: var(--dark-grey);
+
+      .title {
+        font-weight: 500;
+      }
+    }
+  }
+
+  .more-from {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--dark-grey);
+    .brand {
+      color: var(--greyish-brown);
+      font-weight: normal;
+    }
+    .list-products {
+      margin-top: 20px;
+
+      .product-thumbnail {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
+h5.title {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--dark-grey);
+  position: relative;
+  display: inline-block;
+
+  margin-bottom: 0;
+  padding: 0 15px;
+
+  &:before,
+  &:after {
+    content: '';
+    display: block;
+    background-color: #979797;
+    height: 1px;
+    position: absolute;
+    top: 50%;
+  }
+  &:before {
+    left: -99999px;
+    right: calc(100%);
+  }
+  &:after {
+    right: -99999px;
+    left: calc(100%);
+  }
+}
+
+.review {
+  margin-top: 30px;
+
+  .comment-item {
+    padding: 20px 0;
+
+    & + .comment-item {
+      border-top: 1px dashed #979797;
+    }
+
+    p {
+      margin-bottom: 5px;
+    }
+    .name {
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 1.57;
+      color: var(--dark-grey);
+    }
+    .date {
+      font-size: 14px;
+      line-height: 1.57;
+      color: #808080;
+    }
+
+    .wrapper {
+      padding: 20px;
+      background-color: #f9f9f9;
+
+      .title {
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 1.5;
+        color: var(--dark-grey);
+      }
+      .comment {
+        font-size: 14px;
+        line-height: 1.57;
+        letter-spacing: -0.1px;
+        color: var(--greyish-brown);
+      }
+    }
+  }
+}
+
+.also-like {
+  margin-bottom: 30px;
+  .ant-card-body {
+    padding: 10px 0;
+
+    .title {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.33;
+      color: var(--greyish-brown);
+    }
+  }
+}

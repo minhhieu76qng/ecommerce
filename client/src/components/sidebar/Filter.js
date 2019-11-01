@@ -17,23 +17,33 @@ const Filter = () => {
           <Icon type='down' rotate={isActive ? 180 : 0} />
         )}>
         <Collapse.Panel className='panel' header='Size'>
-          <div style={{ paddingTop: 10 }} >
+          <div style={{ paddingTop: 10 }}>
             <Button className='btn-size'>S</Button>
             <Button className='btn-size'>M</Button>
             <Button className='btn-size'>L</Button>
           </div>
         </Collapse.Panel>
         <Collapse.Panel className='panel' header='Color'>
-          <div >
-            <Button className='btn-color' style={{ background: '#ff5f6d' }}></Button>
-            <Button className='btn-color' style={{ background: 'rgba(255, 213, 67, 0.4)' }}></Button>
-            <Button className='btn-color' style={{ background: 'rgba(95, 109, 255, 0.4)' }}></Button>
-            <Button className='btn-color' style={{ background: 'rgba(255, 161, 95, 0.4)' }}></Button>
-            <Button className='btn-color' style={{ background: 'rgba(61, 61, 63, 0.4)' }}></Button>
+          <div>
+            <Button
+              className='btn-color'
+              style={{ background: '#ff5f6d' }}></Button>
+            <Button
+              className='btn-color'
+              style={{ background: 'rgba(255, 213, 67, 0.4)' }}></Button>
+            <Button
+              className='btn-color'
+              style={{ background: 'rgba(95, 109, 255, 0.4)' }}></Button>
+            <Button
+              className='btn-color'
+              style={{ background: 'rgba(255, 161, 95, 0.4)' }}></Button>
+            <Button
+              className='btn-color'
+              style={{ background: 'rgba(61, 61, 63, 0.4)' }}></Button>
           </div>
         </Collapse.Panel>
         <Collapse.Panel className='panel' header='Brand'>
-          <div style={{ paddingTop: 10 }} >
+          <div style={{ paddingTop: 10 }}>
             <ul className='list-filter'>
               <li>
                 <Checkbox className='checkbox'>brand</Checkbox>
@@ -51,15 +61,22 @@ const Filter = () => {
           </div>
         </Collapse.Panel>
         <Collapse.Panel className='panel' header='Price'>
-          <div style={{ padding: '10px 10px 0' }} >
-            <Slider range className='slider' marks={{
-              0: '$0',
-              300: '$300',
-            }} defaultValue={[0, 300]} min={0} max={300} />
+          <div style={{ padding: '10px 10px 0' }}>
+            <Slider
+              range
+              className='slider'
+              marks={{
+                0: '$0',
+                300: '$300',
+              }}
+              defaultValue={[0, 300]}
+              min={0}
+              max={300}
+            />
           </div>
         </Collapse.Panel>
         <Collapse.Panel className='panel' header='Available'>
-          <div style={{ paddingTop: 10 }} >
+          <div style={{ paddingTop: 10 }}>
             <ul className='list-filter'>
               <li>
                 <Checkbox className='checkbox'>In-store</Checkbox>

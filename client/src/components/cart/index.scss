@@ -1,0 +1,44 @@
+#cart {
+  .title {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.33;
+    color: var(--dark-grey);
+  }
+
+  .table-product {
+    .table-header {
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 1.57;
+      color: var(--dark-grey);
+      margin-bottom: 15px;
+    }
+
+    .list {
+      .list-item {
+        padding: 10px 0;
+        border-top: 1px solid #ccc;
+
+        .product-name {
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 1.43;
+          color: var(--dark-grey);
+        }
+        .link {
+          .btn-link {
+            color: inherit;
+            padding: 0;
+            font-size: 12px;
+            line-height: 12px;
+          }
+        }
+      }
+    }
+  }
+}
+
+img {
+  max-width: 100%;
+}
