@@ -1,14 +1,14 @@
-import { connect } from "react-redux";
-import Login from "../components/login_register/Login";
+import { connect } from 'react-redux';
+import Login from '../components/login_register/Login';
 import {
   closeLogin,
   openForgotPassword,
-  openRegister
-} from "../actions/loginRegisterAction";
+  openRegister,
+} from '../actions/loginRegisterAction';
 
 const mapStateToProps = state => {
   return {
-    isOpen: state.loginRegister.openLogin
+    isOpen: state.loginRegister.openLogin,
   };
 };
 
@@ -22,11 +22,11 @@ const mapDispatchToProps = dispatch => {
     },
     openRegister: () => {
       dispatch(openRegister());
-    }
+    },
   };
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Login);

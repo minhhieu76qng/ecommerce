@@ -1,5 +1,5 @@
-@import "~antd/dist/antd.css";
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,700&display=swap");
+@import '~antd/dist/antd.css';
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700&display=swap');
 
 :root {
   --greyish-two: #b7b7b7;
@@ -12,12 +12,15 @@
   --pumpkin-orange: #ff7413;
   --white-three: #ededed;
   --white-four: #d4d3d3;
+  --bright-orange: #ff6900;
 }
 
 .App {
   /* width: 100%; */
   width: 1180px;
   margin: 0 auto;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
 }
 
 .wrapper-content {

@@ -1,8 +1,8 @@
-import { combineReducers } from "redux";
-import loginRegister from "./loginRegister";
+import { combineReducers } from 'redux';
+import loginRegister from './loginRegister';
 
 const reducer = combineReducers({
-  loginRegister
+  loginRegister,
 });
 
 export default reducer;

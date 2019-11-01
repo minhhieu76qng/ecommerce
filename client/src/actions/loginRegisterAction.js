@@ -1,9 +1,9 @@
-export const OPEN_LOGIN = "OPEN_LOGIN";
-export const CLOSE_LOGIN = "CLOSE_LOGIN";
-export const OPEN_REGISTER = "OPEN_REGISTER";
-export const CLOSE_REGISTER = "CLOSE_REGISTER";
-export const OPEN_FORGOT_PW = "OPEN_FORGOT_PW";
-export const CLOSE_FORGOT_PW = "CLOSE_FORGOT_PW";
+export const OPEN_LOGIN = 'OPEN_LOGIN';
+export const CLOSE_LOGIN = 'CLOSE_LOGIN';
+export const OPEN_REGISTER = 'OPEN_REGISTER';
+export const CLOSE_REGISTER = 'CLOSE_REGISTER';
+export const OPEN_FORGOT_PW = 'OPEN_FORGOT_PW';
+export const CLOSE_FORGOT_PW = 'CLOSE_FORGOT_PW';
 
 export function openLogin() {
   return { type: OPEN_LOGIN };
