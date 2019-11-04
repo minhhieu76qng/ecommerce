@@ -2,6 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import Header from '../components/header';
 import Footer from '../components/footer';
+import HeaderContainer from '../containers/HeaderContainer';
 
 const PageLayout = ({ component: Component, ...rest }) => {
   return (
@@ -9,7 +10,7 @@ const PageLayout = ({ component: Component, ...rest }) => {
       {...rest}
       render={matchProps => (
         <React.Fragment>
-          <Header />
+          <HeaderContainer />
           <div className='wrapper-content'>
             <Component {...matchProps} />
           </div>

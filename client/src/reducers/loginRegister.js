@@ -5,12 +5,18 @@ import {
   OPEN_REGISTER,
   OPEN_FORGOT_PW,
   CLOSE_FORGOT_PW,
+  START_FETCHING,
+  STOP_FETCHING,
+  CLEAR_MESSAGE
 } from '../actions/loginRegisterAction';
 
 const initialState = {
   openLogin: false,
   openRegister: false,
   openForgotPw: false,
+  isFetching: false,
+  success: null,
+  errors: []
 };
 
 export default function loginRegister(state = initialState, action) {
@@ -57,6 +63,12 @@ export default function loginRegister(state = initialState, action) {
         openRegister: false,
         openForgotPw: false,
       };
+    case START_FETCHING:
+      return { ...state, isFetching: true, success: null, errors: [] }
+    case STOP_FETCHING:
+      return { ...state, isFetching: false, success: action.success, errors: action.errors }
+    case CLEAR_MESSAGE:
+      return { ...state, success: null, errors: [] }
     default:
       return state;
   }

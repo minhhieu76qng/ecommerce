@@ -4,6 +4,7 @@ import {
   closeLogin,
   openForgotPassword,
   openRegister,
+  clearMessage,
 } from '../actions/loginRegisterAction';
 
 const mapStateToProps = state => {
@@ -23,6 +24,9 @@ const mapDispatchToProps = dispatch => {
     openRegister: () => {
       dispatch(openRegister());
     },
+    clearMessage: () => {
+      dispatch(clearMessage());
+    }
   };
 };
 

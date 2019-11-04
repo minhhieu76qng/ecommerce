@@ -6,14 +6,15 @@ import RegisterContainer from '../../containers/RegisterContainer';
 import LoginContainer from '../../containers/LoginContainer';
 import ForgotPasswordContainer from '../../containers/ForgotPasswordContainer';
 
-const Header = () => {
+const Header = ({ openLogin, openRegister, openForgotPw }) => {
+  console.log(openRegister);
   return (
     <div className='header'>
       <TopHeaderContainer />
       <NavBar />
-      <RegisterContainer />
-      <LoginContainer />
-      <ForgotPasswordContainer />
+      {openRegister && <RegisterContainer />}
+      {openLogin && <LoginContainer />}
+      {openForgotPw && <ForgotPasswordContainer />}
     </div>
   );
 };

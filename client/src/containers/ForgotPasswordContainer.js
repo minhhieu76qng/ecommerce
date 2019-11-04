@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ForgotPassword from '../components/login_register/ForgotPassword';
-import { openLogin, closeForgotPassword } from '../actions/loginRegisterAction';
+import { openLogin, closeForgotPassword, clearMessage } from '../actions/loginRegisterAction';
 
 const mapStateToProps = state => {
   return {
@@ -16,6 +16,9 @@ const mapDispatchToProps = dispatch => {
     openLogin: () => {
       dispatch(openLogin());
     },
+    clearMessage: () => {
+      dispatch(clearMessage());
+    }
   };
 };
 

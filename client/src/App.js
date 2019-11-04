@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import './configs/axios';
 import './App.css';
 import './general.scss';
 import Home from './scenes/Home';

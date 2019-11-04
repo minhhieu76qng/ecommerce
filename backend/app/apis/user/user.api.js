@@ -60,7 +60,7 @@ router.post('/', async (req, res, next) => {
     }
 
     return res.status(httpCode.CREATED).json({
-      attrs: {
+      user: {
         id: result._id,
         email: result.email,
         name: result.name,
