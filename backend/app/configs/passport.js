@@ -16,7 +16,7 @@ const LS = new LocalStrategy({
     }
 
     // compare password
-    const isSame = userService.comparePassword(password, user.password);
+    const isSame = await userService.comparePassword(password, user.password);
 
     if (!isSame) {
       return done(null, false, { message: 'Incorrect password!' })

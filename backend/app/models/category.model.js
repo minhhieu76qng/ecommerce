@@ -5,13 +5,13 @@ const Schema = mongoose.Schema;
 const CategorySchema = new Schema({
   name: String,
   parent: {
-    type: mongoose.Types.ObjectId,
-    ref: 'Category'
+    type: String,
+    default: null,
   },
-  ancestor: [{
-    type: mongoose.Types.ObjectId,
-    ref: 'Category'
-  }]
+  ancestors: {
+    type: Array,
+    default: []
+  }
 })
 
 const Category = mongoose.model('Category', CategorySchema);
