@@ -1,5 +1,6 @@
 import axios from 'axios';
 import LocalStorage from '../utils/LocalStorage';
+import { extractAndSaveUser } from './accountAction';
 
 export const OPEN_LOGIN = 'OPEN_LOGIN';
 export const CLOSE_LOGIN = 'CLOSE_LOGIN';
@@ -12,6 +13,7 @@ export const STOP_FETCHING = 'STOP_FETCHING';
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
 export const LOGGED_IN = 'LOGGED_IN';
 export const SIGNED_IN = 'SIGNED_IN';
+export const LOG_OUT = 'LOG_OUT';
 
 export function openLogin() {
   return { type: OPEN_LOGIN };
@@ -47,6 +49,9 @@ export function loggedIn() {
 }
 export function signedIn() {
   return { type: SIGNED_IN };
+}
+export function logOut() {
+  return { type: LOG_OUT };
 }
 
 // middlewares
@@ -90,6 +95,7 @@ export function login(email, password) {
 
         dispatch(stopFetching(null, null));
         dispatch(loggedIn());
+        dispatch(extractAndSaveUser());
       })
       .catch(err => {
         const errors = err.response.data.errors;

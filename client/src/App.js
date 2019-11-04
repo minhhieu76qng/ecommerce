@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import './configs/axios';
 import './App.css';
@@ -10,7 +10,11 @@ import ProductList from './scenes/ProductList';
 import ProductDetail from './scenes/ProductDetail';
 import Cart from './components/cart';
 
-function App() {
+function App({ extractAndStoreUser }) {
+  useEffect(() => {
+    extractAndStoreUser();
+  }, []);
+
   return (
     <div className='App'>
       <Router>

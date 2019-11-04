@@ -2,8 +2,14 @@ import React from 'react';
 import { Badge, Avatar, Dropdown, Menu, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import searchIcon from './img/cart.svg';
+import LocalStorage from '../../utils/LocalStorage';
 
-const TopHeader = ({ openLogin, openRegister }) => {
+const TopHeader = ({ user, openLogin, openRegister, logOut }) => {
+  const handleLogOut = () => {
+    LocalStorage.removeToken();
+    logOut();
+  };
+
   const menu = (
     <Menu className='menu-account'>
       <Menu.Item key='0'>
@@ -11,7 +17,9 @@ const TopHeader = ({ openLogin, openRegister }) => {
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key='1'>
-        <Link to='/logout'>Logout</Link>
+        <Link to='/' onClick={handleLogOut}>
+          Logout
+        </Link>
       </Menu.Item>
     </Menu>
   );
@@ -63,30 +71,39 @@ const TopHeader = ({ openLogin, openRegister }) => {
       </Link>
 
       <div className='widgets'>
-        <Dropdown overlay={menu} trigger={['click']} placement='bottomRight'>
-          <a className='ant-dropdown-link' href='#'>
-            <Avatar size={35} icon='user' />
-          </a>
-        </Dropdown>
+        {user && (
+          <Dropdown overlay={menu} trigger={['click']} placement='bottomRight'>
+            <a className='ant-dropdown-link' href='#'>
+              {user && user.avatar ? (
+                <Avatar size={35} icon='home' />
+              ) : (
+                <Avatar size={35} icon='user' />
+              )}
+            </a>
+          </Dropdown>
+        )}
 
-        {/* <Link to="/register">Register</Link> */}
-        <a
-          onClick={e => {
-            e.preventDefault();
-            openRegister();
-          }}
-          href='/register'>
-          Register
-        </a>
-        <a
-          onClick={e => {
-            e.preventDefault();
-            openLogin();
-          }}
-          href='/login'
-          className='round-button'>
-          Log In
-        </a>
+        {!user && (
+          <a
+            onClick={e => {
+              e.preventDefault();
+              openRegister();
+            }}
+            href='/register'>
+            Register
+          </a>
+        )}
+        {!user && (
+          <a
+            onClick={e => {
+              e.preventDefault();
+              openLogin();
+            }}
+            href='/login'
+            className='round-button'>
+            Log In
+          </a>
+        )}
 
         <Dropdown overlay={menuCart} trigger={['click']}>
           <Badge count={3} style={{ backgroundColor: '#ffa15f' }}>

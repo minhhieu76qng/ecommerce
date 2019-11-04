@@ -24,6 +24,7 @@ function removeToken() {
 
 function getUserFromToken() {
   const token = localStorage.getItem('token');
+  if (!token) return null;
 
   const user = jwt.decode(token);
 

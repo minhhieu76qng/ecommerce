@@ -10,6 +10,7 @@ import {
   CLEAR_MESSAGE,
   LOGGED_IN,
   SIGNED_IN,
+  LOG_OUT,
 } from '../actions/loginRegisterAction';
 
 const initialState = {
@@ -84,6 +85,8 @@ export default function loginRegister(state = initialState, action) {
       return { ...state, loggedIn: true };
     case SIGNED_IN:
       return { ...state, signedIn: true };
+    case LOG_OUT:
+      return { ...initialState };
     default:
       return state;
   }
