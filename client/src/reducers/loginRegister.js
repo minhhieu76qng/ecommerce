@@ -7,7 +7,9 @@ import {
   CLOSE_FORGOT_PW,
   START_FETCHING,
   STOP_FETCHING,
-  CLEAR_MESSAGE
+  CLEAR_MESSAGE,
+  LOGGED_IN,
+  SIGNED_IN,
 } from '../actions/loginRegisterAction';
 
 const initialState = {
@@ -16,7 +18,9 @@ const initialState = {
   openForgotPw: false,
   isFetching: false,
   success: null,
-  errors: []
+  errors: [],
+  loggedIn: false,
+  signedIn: false,
 };
 
 export default function loginRegister(state = initialState, action) {
@@ -27,6 +31,7 @@ export default function loginRegister(state = initialState, action) {
         openLogin: true,
         openRegister: false,
         openForgotPw: false,
+        loggedIn: false,
       };
     case CLOSE_LOGIN:
       return {
@@ -41,6 +46,7 @@ export default function loginRegister(state = initialState, action) {
         openLogin: false,
         openRegister: true,
         openForgotPw: false,
+        signedIn: false,
       };
     case CLOSE_REGISTER:
       return {
@@ -64,11 +70,20 @@ export default function loginRegister(state = initialState, action) {
         openForgotPw: false,
       };
     case START_FETCHING:
-      return { ...state, isFetching: true, success: null, errors: [] }
+      return { ...state, isFetching: true, success: null, errors: [] };
     case STOP_FETCHING:
-      return { ...state, isFetching: false, success: action.success, errors: action.errors }
+      return {
+        ...state,
+        isFetching: false,
+        success: action.success,
+        errors: action.errors,
+      };
     case CLEAR_MESSAGE:
-      return { ...state, success: null, errors: [] }
+      return { ...state, success: null, errors: [] };
+    case LOGGED_IN:
+      return { ...state, loggedIn: true };
+    case SIGNED_IN:
+      return { ...state, signedIn: true };
     default:
       return state;
   }

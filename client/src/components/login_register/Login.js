@@ -1,23 +1,67 @@
-import React, { useState } from 'react';
+import React from 'react';
+import Fade from 'react-reveal/Fade';
 import { Form, Button, Checkbox } from 'antd';
 import './index.scss';
 
-const Login = ({ form, isOpen, close, openForgotPw, openRegister }) => {
-  const { getFieldDecorator } = form;
+const Login = ({
+  form,
+  close,
+  loggedIn,
+  openForgotPw,
+  openRegister,
+  errors,
+  login,
+}) => {
+  const { getFieldDecorator, getFieldValue, validateFields } = form;
 
-  if (isOpen) {
-    return (
-      <div className='form_wrapper'>
+  if (loggedIn) {
+    close();
+  }
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    validateFields(function(err) {
+      if (!err) {
+        // submit
+        const email = getFieldValue('email');
+        const password = getFieldValue('password');
+
+        login(email, password);
+      }
+    });
+  };
+
+  return (
+    <div className='form_wrapper'>
+      <Fade>
         <div className='wrapper'>
           <button onClick={close} className='reset-button exit-button'>
             <img src='/imgs/cross.svg' />
           </button>
 
-          <Form className='form'>
+          <Form className='form' onSubmit={handleSubmit}>
             <h2 className='form-title'>Log In</h2>
-            <p className='message-error'>error</p>
+            {errors &&
+              errors.map(e => <p className='message-error'>{e.message}</p>)}
             <Form.Item label='Email' colon={false} className='form-item'>
-              {getFieldDecorator('email', {})(
+              {getFieldDecorator('email', {
+                initialValue: '',
+                rules: [
+                  {
+                    required: true,
+                    message: 'Field is required!',
+                  },
+                  {
+                    validator: function(rules, value, cb) {
+                      const pattern = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
+                      if (!pattern.test(value)) {
+                        return cb('Email is not valid!');
+                      }
+                      return cb();
+                    },
+                  },
+                ],
+              })(
                 <input
                   className='input-field'
                   type='text'
@@ -26,7 +70,19 @@ const Login = ({ form, isOpen, close, openForgotPw, openRegister }) => {
               )}
             </Form.Item>
             <Form.Item label='Password' colon={false} className='form-item'>
-              {getFieldDecorator('password', {})(
+              {getFieldDecorator('password', {
+                initialValue: '',
+                rules: [
+                  {
+                    required: true,
+                    message: 'Field is required!',
+                  },
+                  {
+                    min: 6,
+                    message: 'Password required at least 6 characters!',
+                  },
+                ],
+              })(
                 <input
                   className='input-field'
                   type='password'
@@ -49,7 +105,11 @@ const Login = ({ form, isOpen, close, openForgotPw, openRegister }) => {
                 </a>
               </div>
             </div>
-            <Button size='large' className={`button-submit`}>
+            <Button
+              size='large'
+              className={`button-submit`}
+              htmlType='submit'
+              onClick={handleSubmit}>
               Log In
             </Button>
             openRegister
@@ -69,10 +129,9 @@ const Login = ({ form, isOpen, close, openForgotPw, openRegister }) => {
             </div>
           </Form>
         </div>
-      </div>
-    );
-  }
-  return <></>;
+      </Fade>
+    </div>
+  );
 };
 
 const WrappedLogin = Form.create('form_Login')(Login);

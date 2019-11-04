@@ -50,7 +50,14 @@ const Cart = () => {
               <p>$6.900</p>
             </div>
           </div>
-          <Button block className='btn' type='danger' size='large' style={{ marginTop: 20 }}>Check out</Button>
+          <Button
+            block
+            className='btn'
+            type='danger'
+            size='large'
+            style={{ marginTop: 20 }}>
+            Check out
+          </Button>
         </Col>
       </Row>
     </div>

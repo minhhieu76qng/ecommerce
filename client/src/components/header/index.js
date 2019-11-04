@@ -7,7 +7,6 @@ import LoginContainer from '../../containers/LoginContainer';
 import ForgotPasswordContainer from '../../containers/ForgotPasswordContainer';
 
 const Header = ({ openLogin, openRegister, openForgotPw }) => {
-  console.log(openRegister);
   return (
     <div className='header'>
       <TopHeaderContainer />

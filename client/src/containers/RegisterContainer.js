@@ -1,12 +1,18 @@
 import { connect } from 'react-redux';
 import Register from '../components/login_register/Register';
-import { closeRegister, openLogin, register, clearMessage } from '../actions/loginRegisterAction';
+import {
+  closeRegister,
+  openLogin,
+  register,
+  clearMessage,
+} from '../actions/loginRegisterAction';
 
 const mapStateToProps = state => {
   return {
     isOpen: state.loginRegister.openRegister,
     success: state.loginRegister.success,
-    errors: state.loginRegister.errors
+    errors: state.loginRegister.errors,
+    signedIn: state.loginRegister.signedIn,
   };
 };
 
@@ -23,7 +29,7 @@ const mapDispatchToProps = dispatch => {
     },
     clearMessage: () => {
       dispatch(clearMessage());
-    }
+    },
   };
 };
 

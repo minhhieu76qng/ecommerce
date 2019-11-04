@@ -44,7 +44,7 @@ const TopHeader = ({ openLogin, openRegister }) => {
       <Menu.Item>
         <Link to='/cart' className='reset-button cart-button'>
           View cart
-      </Link>
+        </Link>
       </Menu.Item>
     </Menu>
   );

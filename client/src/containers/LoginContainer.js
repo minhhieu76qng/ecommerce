@@ -5,11 +5,14 @@ import {
   openForgotPassword,
   openRegister,
   clearMessage,
+  login,
 } from '../actions/loginRegisterAction';
 
 const mapStateToProps = state => {
   return {
     isOpen: state.loginRegister.openLogin,
+    errors: state.loginRegister.errors,
+    loggedIn: state.loginRegister.loggedIn,
   };
 };
 
@@ -26,7 +29,10 @@ const mapDispatchToProps = dispatch => {
     },
     clearMessage: () => {
       dispatch(clearMessage());
-    }
+    },
+    login: (email, password) => {
+      dispatch(login(email, password));
+    },
   };
 };
 

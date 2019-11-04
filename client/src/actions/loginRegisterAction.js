@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios from 'axios';
+import LocalStorage from '../utils/LocalStorage';
 
 export const OPEN_LOGIN = 'OPEN_LOGIN';
 export const CLOSE_LOGIN = 'CLOSE_LOGIN';
@@ -9,6 +10,8 @@ export const CLOSE_FORGOT_PW = 'CLOSE_FORGOT_PW';
 export const START_FETCHING = 'START_FETCHING';
 export const STOP_FETCHING = 'STOP_FETCHING';
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
+export const LOGGED_IN = 'LOGGED_IN';
+export const SIGNED_IN = 'SIGNED_IN';
 
 export function openLogin() {
   return { type: OPEN_LOGIN };
@@ -30,13 +33,20 @@ export function closeForgotPassword() {
 }
 
 export function startFetching() {
-  return { type: START_FETCHING }
+  return { type: START_FETCHING };
 }
 export function stopFetching(success, errors) {
-  return { type: STOP_FETCHING, success, errors }
+  return { type: STOP_FETCHING, success, errors };
 }
 export function clearMessage() {
   return { type: CLEAR_MESSAGE };
+}
+
+export function loggedIn() {
+  return { type: LOGGED_IN };
+}
+export function signedIn() {
+  return { type: SIGNED_IN };
 }
 
 // middlewares
@@ -44,20 +54,46 @@ export function register(email, password, name) {
   return dispatch => {
     dispatch(startFetching());
 
-    // 
-    axios.post('/api/auth/register', {
-      email, password, name
-    }).then(response => {
-      console.log(response);
-      const success = response.data.success;
+    //
+    axios
+      .post('/api/auth/register', {
+        email,
+        password,
+        name,
+      })
+      .then(response => {
+        const success = response.data.success;
 
-      dispatch(stopFetching(success, null));
-    })
+        dispatch(stopFetching(success, null));
+        dispatch(signedIn());
+      })
       .catch(err => {
-        console.log(err.response);
         const errors = err.response.data.errors;
 
         dispatch(stopFetching(null, errors));
+      });
+  };
+}
+
+export function login(email, password) {
+  return dispatch => {
+    dispatch(startFetching());
+
+    // get data
+    axios
+      .post('/api/auth/login', { email, password })
+      .then(response => {
+        const token = response.data.token;
+
+        // save token to localStorage
+        LocalStorage.setToken(token);
+
+        dispatch(stopFetching(null, null));
+        dispatch(loggedIn());
       })
-  }
+      .catch(err => {
+        const errors = err.response.data.errors;
+        dispatch(stopFetching(null, errors));
+      });
+  };
 }
