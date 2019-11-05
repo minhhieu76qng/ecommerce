@@ -1,60 +1,49 @@
-import React from 'react';
-import { Dropdown, Icon, Menu } from 'antd';
+import React, { useEffect } from 'react';
+import { Dropdown, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 
-const NavBar = () => {
-  const menu = (
+const renderSubmenu = subMenu => {
+  if (!subMenu || subMenu.length === 0) {
+    return <></>;
+  }
+
+  return (
     <ul className='sub-menu'>
-      <li className='item'>
-        <Link to='/categories/id'>Tops</Link>
-      </li>
-      <li className='item'>
-        <Link to='/categories/id'>Tops</Link>
-      </li>
-      <li className='item'>
-        <Link to='/categories/id'>Tops</Link>
-      </li>
-      <li className='item'>
-        <Link to='/categories/id'>Tops</Link>
-      </li>
+      {subMenu &&
+        subMenu.map(item => (
+          <li className='item'>
+            <Link to={`/category/${item.id}`}>{item.name}</Link>
+          </li>
+        ))}
     </ul>
   );
+};
+
+const NavBar = ({ menu: list, fetchMenu }) => {
+  // component did mount
+  useEffect(() => {
+    fetchMenu();
+  }, [fetchMenu]);
+
   return (
     <div className='nav-wrapper'>
       <nav>
         <ul className='main-nav'>
-          <li>
-            <Dropdown overlay={menu} placement='bottomCenter'>
-              <a className='ant-dropdown-link menu-link' href='#'>
-                Mens
-                <Icon className='icon-down' type='down' />
-              </a>
-            </Dropdown>
-          </li>
-          <li>
-            <Dropdown overlay={menu} placement='bottomCenter'>
-              <a className='ant-dropdown-link menu-link' href='#'>
-                Ladies
-                <Icon className='icon-down' type='down' />
-              </a>
-            </Dropdown>
-          </li>
-          <li>
-            <Dropdown overlay={menu} placement='bottomCenter'>
-              <a className='ant-dropdown-link menu-link' href='#'>
-                Girls
-                <Icon className='icon-down' type='down' />
-              </a>
-            </Dropdown>
-          </li>
-          <li>
-            <Dropdown overlay={menu} placement='bottomCenter'>
-              <a className='ant-dropdown-link menu-link' href='#'>
-                Boys
-                <Icon className='icon-down' type='down' />
-              </a>
-            </Dropdown>
-          </li>
+          {list &&
+            list.map(item => {
+              return (
+                <li>
+                  <Dropdown
+                    overlay={renderSubmenu(item.childs)}
+                    placement='bottomCenter'>
+                    <a className='ant-dropdown-link menu-link'>
+                      {item.name}
+                      <Icon className='icon-down' type='down' />
+                    </a>
+                  </Dropdown>
+                </li>
+              );
+            })}
         </ul>
       </nav>
     </div>

@@ -47,18 +47,42 @@ const getCategoryForMenu = async () => {
   }
 }
 
+const getBreadcrumb = async id => {
+  try {
+    let ret = [];
+    const currentCate = await Category.findById(id);
+
+    ret.push({ id: currentCate._id, name: currentCate.name });
+
+    // mang cac ancestors
+    if (currentCate.ancestors.length !== 0) {
+      await Promise.all(currentCate.ancestors.map(async c => {
+        const parentCate = await Category.findById(c.id);
+
+        ret.push({ id: parentCate._id, name: parentCate.name })
+      }))
+    }
+
+    return ret;
+  }
+  catch (err) {
+    return null;
+  }
+}
+
 const addNew = () => {
   const val = new Category({ name: 'Girls' });
   return val.save();
 }
 
 const addToCate = (id) => {
-  const val = new Category({ name: 'T-Shirt', parent: id, ancestors: [{ id: id }] });
+  const val = new Category({ name: 'Shoes', parent: id, ancestors: [{ id: id }] });
   return val.save();
 }
 
 module.exports = {
   getCategoryForMenu,
+  getBreadcrumb,
   addNew,
-  addToCate
+  addToCate,
 }

@@ -13,7 +13,7 @@ import Cart from './components/cart';
 function App({ extractAndStoreUser }) {
   useEffect(() => {
     extractAndStoreUser();
-  }, []);
+  }, [extractAndStoreUser]);
 
   return (
     <div className='App'>
