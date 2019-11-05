@@ -9,7 +9,7 @@ const PageBreadcrumb = ({ breadcrumb: list, fetchBreadcrumb }) => {
 
   useEffect(() => {
     fetchBreadcrumb(cateID);
-  }, [])
+  }, [cateID])
 
   return (
     <div
