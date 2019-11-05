@@ -63,6 +63,9 @@ const getBreadcrumb = async id => {
       }))
     }
 
+    // reverse lai mang nhan duoc
+    ret = ret.reverse();
+
     return ret;
   }
   catch (err) {

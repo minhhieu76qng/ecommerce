@@ -1,8 +1,9 @@
-import { FETCHED_NAVBAR, FETCHED_ROOT_CATEGORY } from '../actions/categoryAction';
+import { FETCHED_NAVBAR, FETCHED_ROOT_CATEGORY, FETCHED_BREADCRUMB } from '../actions/categoryAction';
 
 const initialState = {
   navBarMenu: [],
-  rootCategory: []
+  rootCategory: [],
+  breadcrumb: []
 };
 
 export default function navBar(state = initialState, action) {
@@ -11,6 +12,8 @@ export default function navBar(state = initialState, action) {
       return { ...state, navBarMenu: action.list };
     case FETCHED_ROOT_CATEGORY:
       return { ...state, rootCategory: action.list };
+    case FETCHED_BREADCRUMB:
+      return { ...state, breadcrumb: action.list };
 
     default:
       return { ...state };

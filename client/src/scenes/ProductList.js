@@ -1,14 +1,14 @@
 import React from 'react';
-import PageBreadcrumb from '../components/breadcrumb';
 import { Row, Col, Select, Form, Pagination } from 'antd';
 import Category from '../components/sidebar/Category';
 import Filter from '../components/sidebar/Filter';
 import ProductItem from '../components/product/ProductItem';
+import PageBreadcrumbContainer from '../containers/PageBreadcrumbContainer';
 
 const ProductList = () => {
   return (
     <>
-      <PageBreadcrumb />
+      <PageBreadcrumbContainer />
       <Row gutter={20}>
         <Col span={4}>
           {/* sidebar */}

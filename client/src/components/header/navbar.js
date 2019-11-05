@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Dropdown, Icon } from 'antd';
 import { Link } from 'react-router-dom';
+import uuidv1 from 'uuid/v1';
 
 const renderSubmenu = subMenu => {
   if (!subMenu || subMenu.length === 0) {
@@ -11,7 +12,7 @@ const renderSubmenu = subMenu => {
     <ul className='sub-menu'>
       {subMenu &&
         subMenu.map(item => (
-          <li className='item'>
+          <li className='item' key={uuidv1()}>
             <Link to={`/category/${item.id}`}>{item.name}</Link>
           </li>
         ))}
@@ -32,7 +33,7 @@ const NavBar = ({ navBarMenu: list, fetchMenu }) => {
           {list &&
             list.map(item => {
               return (
-                <li>
+                <li key={uuidv1()}>
                   <Dropdown
                     overlay={renderSubmenu(item.childs)}
                     placement='bottomCenter'>
