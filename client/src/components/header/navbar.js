@@ -19,7 +19,7 @@ const renderSubmenu = subMenu => {
   );
 };
 
-const NavBar = ({ menu: list, fetchMenu }) => {
+const NavBar = ({ navBarMenu: list, fetchMenu }) => {
   // component did mount
   useEffect(() => {
     fetchMenu();
@@ -36,10 +36,10 @@ const NavBar = ({ menu: list, fetchMenu }) => {
                   <Dropdown
                     overlay={renderSubmenu(item.childs)}
                     placement='bottomCenter'>
-                    <a className='ant-dropdown-link menu-link'>
+                    <Link to={`/category/${item.id}`} className='menu-link'>
                       {item.name}
                       <Icon className='icon-down' type='down' />
-                    </a>
+                    </Link>
                   </Dropdown>
                 </li>
               );

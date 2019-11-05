@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import NavBar from '../components/header/navbar';
-import { fetchMenu } from '../actions/navbarAction';
+import { fetchMenu } from '../actions/categoryAction';
 
 const mapStateToProps = state => {
   return {
-    menu: state.navBar.menu,
+    navBarMenu: state.category.navBarMenu,
   };
 };
 

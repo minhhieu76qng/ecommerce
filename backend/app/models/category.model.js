@@ -4,6 +4,10 @@ const Schema = mongoose.Schema;
 
 const CategorySchema = new Schema({
   name: String,
+  coverImg: {
+    type: String,
+    default: null
+  },
   parent: {
     type: String,
     default: null,

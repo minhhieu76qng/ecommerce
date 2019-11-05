@@ -76,11 +76,12 @@ const addNew = () => {
 }
 
 const addToCate = (id) => {
-  const val = new Category({ name: 'Shoes', parent: id, ancestors: [{ id: id }] });
+  const val = new Category({ name: 'Jackets', parent: id, ancestors: [{ id: id }] });
   return val.save();
 }
 
 module.exports = {
+  findRootCategories,
   getCategoryForMenu,
   getBreadcrumb,
   addNew,

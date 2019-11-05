@@ -1,10 +1,10 @@
 import React from 'react';
-import Homepage from '../components/homepage/Homepage';
+import HomepageContainer from '../containers/HomepageContainer';
 
 const Home = () => {
   return (
     <React.Fragment>
-      <Homepage />
+      <HomepageContainer />
     </React.Fragment>
   );
 };

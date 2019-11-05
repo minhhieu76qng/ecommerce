@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Row, Col } from 'antd';
+import { Link } from 'react-router-dom';
 import './index.scss';
 
-const Homepage = () => {
+const Homepage = ({ rootCategory: list, fetchRootCategory }) => {
+
+  useEffect(() => {
+    if (!list || list.length === 0) {
+      fetchRootCategory();
+    }
+  }, [])
+
   return (
     <div className='homepage'>
       {/* main img */}
@@ -17,37 +25,15 @@ const Homepage = () => {
       </Row>
 
       <Row gutter={20} style={{ marginTop: '20px' }}>
-        <Col span={6}>
-          <div className='box-img'>
-            <img src='http://assets.myntassets.com/assets/images/1862801/2018/2/9/11518155061506-Roadster-Men-Maroon--Navy-Blue-Regular-Fit-Checked-Casual-Shirt-8861518155061131-1.jpg' />
-            <div className='title'>Men</div>
-            <button className='btn-shop'>Shop now</button>
-          </div>
-        </Col>
-
-        <Col span={6}>
-          <div className='box-img'>
-            <img src='http://assets.myntassets.com/assets/images/1862801/2018/2/9/11518155061506-Roadster-Men-Maroon--Navy-Blue-Regular-Fit-Checked-Casual-Shirt-8861518155061131-1.jpg' />
-            <div className='title'>Men</div>
-            <button className='btn-shop'>Shop now</button>
-          </div>
-        </Col>
-
-        <Col span={6}>
-          <div className='box-img'>
-            <img src='http://assets.myntassets.com/assets/images/1862801/2018/2/9/11518155061506-Roadster-Men-Maroon--Navy-Blue-Regular-Fit-Checked-Casual-Shirt-8861518155061131-1.jpg' />
-            <div className='title'>Men</div>
-            <button className='btn-shop'>Shop now</button>
-          </div>
-        </Col>
-
-        <Col span={6}>
-          <div className='box-img'>
-            <img src='http://assets.myntassets.com/assets/images/1862801/2018/2/9/11518155061506-Roadster-Men-Maroon--Navy-Blue-Regular-Fit-Checked-Casual-Shirt-8861518155061131-1.jpg' />
-            <div className='title'>Men</div>
-            <button className='btn-shop'>Shop now</button>
-          </div>
-        </Col>
+        {list && list.map(item => (
+          <Col span={6}>
+            <div className='box-img'>
+              <img src={item.coverImg} />
+              <div className='title'>{item.name}</div>
+              <Link className='btn-shop' to={`/category/${item.id}`}>Shop now</Link>
+            </div>
+          </Col>
+        ))}
       </Row>
     </div>
   );
