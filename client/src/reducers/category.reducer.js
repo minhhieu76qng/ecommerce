@@ -1,9 +1,13 @@
-import { FETCHED_NAVBAR, FETCHED_ROOT_CATEGORY, FETCHED_BREADCRUMB } from '../actions/categoryAction';
+import {
+  FETCHED_NAVBAR,
+  FETCHED_ROOT_CATEGORY,
+  FETCHED_BREADCRUMB,
+} from '../actions/categoryAction';
 
 const initialState = {
   navBarMenu: [],
   rootCategory: [],
-  breadcrumb: []
+  breadcrumb: [],
 };
 
 export default function navBar(state = initialState, action) {

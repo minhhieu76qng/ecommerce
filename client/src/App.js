@@ -20,8 +20,8 @@ function App({ extractAndStoreUser }) {
       <Router>
         <Switch>
           <AdminLayout path='/admin' component={() => <div>admin</div>} />
-          <PageLayout path='/category/:id' component={ProductList} />
-          <PageLayout path='/product/:id' component={ProductDetail} />
+          <PageLayout path='/categories/:id' component={ProductList} />
+          <PageLayout path='/products/:id' component={ProductDetail} />
           <PageLayout exact path='/cart' component={Cart} />
           <PageLayout exact path='/' component={Home} />
         </Switch>

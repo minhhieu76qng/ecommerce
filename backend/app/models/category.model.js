@@ -6,7 +6,7 @@ const CategorySchema = new Schema({
   name: String,
   coverImg: {
     type: String,
-    default: null
+    default: null,
   },
   parent: {
     type: String,
@@ -14,9 +14,9 @@ const CategorySchema = new Schema({
   },
   ancestors: {
     type: Array,
-    default: []
-  }
-})
+    default: [],
+  },
+});
 
 const Category = mongoose.model('Category', CategorySchema);
 

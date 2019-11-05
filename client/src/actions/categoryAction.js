@@ -16,27 +16,27 @@ export function saveBreadcrumb(list) {
   return { type: FETCHED_BREADCRUMB, list };
 }
 
-
 // MIDDLEWARES
 
 export function fetchRootCategory() {
   return dispatch => {
-    axios.get('/api/category/root')
+    axios
+      .get('/api/categories/root')
       .then(response => {
         const list = response.data.list;
         dispatch(saveRootCategory(list));
       })
       .catch(err => {
-        dispatch(saveRootCategory([]))
-      })
-  }
+        dispatch(saveRootCategory([]));
+      });
+  };
 }
 
 // fetch api
 export function fetchMenu() {
   return dispatch => {
     axios
-      .get('/api/category/menu')
+      .get('/api/categories/menu')
       .then(response => {
         const menu = response.data.menu;
 
@@ -48,16 +48,16 @@ export function fetchMenu() {
   };
 }
 
-
 export function fetchBreadcrumb(cateID) {
   return dispatch => {
-    axios.get(`/api/category/${cateID}/breadcrumb`)
+    axios
+      .get(`/api/categories/${cateID}/breadcrumb`)
       .then(response => {
         const breadcrumb = response.data.list;
         dispatch(saveBreadcrumb(breadcrumb));
       })
       .catch(err => {
         dispatch(saveBreadcrumb([]));
-      })
-  }
+      });
+  };
 }

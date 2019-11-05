@@ -6,10 +6,10 @@ const UserSchema = new Schema({
   name: String,
   email: {
     type: String,
-    unique: true
+    unique: true,
   },
   password: String,
-  isAdmin: Boolean
+  isAdmin: Boolean,
 });
 
 const User = mongoose.model('User', UserSchema);

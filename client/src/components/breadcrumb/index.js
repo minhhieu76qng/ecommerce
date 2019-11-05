@@ -4,12 +4,11 @@ import { Breadcrumb } from 'antd';
 import { useParams } from 'react-router-dom';
 
 const PageBreadcrumb = ({ breadcrumb: list, fetchBreadcrumb }) => {
-
   const { id: cateID } = useParams();
 
   useEffect(() => {
     fetchBreadcrumb(cateID);
-  }, [cateID])
+  }, [cateID]);
 
   return (
     <div
@@ -20,11 +19,12 @@ const PageBreadcrumb = ({ breadcrumb: list, fetchBreadcrumb }) => {
         padding: '20px 0 30px 0',
       }}>
       <Breadcrumb>
-        {list && list.map(item => (
-          <Breadcrumb.Item>
-            <Link to={`/category/${item.id}`}>{item.name}</Link>
-          </Breadcrumb.Item>
-        ))}
+        {list &&
+          list.map(item => (
+            <Breadcrumb.Item>
+              <Link to={`/categories/${item.id}`}>{item.name}</Link>
+            </Breadcrumb.Item>
+          ))}
       </Breadcrumb>
     </div>
   );

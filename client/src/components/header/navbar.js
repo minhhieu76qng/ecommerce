@@ -13,7 +13,7 @@ const renderSubmenu = subMenu => {
       {subMenu &&
         subMenu.map(item => (
           <li className='item' key={uuidv1()}>
-            <Link to={`/category/${item.id}`}>{item.name}</Link>
+            <Link to={`/categories/${item.id}`}>{item.name}</Link>
           </li>
         ))}
     </ul>
@@ -37,7 +37,7 @@ const NavBar = ({ navBarMenu: list, fetchMenu }) => {
                   <Dropdown
                     overlay={renderSubmenu(item.childs)}
                     placement='bottomCenter'>
-                    <Link to={`/category/${item.id}`} className='menu-link'>
+                    <Link to={`/categories/${item.id}`} className='menu-link'>
                       {item.name}
                       <Icon className='icon-down' type='down' />
                     </Link>

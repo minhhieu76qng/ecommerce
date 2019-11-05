@@ -4,12 +4,11 @@ import { Link } from 'react-router-dom';
 import './index.scss';
 
 const Homepage = ({ rootCategory: list, fetchRootCategory }) => {
-
   useEffect(() => {
     if (!list || list.length === 0) {
       fetchRootCategory();
     }
-  }, [])
+  }, []);
 
   return (
     <div className='homepage'>
@@ -25,15 +24,18 @@ const Homepage = ({ rootCategory: list, fetchRootCategory }) => {
       </Row>
 
       <Row gutter={20} style={{ marginTop: '20px' }}>
-        {list && list.map(item => (
-          <Col span={6}>
-            <div className='box-img'>
-              <img src={item.coverImg} />
-              <div className='title'>{item.name}</div>
-              <Link className='btn-shop' to={`/category/${item.id}`}>Shop now</Link>
-            </div>
-          </Col>
-        ))}
+        {list &&
+          list.map(item => (
+            <Col span={6}>
+              <div className='box-img'>
+                <img src={item.coverImg} />
+                <div className='title'>{item.name}</div>
+                <Link className='btn-shop' to={`/category/${item.id}`}>
+                  Shop now
+                </Link>
+              </div>
+            </Col>
+          ))}
       </Row>
     </div>
   );

@@ -7,20 +7,24 @@ router.post('/login', (req, res, next) => {
   passport.authenticate('local', { session: false }, (error, user, info) => {
     if (error) {
       return res.status(httpCode.INTERNAL_SERVER_ERROR).json({
-        errors: [{
-          code: 'INTERNAL_ERROR',
-          message: 'Unable to login right now!'
-        }]
-      })
+        errors: [
+          {
+            code: 'INTERNAL_ERROR',
+            message: 'Unable to login right now!',
+          },
+        ],
+      });
     }
 
     if (!user) {
       return res.status(httpCode.BAD_REQUEST).json({
-        errors: [{
-          code: 'INVALID',
-          message: info.message
-        }]
-      })
+        errors: [
+          {
+            code: 'INVALID',
+            message: info.message,
+          },
+        ],
+      });
     }
 
     // generate token
@@ -28,34 +32,37 @@ router.post('/login', (req, res, next) => {
     return res.status(httpCode.OK).json({
       user: {
         id: user._id,
-        email: user.email
+        email: user.email,
       },
-      token
-    })
-
+      token,
+    });
   })(req, res, next);
-})
+});
 
 router.post('/register', async (req, res, next) => {
   const { name, email, password } = req.body;
 
   if (!(name && email && password)) {
     return res.status(httpCode.BAD_REQUEST).json({
-      errors: [{
-        code: 'MISSING',
-        message: 'Fields are required!'
-      }]
-    })
+      errors: [
+        {
+          code: 'MISSING',
+          message: 'Fields are required!',
+        },
+      ],
+    });
   }
 
   // VALID EMAIL
   if (!userService.isValidEmail(email)) {
     return res.status(httpCode.BAD_REQUEST).json({
-      errors: [{
-        code: 'INVALID',
-        message: 'Email is not valid!'
-      }]
-    })
+      errors: [
+        {
+          code: 'INVALID',
+          message: 'Email is not valid!',
+        },
+      ],
+    });
   }
 
   try {
@@ -63,23 +70,27 @@ router.post('/register', async (req, res, next) => {
 
     if (isExist) {
       return res.status(httpCode.CONFLICT).json({
-        errors: [{
-          code: 'EXIST',
-          message: 'Email is already exist!',
-          email
-        }]
-      })
+        errors: [
+          {
+            code: 'EXIST',
+            message: 'Email is already exist!',
+            email,
+          },
+        ],
+      });
     }
 
     const result = await userService.createUser(name, email, password);
 
     if (!result) {
       return res.status(httpCode.INTERNAL_SERVER_ERROR).json({
-        errors: [{
-          code: 'INTERNAL_ERROR',
-          message: 'Unable to create user right now!'
-        }]
-      })
+        errors: [
+          {
+            code: 'INTERNAL_ERROR',
+            message: 'Unable to create user right now!',
+          },
+        ],
+      });
     }
 
     return res.status(httpCode.CREATED).json({
@@ -89,18 +100,19 @@ router.post('/register', async (req, res, next) => {
         name: result.name,
       },
       success: {
-        message: 'Create user successfully!'
-      }
-    })
-  }
-  catch (err) {
+        message: 'Create user successfully!',
+      },
+    });
+  } catch (err) {
     return res.status(httpCode.INTERNAL_SERVER_ERROR).json({
-      errors: [{
-        code: 'INTERNAL_ERROR',
-        message: 'Can\'t create user now!'
-      }]
-    })
+      errors: [
+        {
+          code: 'INTERNAL_ERROR',
+          message: "Can't create user now!",
+        },
+      ],
+    });
   }
-})
+});
 
 module.exports = router;
