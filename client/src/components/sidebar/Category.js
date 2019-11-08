@@ -11,26 +11,26 @@ const Category = ({ listCategories: list, currentCategory, fetchCategories }) =>
     fetchCategories(parentCateID);
   }, [parentCateID])
 
-
-
   return (
     <div className='category widget-sidebar'>
       <h3 className='title'>Category</h3>
 
-      <ul className='list'>
-        <li className='active'>
-          <Link className='link' to={`/categories/${parentCateID}`}>
-            {currentCategory && `All ${currentCategory.name.toLowerCase()}`}
-          </Link>
-        </li>
-        {list && list.map(item => (
-          <li key={uuidv1()}>
-            <Link className='link' to={`/categories/${item._id}`}>
-              {item.name}
+      {list && currentCategory &&
+        <ul className='list'>
+          <li className={`${currentCategory._id === parentCateID ? 'active' : ''}`}>
+            <Link className='link' to={`/categories/${currentCategory._id}`}>
+              {`All ${currentCategory.name.toLowerCase()}`}
             </Link>
           </li>
-        ))}
-      </ul>
+          {list && list.map(item => (
+            <li className={`${item._id === parentCateID ? 'active' : ''}`} key={uuidv1()}>
+              <Link className={`link`} to={`/categories/${item._id}`}>
+                {item.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      }
     </div>
   );
 };

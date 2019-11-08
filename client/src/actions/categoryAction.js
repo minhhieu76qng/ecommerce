@@ -39,8 +39,6 @@ export function fetchMenu() {
       .get('/api/categories/menu')
       .then(response => {
         const menu = response.data.menu;
-        console.log(menu);
-
         dispatch(saveNavbarMenu(menu));
       })
       .catch(err => {

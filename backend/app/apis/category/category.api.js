@@ -52,9 +52,26 @@ router.get('/:id/breadcrumb', async (req, res, next) => {
 })
 
 router.get('/:id/categories', async (req, res, next) => {
+
   try {
     const parentID = req.params.id;
-    const result = await categoryService.findWithParent(parentID);
+
+    const cate = await categoryService.findByID(parentID);
+
+    let result = null;
+
+    // nếu cái category này đã có 2 phần tử trong ancestors
+    // -> category này là cuối cùng -> trả về cái list với id là parent của nó
+    console.log(cate);
+    if (cate.ancestors.length >= 2) {
+      console.log(cate.parent);
+      result = await categoryService.findWithParent(cate.parent);
+    } else {
+      console.log('b');
+      result = await categoryService.findWithParent(parentID);
+    }
+
+    console.log(result);
 
     if (!result || !(Array.isArray(result)) || result.length === 0)
       return res.status(httpCode.INTERNAL_SERVER_ERROR).json({ list: null });
@@ -62,7 +79,7 @@ router.get('/:id/categories', async (req, res, next) => {
     const parent = result[0];
 
     return res.status(httpCode.OK).json({
-      parent: { _id: parent._id, name: parent.name },
+      parent: { _id: parent._id, name: parent.name, isEnd: parent.isEnd },
       childs: parent.childs
     })
   }
@@ -98,7 +115,7 @@ router.get('/:id/products', async (req, res, next) => {
 // trash
 
 router.post('/', async (req, res, next) => {
-  const result = await categoryService.addToCate('5dc4e21e01aaec15f843898d');
+  const result = await categoryService.addToCate('5dc4e38157162f2838298146');
 
   return res.json({ result })
 })

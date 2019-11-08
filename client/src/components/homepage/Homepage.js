@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
+import uuidv1 from 'uuid/v1';
 import './index.scss';
 
 const Homepage = ({ rootCategory: list, fetchRootCategory }) => {
@@ -26,11 +27,11 @@ const Homepage = ({ rootCategory: list, fetchRootCategory }) => {
       <Row gutter={20} style={{ marginTop: '20px' }}>
         {list &&
           list.map(item => (
-            <Col span={6}>
+            <Col span={6} key={uuidv1()}>
               <div className='box-img'>
                 <img src={item.coverImg} />
                 <div className='title'>{item.name}</div>
-                <Link className='btn-shop' to={`/category/${item.id}`}>
+                <Link className='btn-shop' to={`/categories/${item._id}`}>
                   Shop now
                 </Link>
               </div>

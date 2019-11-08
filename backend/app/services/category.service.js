@@ -12,6 +12,10 @@ const findRootCategories = () => {
   });
 };
 
+const findByID = id => {
+  return Category.findById(id);
+}
+
 const find2ndCategories = () => {
   return Category.where('parent')
     .ne(null)
@@ -131,14 +135,15 @@ const addNew = (name) => {
 
 const addToCate = id => {
   const val = new Category({
-    name: 'Skirt',
+    name: 'Mini dresses',
     parent: id,
-    ancestors: [id],
+    ancestors: [id, '5dc4e23165056233f0bdbf34'],
   });
   return val.save();
 };
 
 module.exports = {
+  findByID,
   findWithParent,
   findRootCategories,
   getCategoryForMenu,

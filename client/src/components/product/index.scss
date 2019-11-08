@@ -9,7 +9,6 @@
     .wrapper-img {
       height: 100%;
       position: relative;
-      overflow: hidden;
 
       &:hover .add-cart {
         height: 54px;
@@ -23,10 +22,10 @@
         bottom: 0;
         left: 0;
         right: 0;
-        height: 0;
+        height: 100px;
         background-color: var(--pale-orange);
         z-index: 100;
-        transition: all 0.3s;
+        transition: all 0.5s;
         color: #fff;
         line-height: 54px;
         text-align: center;
