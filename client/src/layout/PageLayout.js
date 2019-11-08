@@ -9,13 +9,13 @@ const PageLayout = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={matchProps => (
-        <React.Fragment>
+        <div style={{ width: 1180, margin: '0 auto' }}>
           <HeaderContainer />
           <div className='wrapper-content'>
             <Component {...matchProps} />
           </div>
           <Footer />
-        </React.Fragment>
+        </div>
       )}
     />
   );

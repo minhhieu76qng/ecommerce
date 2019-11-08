@@ -1,40 +1,52 @@
 import jwt from 'jsonwebtoken';
 
-function isValidToken() {
-  const token = localStorage.getItem('token');
-
-  const user = jwt.decode(token);
-  if (!user) {
-    return false;
+class Token {
+  constructor() {
+    this.token_string = 'token';
   }
-  return true;
+
+  isValidToken() {
+    const token = localStorage.getItem(this.token_string);
+
+    const user = jwt.decode(token);
+    if (!user) {
+      return false;
+    }
+    return true;
+  }
+
+  getToken() {
+    return localStorage.getItem(this.token_string);
+  }
+
+  setToken(token) {
+    localStorage.setItem(this.token_string, token);
+  }
+
+  removeToken() {
+    localStorage.removeItem(this.token_string);
+  }
+
+  getUserFromToken() {
+    const token = localStorage.getItem(this.token_string);
+    if (!token) return null;
+
+    const user = jwt.decode(token);
+
+    return user;
+  }
 }
 
-function getToken() {
-  return localStorage.getItem('token');
+export class UserToken extends Token {
+  constructor() {
+    super();
+    this.token_string = 'token';
+  }
 }
 
-function setToken(token) {
-  localStorage.setItem('token', token);
+export class SellerToken extends Token {
+  constructor() {
+    super();
+    this.token_string = 'seller_token';
+  }
 }
-
-function removeToken() {
-  localStorage.removeItem('token');
-}
-
-function getUserFromToken() {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
-
-  const user = jwt.decode(token);
-
-  return user;
-}
-
-export default {
-  isValidToken,
-  getToken,
-  setToken,
-  removeToken,
-  getUserFromToken,
-};

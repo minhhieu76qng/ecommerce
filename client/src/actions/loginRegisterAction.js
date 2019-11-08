@@ -1,6 +1,8 @@
 import axios from 'axios';
-import LocalStorage from '../utils/LocalStorage';
+import { UserToken } from '../utils/LocalStorage';
 import { extractAndSaveUser } from './accountAction';
+
+const userToken = new UserToken();
 
 export const OPEN_LOGIN = 'OPEN_LOGIN';
 export const CLOSE_LOGIN = 'CLOSE_LOGIN';
@@ -91,7 +93,7 @@ export function login(email, password) {
         const token = response.data.token;
 
         // save token to localStorage
-        LocalStorage.setToken(token);
+        userToken.setToken(token);
 
         dispatch(stopFetching(null, null));
         dispatch(loggedIn());

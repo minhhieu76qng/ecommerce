@@ -2,11 +2,12 @@ import React from 'react';
 import { Badge, Avatar, Dropdown, Menu, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import searchIcon from './img/cart.svg';
-import LocalStorage from '../../utils/LocalStorage';
+import { UserToken } from '../../utils/LocalStorage';
+const userToken = new UserToken();
 
 const TopHeader = ({ user, openLogin, openRegister, logOut }) => {
   const handleLogOut = () => {
-    LocalStorage.removeToken();
+    userToken.removeToken();
     logOut();
   };
 
@@ -77,8 +78,8 @@ const TopHeader = ({ user, openLogin, openRegister, logOut }) => {
               {user && user.avatar ? (
                 <Avatar size={35} icon='home' />
               ) : (
-                <Avatar size={35} icon='user' />
-              )}
+                  <Avatar size={35} icon='user' />
+                )}
             </a>
           </Dropdown>
         )}

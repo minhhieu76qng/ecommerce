@@ -5,6 +5,7 @@ export const SET_FETCHING_PRODUCTS = 'SET_FETCHING_PRODUCTS';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 export const SET_CURRENT_CATEGORY = 'SET_CURRENT_CATEGORY';
+export const SET_LIST_PRODUCT = 'SET_LIST_PRODUCT';
 
 export function setFetchingCategories(status) {
   return { type: SET_FETCHING_CATEGORIES, status };
@@ -24,6 +25,10 @@ export function setProducts(list) {
 export function setCurrentCategory(cate) {
   return { type: SET_CURRENT_CATEGORY, cate };
 }
+
+export function setListProduct(list) {
+  return { type: SET_LIST_PRODUCT, list };
+}
 // middlewares
 
 export function fetchCategories(parentCateID) {
@@ -34,7 +39,6 @@ export function fetchCategories(parentCateID) {
       .then(response => {
 
         const parent = response.data.parent;
-        console.log(parent);
 
         dispatch(setCurrentCategory(parent));
 
@@ -66,6 +70,23 @@ export function fetchProducts(categoryID) {
       })
       .finally(() => {
         dispatch(setFetchingProducts(false));
+      })
+  }
+}
+
+export function getProducts(categoryID) {
+  return dispatch => {
+    dispatch(setFetchingProducts());
+
+    axios.get(`/api/categories/${categoryID}/products`)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+
+      })
+      .finally(() => {
+
       })
   }
 }

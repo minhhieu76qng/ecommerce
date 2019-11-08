@@ -1,0 +1,67 @@
+.login_wrapper {
+  background: url('/imgs/rectangle-5@2x.jpg') no-repeat left top;
+  background-size: cover;
+
+  .form-card {
+    width: 380px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--charcoal-grey);
+    padding: 30px;
+    border-radius: 3px;
+
+    .title {
+      font-family: Montserrat;
+      font-size: 28px;
+      font-weight: bold;
+      line-height: 1.29;
+      color: var(--pale-orange);
+      text-align: center;
+    }
+
+    .form-item {
+      margin-bottom: 5px;
+      .has-error .ant-form-explain {
+        margin-top: 10px;
+      }
+
+      .ant-form-item-label {
+        label {
+          height: 18px;
+          font-family: Montserrat;
+          font-size: 12px;
+          font-weight: 600;
+          line-height: 1.5;
+          color: var(--greyish);
+          text-transform: uppercase;
+        }
+      }
+      input {
+        width: 100%;
+        border-radius: 2px;
+        border: solid 1px var(--white-three);
+        background-color: var(--white);
+        padding: 0 15px;
+      }
+    }
+    .submit-btn {
+      background-color: var(--pale-orange);
+      color: #fff;
+      border-radius: 2px;
+      font-size: 14px;
+      font-weight: 600;
+      height: 48px;
+      margin-top: 30px;
+    }
+
+    .link {
+      display: block;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--white);
+    }
+  }
+}

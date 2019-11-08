@@ -9,6 +9,7 @@ import AdminLayout from './layout/AdminLayout';
 import ProductList from './scenes/ProductList';
 import ProductDetail from './scenes/ProductDetail';
 import Cart from './components/cart';
+import Login from './components/seller/login/Login';
 
 function App({ extractAndStoreUser }) {
   useEffect(() => {
@@ -24,6 +25,7 @@ function App({ extractAndStoreUser }) {
           <PageLayout path='/products/:id' component={ProductDetail} />
           <PageLayout exact path='/cart' component={Cart} />
           <PageLayout exact path='/' component={Home} />
+          {/* <Login /> */}
         </Switch>
       </Router>
     </div>
