@@ -54,11 +54,20 @@ router.get('/:id/breadcrumb', async (req, res, next) => {
 router.get('/:id/categories', async (req, res, next) => {
   try {
     const parentID = req.params.id;
-    const list = await categoryService.findWithParent(parentID);
+    const result = await categoryService.findWithParent(parentID);
 
-    return res.status(httpCode.OK).json({ list })
+    if (!result || !(Array.isArray(result)) || result.length === 0)
+      return res.status(httpCode.INTERNAL_SERVER_ERROR).json({ list: null });
+
+    const parent = result[0];
+
+    return res.status(httpCode.OK).json({
+      parent: { _id: parent._id, name: parent.name },
+      childs: parent.childs
+    })
   }
   catch (err) {
+    console.log(err);
     return res.status(httpCode.INTERNAL_SERVER_ERROR).json({
       list: null,
     })

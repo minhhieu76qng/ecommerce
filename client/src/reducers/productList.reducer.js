@@ -1,8 +1,9 @@
-import { SET_FETCHING_CATEGORIES, SET_FETCHING_PRODUCTS, SET_PRODUCTS, SET_CATEGORIES } from "../actions/productListAction";
+import { SET_FETCHING_CATEGORIES, SET_FETCHING_PRODUCTS, SET_PRODUCTS, SET_CATEGORIES, SET_CURRENT_CATEGORY } from "../actions/productListAction";
 
 const initialState = {
   isFetchingCategories: false,
   isFetchingProducts: false,
+  currentCategory: null,
   listProducts: [],
   listCategories: [],
 };
@@ -17,6 +18,8 @@ export default function productList(state = initialState, action) {
       return { ...state, listCategories: [...action.list] }
     case SET_PRODUCTS:
       return { ...state, listProducts: action.list }
+    case SET_CURRENT_CATEGORY:
+      return { ...state, currentCategory: action.cate }
     default:
       return { ...state };
   }

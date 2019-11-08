@@ -28,7 +28,34 @@ const find3rdCategories = () => {
 };
 
 const findWithParent = parentID => {
-  return Category.find({ parent: parentID });
+  return Category.aggregate([
+    {
+      $match: {
+        _id: ObjectId(parentID)
+      }
+    },
+    {
+      $lookup: {
+        from: 'categories',
+        pipeline: [
+          {
+            $match: {
+              parent: ObjectId(parentID)
+            }
+          }
+        ],
+        as: 'childs'
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        'childs._id': 1,
+        'childs.name': 1
+      }
+    }
+  ])
 };
 
 const getCategoryForMenu = async () => {

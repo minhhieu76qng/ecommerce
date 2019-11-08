@@ -3,13 +3,15 @@ import { Link, useParams } from 'react-router-dom';
 import uuidv1 from 'uuid/v1';
 import './index.scss';
 
-const Category = ({ listCategories: list, fetchCategories }) => {
+const Category = ({ listCategories: list, currentCategory, fetchCategories }) => {
 
   const { id: parentCateID } = useParams();
 
   useEffect(() => {
     fetchCategories(parentCateID);
   }, [parentCateID])
+
+
 
   return (
     <div className='category widget-sidebar'>
@@ -18,7 +20,7 @@ const Category = ({ listCategories: list, fetchCategories }) => {
       <ul className='list'>
         <li className='active'>
           <Link className='link' to={`/categories/${parentCateID}`}>
-            All dresses
+            {currentCategory && `All ${currentCategory.name.toLowerCase()}`}
           </Link>
         </li>
         {list && list.map(item => (
