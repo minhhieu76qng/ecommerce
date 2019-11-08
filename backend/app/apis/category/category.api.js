@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const httpCode = require('http-status-codes');
 const categoryService = require('@services/category.service');
 const productService = require('@services/product.service');
 
@@ -22,10 +23,28 @@ router.get('/:id/breadcrumb', async (req, res, next) => {
   const id = req.params.id;
 
   const result = await categoryService.getBreadcrumb(id);
-  return res.json({ list: result })
+
+  let ret = null;
+  if (result !== null) {
+    ret = result.map(item => ({ id: item._id, name: item.name }))
+  }
+
+  return res.status(httpCode.OK).json({ list: ret })
 })
 
-router.get('/:id/categories')
+router.get('/:id/categories', async (req, res, next) => {
+  try {
+    const parentID = req.params.id;
+    const list = await categoryService.findWithParent(parentID);
+
+    return res.status(httpCode.OK).json({ list })
+  }
+  catch (err) {
+    return res.status(httpCode.INTERNAL_SERVER_ERROR).json({
+      list: null,
+    })
+  }
+})
 
 // get product in this category
 router.get('/:id/products', async (req, res, next) => {
@@ -38,13 +57,12 @@ router.get('/:id/products', async (req, res, next) => {
       offset = 0;
       limit = 20;
     }
-    const result = await productService.getProductByCategoryID(id, offset, limit);
+    const list = await productService.getProductByCategoryID(id, offset, limit);
 
-    return res.json({ result })
+    return res.status(httpCode.OK).json({ list, isSuccess: true })
   }
   catch (err) {
-    console.log(err);
-    return res.json({ err })
+    return res.json({ list: null, isSuccess: false });
   }
 })
 

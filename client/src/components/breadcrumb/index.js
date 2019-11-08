@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { useParams } from 'react-router-dom';
+import uuidv1 from 'uuid/v1';
 
 const PageBreadcrumb = ({ breadcrumb: list, fetchBreadcrumb }) => {
   const { id: cateID } = useParams();
@@ -21,7 +22,7 @@ const PageBreadcrumb = ({ breadcrumb: list, fetchBreadcrumb }) => {
       <Breadcrumb>
         {list &&
           list.map(item => (
-            <Breadcrumb.Item>
+            <Breadcrumb.Item key={uuidv1()}>
               <Link to={`/categories/${item.id}`}>{item.name}</Link>
             </Breadcrumb.Item>
           ))}

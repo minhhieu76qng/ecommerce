@@ -1,9 +1,9 @@
 import React from 'react';
 import { Row, Col, Select, Form, Pagination } from 'antd';
-import Category from '../components/sidebar/Category';
 import Filter from '../components/sidebar/Filter';
 import ProductItem from '../components/product/ProductItem';
 import PageBreadcrumbContainer from '../containers/PageBreadcrumbContainer';
+import CategoryContainer from '../containers/CategoryContainer';
 
 const ProductList = () => {
   return (
@@ -12,7 +12,7 @@ const ProductList = () => {
       <Row gutter={20}>
         <Col span={4}>
           {/* sidebar */}
-          <Category />
+          <CategoryContainer />
           <Filter />
         </Col>
         <Col span={20}>

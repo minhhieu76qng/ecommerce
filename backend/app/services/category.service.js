@@ -22,7 +22,7 @@ const find3rdCategories = () => {
 };
 
 const findWithParent = parentID => {
-  return Category.where('parent').equals(parentID);
+  return Category.find({ parent: parentID });
 };
 
 const getCategoryForMenu = async () => {
@@ -101,6 +101,7 @@ const addToCate = id => {
 };
 
 module.exports = {
+  findWithParent,
   findRootCategories,
   getCategoryForMenu,
   getBreadcrumb,
