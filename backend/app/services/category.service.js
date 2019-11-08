@@ -1,9 +1,15 @@
 // const { Category } = require('@models/category.model');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 const { Category } = require('../models/category.model');
 
 const findRootCategories = () => {
-  return Category.find({ parent: null });
+  return Category.find({ parent: null }).select({
+    _id: 1,
+    name: 1,
+    coverImg: 1
+  });
 };
 
 const find2ndCategories = () => {
@@ -26,76 +32,81 @@ const findWithParent = parentID => {
 };
 
 const getCategoryForMenu = async () => {
-  let tree = [];
-  try {
-    const root = await findRootCategories();
-
-
-    // can su dung aggregation
-
-    await Promise.all(
-      root.map(async cate => {
-        const id = cate._id;
-        let item = {
-          id,
-          name: cate.name,
-        };
-
-        const subCate = await findWithParent(id);
-
-        item.childs = subCate.map(el => {
-          return { id: el._id, name: el.name };
-        });
-
-        tree.push(item);
-      })
-    );
-
-
-
-    return tree;
-  } catch (err) {
-    return null;
-  }
+  const result = await Category.aggregate([
+    {
+      $match: { parent: null }
+    },
+    {
+      $lookup: {
+        from: 'categories',
+        localField: '_id',
+        foreignField: 'parent',
+        as: 'childs'
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        'name': 1,
+        'childs._id': 1,
+        'childs.name': 1
+      }
+    }]);
+  return result;
 };
 
 const getBreadcrumb = async id => {
-  try {
-    let ret = [];
-    const currentCate = await Category.findById(id);
-
-    ret.push({ id: currentCate._id, name: currentCate.name });
-
-    // mang cac ancestors
-    if (currentCate.ancestors.length !== 0) {
-      await Promise.all(
-        currentCate.ancestors.map(async c => {
-          const parentCate = await Category.findById(c.id);
-
-          ret.push({ id: parentCate._id, name: parentCate.name });
-        }),
-      );
+  const result = await Category.aggregate([
+    {
+      $match: {
+        _id: ObjectId(id)
+      }
+    },
+    {
+      $lookup: {
+        from: 'categories',
+        localField: 'ancestors',
+        foreignField: '_id',
+        as: 'parentItems'
+      }
+    },
+    {
+      $unwind: {
+        path: "$parentItems",
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    // Group back to arrays
+    {
+      $group: {
+        "_id": "$_id",
+        "name": { $first: "$name" },
+        "parentCates": { "$push": "$parentItems" },
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        'parentCates._id': 1,
+        'parentCates.name': 1
+      }
     }
+  ])
 
-    // reverse lai mang nhan duoc
-    ret = ret.reverse();
-
-    return ret;
-  } catch (err) {
-    return null;
-  }
+  return result;
 };
 
-const addNew = () => {
-  const val = new Category({ name: 'Girls' });
+const addNew = (name) => {
+  const val = new Category({ name: name });
   return val.save();
 };
 
 const addToCate = id => {
   const val = new Category({
-    name: 'Jackets',
+    name: 'Skirt',
     parent: id,
-    ancestors: [{ id: id }],
+    ancestors: [id],
   });
   return val.save();
 };

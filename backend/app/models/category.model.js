@@ -9,13 +9,10 @@ const CategorySchema = new Schema({
     default: null,
   },
   parent: {
-    type: String,
+    type: mongoose.Types.ObjectId,
     default: null,
   },
-  ancestors: {
-    type: Array,
-    default: [],
-  },
+  ancestors: [{ type: mongoose.Types.ObjectId, ref: 'Category' }],
 });
 
 const Category = mongoose.model('Category', CategorySchema);

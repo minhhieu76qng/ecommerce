@@ -5,16 +5,19 @@ const productService = require('@services/product.service');
 
 // get menu
 router.get('/menu', async (req, res, next) => {
-  const menu = await categoryService.getCategoryForMenu();
+  try {
+    const menu = await categoryService.getCategoryForMenu();
 
-  return res.json({ menu: menu });
+    return res.status(httpCode.OK).json({ menu });
+  }
+  catch (err) {
+    return null;
+  }
 })
 
 // root categories
 router.get('/root', async (req, res, next) => {
   let list = await categoryService.findRootCategories();
-
-  list = list.map(item => ({ id: item.id, name: item.name, coverImg: item.coverImg }))
 
   return res.json({ list });
 })
@@ -22,14 +25,30 @@ router.get('/root', async (req, res, next) => {
 router.get('/:id/breadcrumb', async (req, res, next) => {
   const id = req.params.id;
 
-  const result = await categoryService.getBreadcrumb(id);
+  try {
+    const result = await categoryService.getBreadcrumb(id);
 
-  let ret = null;
-  if (result !== null) {
-    ret = result.map(item => ({ id: item._id, name: item.name }))
+    if (!result || !(Array.isArray(result)) || result.length === 0)
+      return res.status(httpCode.INTERNAL_SERVER_ERROR).json({ list: null });
+
+    const currentCate = result[0];
+
+    let list = [];
+
+    list.push({ _id: currentCate._id, name: currentCate.name });
+
+    currentCate.parentCates.map(el => {
+      list.push(el);
+    })
+
+    list.reverse();
+
+    return res.status(httpCode.OK).json({ list });
   }
-
-  return res.status(httpCode.OK).json({ list: ret })
+  catch (err) {
+    console.log(err);
+    return res.status(httpCode.INTERNAL_SERVER_ERROR).json({ list: null });
+  }
 })
 
 router.get('/:id/categories', async (req, res, next) => {
@@ -70,7 +89,7 @@ router.get('/:id/products', async (req, res, next) => {
 // trash
 
 router.post('/', async (req, res, next) => {
-  const result = await categoryService.addToCate('5dc0052acee8951f185a39ec');
+  const result = await categoryService.addToCate('5dc4e21e01aaec15f843898d');
 
   return res.json({ result })
 })

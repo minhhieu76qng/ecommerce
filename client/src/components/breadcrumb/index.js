@@ -23,7 +23,7 @@ const PageBreadcrumb = ({ breadcrumb: list, fetchBreadcrumb }) => {
         {list &&
           list.map(item => (
             <Breadcrumb.Item key={uuidv1()}>
-              <Link to={`/categories/${item.id}`}>{item.name}</Link>
+              <Link to={`/categories/${item._id}`}>{item.name}</Link>
             </Breadcrumb.Item>
           ))}
       </Breadcrumb>
