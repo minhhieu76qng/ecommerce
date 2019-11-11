@@ -4,6 +4,65 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const { Category } = require('../models/category.model');
 
+const getAll = () => {
+  return Category.aggregate([
+    {
+      $match: { parent: null }
+    },
+    {
+      $lookup: {
+        from: 'categories',
+        localField: '_id',
+        foreignField: 'parent',
+        as: 'childs'
+      }
+    },
+    {
+      $unwind: {
+        path: '$childs',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'categories',
+        localField: 'childs._id',
+        foreignField: 'parent',
+        as: 'childs.childs'
+      }
+    },
+    {
+      $group: {
+        _id: '$_id',
+        name: { $first: '$name' },
+        parent: { $first: '$parent' },
+        coverImg: { $first: '$coverImg' },
+        childs: { $push: '$childs' },
+      }
+    },
+    {
+      $addFields: {
+        'childs.childs.isLeaf': true
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        coverImg: 1,
+        parent: 1,
+        'childs._id': 1,
+        'childs.name': 1,
+        'childs.parent': 1,
+        'childs.childs._id': 1,
+        'childs.childs.name': 1,
+        'childs.childs.parent': 1,
+        'childs.childs.isLeaf': 1,
+      }
+    }
+  ])
+}
+
 const findRootCategories = () => {
   return Category.find({ parent: null }).select({
     _id: 1,
@@ -143,6 +202,7 @@ const addToCate = id => {
 };
 
 module.exports = {
+  getAll,
   findByID,
   findWithParent,
   findRootCategories,

@@ -4,12 +4,7 @@ import { Link } from 'react-router-dom';
 import uuidv1 from 'uuid/v1';
 import './index.scss';
 
-const Homepage = ({ rootCategory: list, fetchRootCategory }) => {
-  useEffect(() => {
-    if (!list || list.length === 0) {
-      fetchRootCategory();
-    }
-  }, []);
+const Homepage = ({ categories: list }) => {
 
   return (
     <div className='homepage'>

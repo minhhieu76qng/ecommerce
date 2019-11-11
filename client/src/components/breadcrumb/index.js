@@ -1,15 +1,36 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
-import { useParams } from 'react-router-dom';
 import uuidv1 from 'uuid/v1';
 
-const PageBreadcrumb = ({ breadcrumb: list, fetchBreadcrumb }) => {
-  const { id: cateID } = useParams();
+const PageBreadcrumb = ({ planeCategories: list, categoryID }) => {
 
-  useEffect(() => {
-    fetchBreadcrumb(cateID);
-  }, [cateID]);
+  // tim kiem breadcrumb tu list
+  let breadcrumbs = [];
+
+  if (list && list.length !== 0) {
+    let cateID = categoryID;
+    do {
+      const cate = list.filter(val => val._id === cateID);
+
+      if (cate.length === 0) {
+        break;
+      }
+
+      if (cate.length === 1) {
+        breadcrumbs = breadcrumbs.concat(cate);
+        cateID = cate[0].parent;
+      }
+
+      if (!cateID) {
+        break;
+      }
+    }
+    while (true);
+  }
+
+  // reverse array
+  breadcrumbs.reverse();
 
   return (
     <div
@@ -20,8 +41,8 @@ const PageBreadcrumb = ({ breadcrumb: list, fetchBreadcrumb }) => {
         padding: '20px 0 30px 0',
       }}>
       <Breadcrumb>
-        {list &&
-          list.map(item => (
+        {breadcrumbs &&
+          breadcrumbs.map(item => (
             <Breadcrumb.Item key={uuidv1()}>
               <Link to={`/categories/${item._id}`}>{item.name}</Link>
             </Breadcrumb.Item>

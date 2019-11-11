@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Dropdown, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 import uuidv1 from 'uuid/v1';
@@ -20,12 +20,7 @@ const renderSubmenu = subMenu => {
   );
 };
 
-const NavBar = ({ navBarMenu: list, fetchMenu }) => {
-  // component did mount
-  useEffect(() => {
-    fetchMenu();
-  }, [fetchMenu]);
-
+const NavBar = ({ categories: list }) => {
   return (
     <div className='nav-wrapper'>
       <nav>

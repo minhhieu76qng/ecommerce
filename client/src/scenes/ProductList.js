@@ -1,22 +1,24 @@
 import React from 'react';
 import { Row, Col, Select, Form, Pagination } from 'antd';
+import { useParams } from 'react-router-dom';
 import Filter from '../components/sidebar/Filter';
 import ProductItem from '../components/product/ProductItem';
 import PageBreadcrumbContainer from '../containers/PageBreadcrumbContainer';
 import CategoryContainer from '../containers/CategoryContainer';
 
 const ProductList = () => {
+
+  const { id: categoryID } = useParams();
+
   return (
     <>
-      <PageBreadcrumbContainer />
+      <PageBreadcrumbContainer categoryID={categoryID} />
       <Row gutter={20}>
         <Col span={4}>
-          {/* sidebar */}
           <CategoryContainer />
           <Filter />
         </Col>
         <Col span={20}>
-          {/* products */}
           <Row>
             <Col span={24}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>

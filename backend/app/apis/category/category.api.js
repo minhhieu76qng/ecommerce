@@ -4,6 +4,12 @@ const categoryService = require('@services/category.service');
 const productService = require('@services/product.service');
 
 // get menu
+
+router.get('/', async (req, res, next) => {
+  const result = await categoryService.getAll();
+  return res.json({ result })
+})
+
 router.get('/menu', async (req, res, next) => {
   try {
     const menu = await categoryService.getCategoryForMenu();
