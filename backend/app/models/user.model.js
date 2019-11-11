@@ -9,7 +9,10 @@ const UserSchema = new Schema({
     unique: true,
   },
   password: String,
-  isAdmin: Boolean,
+  isSeller: {
+    type: Boolean,
+    default: false
+  },
 });
 
 const User = mongoose.model('User', UserSchema);

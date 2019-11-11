@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Button, Spin } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import './index.scss';
+import Axios from 'axios';
+import { UserToken } from '../../../utils/LocalStorage';
 
-const Login = ({ form, isFetching, errors, login, openModalForgotPassword }) => {
+const userToken = new UserToken();
+
+const Login = ({ form }) => {
+
+  const [isFetching, setIsFetching] = useState(false);
+  const [errors, setErrors] = useState(null);
+
+  const user = userToken.getUserFromToken();
+
+  if (user && user.isSeller) {
+    return <Redirect to='/seller' />
+  }
+
 
   const { getFieldDecorator, validateFields, getFieldValue } = form;
 
@@ -16,7 +30,30 @@ const Login = ({ form, isFetching, errors, login, openModalForgotPassword }) => 
         const email = getFieldValue('email');
         const password = getFieldValue('password');
 
-        login(email, password);
+        setIsFetching(true);
+
+        Axios.post('/api/auth/login', { email, password })
+          .then(response => {
+            const user = response.data.user;
+
+            if (!user.isSeller) {
+              return setErrors([{
+                message: 'You are not a seller!'
+              }])
+            }
+
+            const token = response.data.token;
+
+            // save token to localStorage
+            userToken.setToken(token);
+          })
+          .catch(err => {
+            const errors = err.response.data.errors;
+            return setErrors(errors);
+          })
+          .finally(() => {
+            setIsFetching(false);
+          })
       }
     })
   }
@@ -31,7 +68,7 @@ const Login = ({ form, isFetching, errors, login, openModalForgotPassword }) => 
             {errors &&
               <div className='message-errors'>
                 {errors.map(el => (
-                  <p>{el.msg}</p>
+                  <p>{el.message}</p>
                 ))}
               </div>
             }
@@ -49,9 +86,9 @@ const Login = ({ form, isFetching, errors, login, openModalForgotPassword }) => 
                       const pattern = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
 
                       if (!pattern.test(value)) {
-                        cb('Email is not valid!');
+                        return cb('Email is not valid!');
                       } else {
-                        cb();
+                        return cb();
                       }
                     }
                   },
@@ -97,5 +134,5 @@ const Login = ({ form, isFetching, errors, login, openModalForgotPassword }) => 
   );
 };
 
-const WrappedLoginSeller = Form.create('login_seller')(Login);
-export default WrappedLoginSeller;
+const SellerLogin = Form.create('login_seller')(Login);
+export default SellerLogin;

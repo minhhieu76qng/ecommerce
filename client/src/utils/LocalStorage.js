@@ -35,6 +35,15 @@ class Token {
 
     return user;
   }
+
+  isSeller() {
+    const user = this.getUserFromToken();
+    if (!user || !user.isSeller) {
+      return false;
+    }
+
+    return true;
+  }
 }
 
 export class UserToken extends Token {

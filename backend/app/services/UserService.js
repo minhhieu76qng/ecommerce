@@ -45,6 +45,7 @@ const generateToken = user => {
     id: user._id,
     email: user.email,
     name: user.name,
+    isSeller: user.isSeller
   };
 
   const JWTSECRET = process.env.JWTSECRET || 'secret_string';

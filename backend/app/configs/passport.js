@@ -8,7 +8,7 @@ const LS = new LocalStrategy(
     usernameField: 'email',
     passwordField: 'password',
   },
-  async function(email, password, done) {
+  async function (email, password, done) {
     try {
       const user = await userService.findUserByEmail(email);
 
@@ -27,7 +27,7 @@ const LS = new LocalStrategy(
     } catch (err) {
       return done(err);
     }
-  },
+  }
 );
 
 passport.use(LS);

@@ -33,6 +33,7 @@ router.post('/login', (req, res, next) => {
       user: {
         id: user._id,
         email: user.email,
+        isSeller: user.isSeller
       },
       token,
     });
