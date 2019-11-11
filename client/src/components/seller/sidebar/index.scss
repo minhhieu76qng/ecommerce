@@ -1,0 +1,37 @@
+#nav_seller {
+  li {
+    position: relative;
+
+    .link {
+      padding-left: 20px;
+      color: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      display: block;
+      line-height: 48px;
+      color: var(--charcoal-grey);
+
+      &.active,
+      &:hover {
+        color: var(--pale-orange);
+      }
+
+      .icon {
+        display: inline-block;
+        margin-right: 15px;
+        // color: #9b9b9b;
+        vertical-align: middle;
+      }
+      &.active:before {
+        content: '';
+        display: block;
+        height: 100%;
+        width: 6px;
+        background-color: var(--pale-orange);
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+  }
+}

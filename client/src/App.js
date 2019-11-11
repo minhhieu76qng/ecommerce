@@ -9,6 +9,7 @@ import SellerLogin from './components/seller/login/Login';
 import SellerLayout from './layout/SellerLayout';
 import Product from './components/seller/product/Product';
 import SellerPrivateRoute from './layout/SellerPrivateRoute';
+import Order from './components/seller/order/Order';
 // import AdminLayout from './layout/AdminLayout';
 // import ProductList from './scenes/ProductList';
 // import ProductDetail from './scenes/ProductDetail';
@@ -33,6 +34,7 @@ function App({ extractAndStoreUser, fetchCategories }) {
           <PageLayout path='/products/:id' component={ProductDetail} />
           <PageLayout exact path='/cart' component={Cart} /> */}
           {/* <PageLayout exact path='/' component={Home} /> */}
+          <SellerPrivateRoute path='/seller/orders' component={Order} />
           <SellerPrivateRoute path='/seller/products' component={Product} />
           <Route exact path='/seller/login' component={SellerLogin} />
         </Switch>

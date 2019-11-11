@@ -6,7 +6,6 @@ import SellerLayout from './SellerLayout';
 const userToken = new UserToken();
 
 const SellerPrivateRoute = ({ component: Component, ...rest }) => {
-  console.log(userToken);
   return (
     <Route {...rest} render={matchProps => {
 
