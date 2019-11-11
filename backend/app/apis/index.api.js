@@ -1,8 +1,11 @@
 const router = require('express').Router();
 
-router.use('/users', require('./user/user.api'));
-router.use('/auth', require('./auth/auth.api'));
-router.use('/categories', require('./category/category.api'));
-router.use('/products', require('./product/product.api'));
+router.use('/users', require('./user.api'));
+router.use('/auth', require('./auth.api'));
+router.use('/categories', require('./category.api'));
+router.use('/products', require('./product.api'));
+router.use('/sizes', require('./size.api'));
+router.use('/colors', require('./color.api'));
+router.use('/brands', require('./brand.api'));
 
 module.exports = router;

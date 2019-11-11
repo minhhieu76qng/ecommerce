@@ -8,7 +8,7 @@ const getBrandByID = BrandID => {
   return Brand.findById(BrandID);
 }
 
-module.exports = [
+module.exports = {
   getBrands,
   getBrandByID
-]
+}

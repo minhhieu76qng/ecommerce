@@ -8,7 +8,7 @@ const getColorByID = ColorID => {
   return Color.findById(ColorID);
 }
 
-module.exports = [
+module.exports = {
   getColors,
   getColorByID
-]
+}

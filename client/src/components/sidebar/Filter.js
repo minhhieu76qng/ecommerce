@@ -1,9 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import uuidv1 from 'uuid/v1'
 import './index.scss';
 import { Collapse, Icon, Button, Checkbox, Slider } from 'antd';
 
 const Filter = () => {
+
+  const [sizes, setSizes] = useState(null);
+  const [colors, setColors] = useState(null);
+  const [brands, setBrands] = useState(null);
+
+  // lấy size, color, brand
+  // lay size
+  useEffect(() => {
+    axios.get('/api/brands')
+      .then(response => {
+        setBrands(response.data.brands);
+      })
+      .catch(err => {
+
+      })
+
+    axios.get('/api/colors')
+      .then(response => {
+        setColors(response.data.colors);
+      })
+      .catch(err => {
+
+      })
+
+    axios.get('/api/sizes')
+      .then(response => {
+        setSizes(response.data.sizes);
+      })
+      .catch(err => {
+
+      })
+  }, [])
+
   return (
     <div className='filter widget-sidebar'>
       <h3 className='title'>Filter</h3>
@@ -17,47 +52,32 @@ const Filter = () => {
           <Icon type='down' rotate={isActive ? 180 : 0} />
         )}>
         <Collapse.Panel className='panel' header='Size'>
-          <div style={{ paddingTop: 10 }}>
-            <Button className='btn-size'>S</Button>
-            <Button className='btn-size'>M</Button>
-            <Button className='btn-size'>L</Button>
+          <div>
+            {sizes &&
+              sizes.map(val => <Button key={uuidv1()} className='btn-size'>{val.name}</Button>)
+            }
           </div>
         </Collapse.Panel>
         <Collapse.Panel className='panel' header='Color'>
           <div>
-            <Button
-              className='btn-color'
-              style={{ background: '#ff5f6d' }}></Button>
-            <Button
-              className='btn-color'
-              style={{ background: 'rgba(255, 213, 67, 0.4)' }}></Button>
-            <Button
-              className='btn-color'
-              style={{ background: 'rgba(95, 109, 255, 0.4)' }}></Button>
-            <Button
-              className='btn-color'
-              style={{ background: 'rgba(255, 161, 95, 0.4)' }}></Button>
-            <Button
-              className='btn-color'
-              style={{ background: 'rgba(61, 61, 63, 0.4)' }}></Button>
+            {colors && colors.map(val => (
+              <Button
+                className='btn-color'
+                style={{ background: `${val.value}` }} />
+            ))}
           </div>
         </Collapse.Panel>
         <Collapse.Panel className='panel' header='Brand'>
           <div style={{ paddingTop: 10 }}>
-            <ul className='list-filter'>
-              <li>
-                <Checkbox className='checkbox'>brand</Checkbox>
-              </li>
-              <li>
-                <Checkbox className='checkbox'>brand</Checkbox>
-              </li>
-              <li>
-                <Checkbox className='checkbox'>brand</Checkbox>
-              </li>
-              <li>
-                <Checkbox className='checkbox'>brand</Checkbox>
-              </li>
-            </ul>
+            {brands && (
+              <ul className='list-filter'>
+                {brands.map(val => (
+                  <li>
+                    <Checkbox className='checkbox'>{val.name}</Checkbox>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </Collapse.Panel>
         <Collapse.Panel className='panel' header='Price'>

@@ -8,7 +8,7 @@ const getSizeByID = sizeID => {
   return Size.findById(sizeID);
 }
 
-module.exports = [
-  getSize,
+module.exports = {
+  getSizes,
   getSizeByID
-]
+}
