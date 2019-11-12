@@ -5,7 +5,7 @@ import SellerLayout from './SellerLayout';
 
 const userToken = new UserToken();
 
-const SellerPrivateRoute = ({ component: Component, ...rest }) => {
+const SellerPrivateRoute = ({ component: Component, title, ...rest }) => {
   return (
     <Route
       {...rest}
@@ -16,7 +16,7 @@ const SellerPrivateRoute = ({ component: Component, ...rest }) => {
 
         return (
           <div>
-            <SellerLayout>
+            <SellerLayout title={title}>
               <Component {...matchProps} />
             </SellerLayout>
           </div>

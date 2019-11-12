@@ -122,7 +122,7 @@ router.get('/:id/products', async (req, res, next) => {
 // trash
 
 router.post('/', async (req, res, next) => {
-  const result = await categoryService.addToCate('5dc4e38157162f2838298146');
+  const result = await categoryService.addToCate('5dc4e338c7c42205a85d567c');
 
   return res.json({ result })
 })

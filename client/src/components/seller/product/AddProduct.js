@@ -21,6 +21,8 @@ const MAX_IMAGES = 4;
 
 const AddProduct = ({ form, planeCategories: categoryList }) => {
 
+  document.title = 'Add new product';
+
   const [addProductLoading, setAddProductLoading] = useState(false);
 
   const [photos, setPhotos] = useState([]);
@@ -63,6 +65,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
     multiple: false,
     action: 'http://localhost:5000/api/products/avatar',
     showUploadList: false,
+    accept: '.jpg,.png,.jpeg,.bmp',
     customRequest({ file, onError, onProgress, onSuccess }) {
       setLoading(true);
       const formData = new FormData();

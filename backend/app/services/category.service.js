@@ -194,9 +194,9 @@ const addNew = (name) => {
 
 const addToCate = id => {
   const val = new Category({
-    name: 'Mini dresses',
+    name: 'Modern Fit Suit',
     parent: id,
-    ancestors: [id, '5dc4e23165056233f0bdbf34'],
+    ancestors: [id, '5dc4e237c3d42430741ec2fe'],
   });
   return val.save();
 };

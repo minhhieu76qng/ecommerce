@@ -1,7 +1,8 @@
 import React from 'react';
-import { Avatar, Dropdown, Icon, Menu, Badge } from 'antd';
+import { Avatar, Dropdown, Icon, Menu, Badge, Breadcrumb } from 'antd';
+import { Link } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({ title }) => {
   const menu = (
     <Menu>
       <Menu.Item>
@@ -32,8 +33,19 @@ const Header = () => {
           lineHeight: 1,
           marginBottom: 0,
           flexGrow: 1,
+          position: 'relative'
         }}>
-        Products
+        {title}
+        {title === 'Add product' &&
+          <Breadcrumb style={{ fontSize: 14, fontWeight: 500, color: 'var(--charcoal-grey)', position: 'absolute', bottom: '-25px' }}>
+            <Breadcrumb.Item>
+              <Link to='/seller/products'>Products</Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <Link to='/seller/products/add'>Add product</Link>
+            </Breadcrumb.Item>
+          </Breadcrumb>
+        }
       </h3>
 
       <div

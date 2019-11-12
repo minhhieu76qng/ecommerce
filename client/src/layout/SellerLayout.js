@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import SellerSidebar from '../components/seller/sidebar/SellerSidebar';
 import Header from '../components/seller/header/Header';
 
-const SellerLayout = ({ children }) => {
+const SellerLayout = ({ children, title }) => {
   return (
     <div
       className='seller_layout'
@@ -33,7 +33,7 @@ const SellerLayout = ({ children }) => {
         <SellerSidebar />
       </div>
       <div style={{ flexGrow: 1, padding: '0 20px' }}>
-        <Header />
+        <Header title={title} />
         <div style={{ marginTop: 30 }}>{children}</div>
       </div>
     </div>
