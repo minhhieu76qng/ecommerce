@@ -69,13 +69,12 @@ export function setCategories(categories) {
 
 export function fetchCategories() {
   return dispatch => {
-    axios.get('/api/categories')
+    axios
+      .get('/api/categories')
       .then(response => response.data.result)
       .then(categories => {
         dispatch(setCategories(categories));
       })
-      .catch(error => {
-
-      })
-  }
+      .catch(error => {});
+  };
 }

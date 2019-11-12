@@ -7,7 +7,6 @@ import PageBreadcrumbContainer from '../containers/PageBreadcrumbContainer';
 import CategoryContainer from '../containers/CategoryContainer';
 
 const ProductList = () => {
-
   const { id: categoryID } = useParams();
 
   return (

@@ -8,7 +8,7 @@ const reducer = combineReducers({
   loginRegister,
   account,
   category,
-  productList
+  productList,
 });
 
 export default reducer;

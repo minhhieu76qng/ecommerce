@@ -9,8 +9,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(extractAndSaveUser());
     },
     fetchCategories: () => {
-      dispatch(fetchCategories())
-    }
+      dispatch(fetchCategories());
+    },
   };
 };
 

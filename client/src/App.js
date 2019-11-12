@@ -10,6 +10,7 @@ import SellerLayout from './layout/SellerLayout';
 import Product from './components/seller/product/Product';
 import SellerPrivateRoute from './layout/SellerPrivateRoute';
 import Order from './components/seller/order/Order';
+import AddProduct from './components/seller/product/AddProduct';
 // import AdminLayout from './layout/AdminLayout';
 // import ProductList from './scenes/ProductList';
 // import ProductDetail from './scenes/ProductDetail';
@@ -23,7 +24,7 @@ function App({ extractAndStoreUser, fetchCategories }) {
   useEffect(() => {
     // fetch menu
     fetchCategories();
-  }, [])
+  }, []);
 
   return (
     <div className='App'>
@@ -35,6 +36,10 @@ function App({ extractAndStoreUser, fetchCategories }) {
           <PageLayout exact path='/cart' component={Cart} /> */}
           {/* <PageLayout exact path='/' component={Home} /> */}
           <SellerPrivateRoute path='/seller/orders' component={Order} />
+          <SellerPrivateRoute
+            path='/seller/products/add'
+            component={AddProduct}
+          />
           <SellerPrivateRoute path='/seller/products' component={Product} />
           <Route exact path='/seller/login' component={SellerLogin} />
         </Switch>

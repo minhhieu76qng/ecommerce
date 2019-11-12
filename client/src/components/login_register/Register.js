@@ -16,7 +16,7 @@ const Register = ({
   const { getFieldDecorator, getFieldValue, validateFields } = form;
   const handleSubmit = event => {
     event.preventDefault();
-    validateFields(function (err) {
+    validateFields(function(err) {
       if (!err) {
         const email = getFieldValue('email');
         const password = getFieldValue('password');
@@ -69,7 +69,7 @@ const Register = ({
                 rules: [
                   {
                     required: true,
-                    message: 'Field is required!'
+                    message: 'Field is required!',
                   },
                 ],
               })(
@@ -85,7 +85,7 @@ const Register = ({
                 initialValue: '',
                 rules: [
                   {
-                    validator: function (rule, value, cb) {
+                    validator: function(rule, value, cb) {
                       const pattern = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
                       if (!pattern.test(value)) {
                         return cb('Please enter a valid e-mail!');

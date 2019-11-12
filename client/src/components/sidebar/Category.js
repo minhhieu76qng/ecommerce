@@ -4,10 +4,7 @@ import uuidv1 from 'uuid/v1';
 import './index.scss';
 
 const Category = ({ planeCategories: list }) => {
-
   const { id: categoryID } = useParams();
-
-
 
   // nếu categoryID không phải leaf -> render như bình thường. currentCategory = categoryID
 
@@ -38,23 +35,27 @@ const Category = ({ planeCategories: list }) => {
     <div className='category widget-sidebar'>
       <h3 className='title'>Category</h3>
 
-      {childs && currentCategory &&
+      {childs && currentCategory && (
         <ul className='list'>
-          <li className={`${currentCategory._id === categoryID ? 'active' : ''}`}>
+          <li
+            className={`${currentCategory._id === categoryID ? 'active' : ''}`}>
             <Link className='link' to={`/categories/${currentCategory._id}`}>
               {`All ${currentCategory.name.toLowerCase()}`}
             </Link>
           </li>
 
-          {childs && childs.map(item => (
-            <li key={uuidv1()} className={`${item._id === categoryID ? 'active' : ''}`}>
-              <Link className={`link`} to={`/categories/${item._id}`}>
-                {item.name}
-              </Link>
-            </li>
-          ))}
+          {childs &&
+            childs.map(item => (
+              <li
+                key={uuidv1()}
+                className={`${item._id === categoryID ? 'active' : ''}`}>
+                <Link className={`link`} to={`/categories/${item._id}`}>
+                  {item.name}
+                </Link>
+              </li>
+            ))}
         </ul>
-      }
+      )}
     </div>
   );
 };

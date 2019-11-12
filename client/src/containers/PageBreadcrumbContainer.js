@@ -7,6 +7,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps
-)(PageBreadcrumb);
+export default connect(mapStateToProps)(PageBreadcrumb);

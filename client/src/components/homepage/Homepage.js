@@ -5,7 +5,6 @@ import uuidv1 from 'uuid/v1';
 import './index.scss';
 
 const Homepage = ({ categories: list }) => {
-
   return (
     <div className='homepage'>
       {/* main img */}

@@ -7,20 +7,22 @@ const userToken = new UserToken();
 
 const SellerPrivateRoute = ({ component: Component, ...rest }) => {
   return (
-    <Route {...rest} render={matchProps => {
+    <Route
+      {...rest}
+      render={matchProps => {
+        if (!userToken.isSeller()) {
+          return <Redirect to='/seller/login' />;
+        }
 
-      if (!userToken.isSeller()) {
-        return <Redirect to='/seller/login' />
-      }
-
-      return (
-        <div>
-          <SellerLayout>
-            <Component {...matchProps} />
-          </SellerLayout>
-        </div>
-      )
-    }} />
+        return (
+          <div>
+            <SellerLayout>
+              <Component {...matchProps} />
+            </SellerLayout>
+          </div>
+        );
+      }}
+    />
   );
 };
 

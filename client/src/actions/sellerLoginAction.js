@@ -6,11 +6,11 @@ export const SET_FETCHING = 'SET_FETCHING';
 export const NOTIFY_ERROR = 'NOTIFY_ERROR';
 
 export function setOpenLogin(status) {
-  return { type: SET_OPEN_LOGIN, status }
+  return { type: SET_OPEN_LOGIN, status };
 }
 
 export function setOpenForgotPw(status) {
-  return { type: SET_OPEN_FORGOT_PASSWORD, status }
+  return { type: SET_OPEN_FORGOT_PASSWORD, status };
 }
 
 export function setFetching(status) {
@@ -18,14 +18,15 @@ export function setFetching(status) {
 }
 
 export function notifyError(errors) {
-  return { type: NOTIFY_ERROR, errors }
+  return { type: NOTIFY_ERROR, errors };
 }
 
 export function login(email, password) {
   return dispatch => {
     dispatch(setFetching(true));
 
-    axios.post(`/api/auth/seller/login`, { email, password })
+    axios
+      .post(`/api/auth/seller/login`, { email, password })
       .then(response => {
         console.log(response);
 
@@ -35,8 +36,8 @@ export function login(email, password) {
         const errors = err.response.errors;
         dispatch(notifyError(errors));
       })
-      .finally(function () {
+      .finally(function() {
         dispatch(setFetching(false));
-      })
-  }
+      });
+  };
 }

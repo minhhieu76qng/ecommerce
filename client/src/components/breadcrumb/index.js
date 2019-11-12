@@ -4,7 +4,6 @@ import { Breadcrumb } from 'antd';
 import uuidv1 from 'uuid/v1';
 
 const PageBreadcrumb = ({ planeCategories: list, categoryID }) => {
-
   // tim kiem breadcrumb tu list
   let breadcrumbs = [];
 
@@ -25,8 +24,7 @@ const PageBreadcrumb = ({ planeCategories: list, categoryID }) => {
       if (!cateID) {
         break;
       }
-    }
-    while (true);
+    } while (true);
   }
 
   // reverse array

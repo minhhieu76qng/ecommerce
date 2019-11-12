@@ -8,6 +8,7 @@
     "jsonwebtoken": "^8.5.1",
     "rc-input-number": "^4.5.1",
     "react": "^16.11.0",
+    "react-dnd": "^9.4.0",
     "react-dom": "^16.11.0",
     "react-redux": "^7.1.1",
     "react-reveal": "^1.2.2",

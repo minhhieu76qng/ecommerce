@@ -1,0 +1,104 @@
+.view_products {
+  .sort_by {
+    .title {
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var(--greyish);
+      font-weight: 600;
+      display: inline-block;
+      margin-right: 20px;
+    }
+  }
+  .product_table {
+    border-radius: 2px;
+    box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.08);
+    background-color: var(--white);
+    margin-top: 30px;
+  }
+}
+
+.add_new_product {
+  padding-bottom: 80px;
+  .form-title {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: right;
+    color: var(--dark-grey);
+    text-transform: uppercase;
+  }
+
+  .upload-imgs {
+    .list_dropzone {
+      display: flex;
+
+      .dropzone {
+        width: 180px;
+        height: 270px;
+        margin-right: 20px;
+        border: solid 1px var(--white-three);
+        background-color: rgba(255, 255, 255, 0.5);
+        position: relative;
+        // width: 100%;
+        max-width: 180px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        .dropzone_wrapper {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+
+          .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--greyish);
+          }
+
+          &.preview_item {
+            .remove {
+              position: absolute;
+              top: 0px;
+              right: 0px;
+              background-color: transparent;
+              width: 30px;
+              height: 30px;
+            }
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+        }
+      }
+    }
+
+    .hint {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--greyish);
+      margin: 10px 0 0;
+    }
+  }
+
+  .form-add {
+    .form-field {
+      input {
+        // height: 48px;
+      }
+      & + .form-field {
+        margin-top: 20px;
+      }
+    }
+    .ant-form-item .ant-form-explain {
+      position: absolute;
+    }
+  }
+}

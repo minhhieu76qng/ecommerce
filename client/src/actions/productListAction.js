@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 export const SET_FETCHING_PRODUCTS = 'SET_FETCHING_PRODUCTS';
 export const SET_LIST_PRODUCT = 'SET_LIST_PRODUCT';
@@ -15,7 +14,8 @@ export function fetchProducts(categoryID) {
   return dispatch => {
     dispatch(setFetchingProducts(true));
 
-    axios.get(`/api/categories/${categoryID}/products`)
+    axios
+      .get(`/api/categories/${categoryID}/products`)
       .then(response => {
         const list = response.data.list;
 
@@ -26,6 +26,6 @@ export function fetchProducts(categoryID) {
       })
       .finally(() => {
         dispatch(setFetchingProducts(false));
-      })
-  }
+      });
+  };
 }

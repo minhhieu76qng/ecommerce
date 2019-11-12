@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import uuidv1 from 'uuid/v1'
+import uuidv1 from 'uuid/v1';
 import './index.scss';
 import { Collapse, Icon, Button, Checkbox, Slider } from 'antd';
 
 const Filter = () => {
-
   const [sizes, setSizes] = useState(null);
   const [colors, setColors] = useState(null);
   const [brands, setBrands] = useState(null);
@@ -14,30 +13,27 @@ const Filter = () => {
   // lấy size, color, brand
   // lay size
   useEffect(() => {
-    axios.get('/api/brands')
+    axios
+      .get('/api/brands')
       .then(response => {
         setBrands(response.data.brands);
       })
-      .catch(err => {
+      .catch(err => {});
 
-      })
-
-    axios.get('/api/colors')
+    axios
+      .get('/api/colors')
       .then(response => {
         setColors(response.data.colors);
       })
-      .catch(err => {
+      .catch(err => {});
 
-      })
-
-    axios.get('/api/sizes')
+    axios
+      .get('/api/sizes')
       .then(response => {
         setSizes(response.data.sizes);
       })
-      .catch(err => {
-
-      })
-  }, [])
+      .catch(err => {});
+  }, []);
 
   return (
     <div className='filter widget-sidebar'>
@@ -54,17 +50,22 @@ const Filter = () => {
         <Collapse.Panel className='panel' header='Size'>
           <div>
             {sizes &&
-              sizes.map(val => <Button key={uuidv1()} className='btn-size'>{val.name}</Button>)
-            }
+              sizes.map(val => (
+                <Button key={uuidv1()} className='btn-size'>
+                  {val.name}
+                </Button>
+              ))}
           </div>
         </Collapse.Panel>
         <Collapse.Panel className='panel' header='Color'>
           <div>
-            {colors && colors.map(val => (
-              <Button
-                className='btn-color'
-                style={{ background: `${val.value}` }} />
-            ))}
+            {colors &&
+              colors.map(val => (
+                <Button
+                  className='btn-color'
+                  style={{ background: `${val.value}` }}
+                />
+              ))}
           </div>
         </Collapse.Panel>
         <Collapse.Panel className='panel' header='Brand'>

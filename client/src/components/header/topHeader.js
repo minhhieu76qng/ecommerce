@@ -78,8 +78,8 @@ const TopHeader = ({ user, openLogin, openRegister, logOut }) => {
               {user && user.avatar ? (
                 <Avatar size={35} icon='home' />
               ) : (
-                  <Avatar size={35} icon='user' />
-                )}
+                <Avatar size={35} icon='user' />
+              )}
             </a>
           </Dropdown>
         )}
