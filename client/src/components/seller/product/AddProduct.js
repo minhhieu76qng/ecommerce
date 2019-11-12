@@ -55,7 +55,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
   let categories = null;
   categories = categoryList.filter(val => val.isLeaf === true);
 
-  const { getFieldDecorator } = form;
+  const { getFieldDecorator, validateFields, getFieldValue } = form;
   const props = {
     name: 'file',
     multiple: true,
@@ -83,6 +83,17 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
     temp = temp.filter((val, index) => index !== idx);
     setPhotos(temp);
   };
+
+  const handleFormSubmit = event => {
+    event.preventDefault();
+
+    validateFields(function (err) {
+      if (!err) {
+        // submit
+
+      }
+    })
+  }
 
   return (
     <div className='add_new_product'>
@@ -128,7 +139,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
       </Row>
 
       <div style={{ marginTop: 20 }}>
-        <Form className='form-add'>
+        <Form className='form-add' onSubmit={handleFormSubmit}>
           <Row gutter={20} type='flex' align='middle' className='form-field'>
             <Col span={4} className='form-title'>
               Name
@@ -341,7 +352,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
             <Col span={4} />
             <Col span={16} style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <button className='btn-seller bg-white'>Cancle</button>
-              <button className='btn-seller bg-orange' style={{ marginLeft: 20 }}>Complete</button>
+              <button type='submit' className='btn-seller bg-orange' style={{ marginLeft: 20 }} onClick={handleFormSubmit}>Complete</button>
             </Col>
           </Row>
         </Form>

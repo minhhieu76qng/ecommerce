@@ -1,5 +1,15 @@
 const router = require('express').Router();
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+const aws = require('aws-sdk');
 const productService = require('@services/product.service');
+
+const { authSeller } = require('../middlewares/auth.mdw');
+
+
+// const S3 = new aws.S3({
+
+// })
 
 router.post('/', async (req, res, next) => {
   const photos = [], name = 'PRODUCT 1', categories = ['5dc5142dc29a4919f4b627db', '5dc514116871a43760772f72'],
@@ -17,7 +27,15 @@ router.post('/', async (req, res, next) => {
     console.log(err);
     return res.json({ err })
   }
+})
 
+router.get('/', authSeller, (req, res, next) => {
+  res.json({
+    a: 'a..'
+  })
+})
+
+router.post('/avatar', (req, res, next) => {
 
 })
 

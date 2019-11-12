@@ -1,7 +1,10 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const JWTStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 const userService = require('@services/UserService');
+
+const { JWTSECRET } = process.env;
 
 const LS = new LocalStrategy(
   {
@@ -30,4 +33,20 @@ const LS = new LocalStrategy(
   }
 );
 
+const JWT = new JWTStrategy(
+  {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: JWTSECRET
+  },
+  async (jwtPayload, done) => {
+    try {
+      const user = await userService.findById(jwtPayload.id);
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  }
+);
+
 passport.use(LS);
+passport.use(JWT);

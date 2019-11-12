@@ -36,6 +36,10 @@ const findUserByEmail = email => {
   return User.findOne({ email });
 };
 
+
+const findById = id => {
+  return User.findById(id);
+}
 const comparePassword = (password, encrypted) => {
   return bcrypt.compare(password, encrypted);
 };
@@ -54,6 +58,7 @@ const generateToken = user => {
 };
 
 module.exports = {
+  findById,
   createUser,
   isValidEmail,
   isEmailExist,
