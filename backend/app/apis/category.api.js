@@ -97,6 +97,7 @@ router.get('/:id/categories', async (req, res, next) => {
   }
 })
 
+
 // get product in this category
 router.get('/:id/products', async (req, res, next) => {
   try {

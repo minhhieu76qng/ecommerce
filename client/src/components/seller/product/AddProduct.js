@@ -9,18 +9,51 @@ import {
   Form,
   Input,
   Select,
-  InputNumber,
 } from 'antd';
 import './index.scss';
 import PreviewItem from './PreviewItem';
+import AuthAxios from '../../../utils/AuthAxios'
 
 const { Dragger } = Upload;
 
 const MAX_IMAGES = 4;
 
-const AddProduct = ({ form }) => {
+const AddProduct = ({ form, planeCategories: categoryList }) => {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [sizes, setSizes] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [brands, setBrands] = useState([]);
+
+  useEffect(() => {
+    // fetch api categories
+    AuthAxios.CreateInstance().get('/api/sizes')
+      .then(response => {
+        setSizes(response.data.sizes);
+      })
+      .catch(err => {
+
+      })
+    AuthAxios.CreateInstance().get('/api/brands')
+      .then(response => {
+        setBrands(response.data.brands);
+      })
+      .catch(err => {
+
+      })
+    AuthAxios.CreateInstance().get('/api/colors')
+      .then(response => {
+        setColors(response.data.colors);
+      })
+      .catch(err => {
+
+      })
+  }, []);
+
+  // get leaf categories
+  let categories = null;
+  categories = categoryList.filter(val => val.isLeaf === true);
 
   const { getFieldDecorator } = form;
   const props = {
@@ -50,8 +83,6 @@ const AddProduct = ({ form }) => {
     temp = temp.filter((val, index) => index !== idx);
     setPhotos(temp);
   };
-
-  useEffect(() => { }, []);
 
   return (
     <div className='add_new_product'>
@@ -137,9 +168,8 @@ const AddProduct = ({ form }) => {
                     size='large'
                     showArrow={true}
                     suffixIcon={<Icon type='caret-down' theme='filled' />}>
-                    <Select.Option key='a'>a</Select.Option>
-                    <Select.Option key='b'>b</Select.Option>
-                    <Select.Option key='c'>c</Select.Option>
+
+                    {categories && categories.map(val => <Select.Option key={`${val._id}`}>{val.name}</Select.Option>)}
                   </Select>
                 )}
               </Form.Item>
@@ -166,9 +196,7 @@ const AddProduct = ({ form }) => {
                     size='large'
                     showArrow={true}
                     suffixIcon={<Icon type='caret-down' theme='filled' />}>
-                    <Select.Option key='a'>a</Select.Option>
-                    <Select.Option key='b'>b</Select.Option>
-                    <Select.Option key='c'>c</Select.Option>
+                    {brands && brands.map(val => <Select.Option key={`${val._id}`} value={`${val._id}`}>{val.name}</Select.Option>)}
                   </Select>
                 )}
               </Form.Item>
@@ -225,9 +253,7 @@ const AddProduct = ({ form }) => {
                     size='large'
                     showArrow={true}
                     suffixIcon={<Icon type='caret-down' theme='filled' />}>
-                    <Select.Option key='a'>a</Select.Option>
-                    <Select.Option key='b'>b</Select.Option>
-                    <Select.Option key='c'>c</Select.Option>
+                    {sizes && sizes.map(val => <Select.Option key={`${val._id}`} value={`${val._id}`}>{val.name}</Select.Option>)}
                   </Select>
                 )}
               </Form.Item>
@@ -255,9 +281,7 @@ const AddProduct = ({ form }) => {
                     size='large'
                     showArrow={true}
                     suffixIcon={<Icon type='caret-down' theme='filled' />}>
-                    <Select.Option key='a'>a</Select.Option>
-                    <Select.Option key='b'>b</Select.Option>
-                    <Select.Option key='c'>c</Select.Option>
+                    {colors && colors.map(val => <Select.Option key={`${val._id}`} value={`${val._id}`}>{val.name}</Select.Option>)}
                   </Select>
                 )}
               </Form.Item>

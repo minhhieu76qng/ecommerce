@@ -11,6 +11,7 @@ import Product from './components/seller/product/Product';
 import SellerPrivateRoute from './layout/SellerPrivateRoute';
 import Order from './components/seller/order/Order';
 import AddProduct from './components/seller/product/AddProduct';
+import AddProductContainer from './containers/AddProductContainer';
 // import AdminLayout from './layout/AdminLayout';
 // import ProductList from './scenes/ProductList';
 // import ProductDetail from './scenes/ProductDetail';
@@ -38,7 +39,7 @@ function App({ extractAndStoreUser, fetchCategories }) {
           <SellerPrivateRoute path='/seller/orders' component={Order} />
           <SellerPrivateRoute
             path='/seller/products/add'
-            component={AddProduct}
+            component={AddProductContainer}
           />
           <SellerPrivateRoute path='/seller/products' component={Product} />
           <Route exact path='/seller/login' component={SellerLogin} />
