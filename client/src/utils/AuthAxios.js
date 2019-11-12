@@ -4,7 +4,6 @@ import { UserToken } from './LocalStorage';
 const userToken = new UserToken();
 
 function CreateInstance() {
-
   if (!userToken.isValidToken()) {
     userToken.removeToken();
   }
@@ -13,13 +12,13 @@ function CreateInstance() {
   const instance = Axios.create({
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  })
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   return instance;
 }
 
 export default {
-  CreateInstance
+  CreateInstance,
 };

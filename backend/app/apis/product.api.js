@@ -1,42 +1,135 @@
 const router = require('express').Router();
+const httpCode = require('http-status-codes');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-const aws = require('aws-sdk');
+const Aws = require('aws-sdk');
 const productService = require('@services/product.service');
+const sizeService = require('@services/size.service');
+const brandService = require('@services/brand.service');
+const colorService = require('@services/color.service');
+const categoryService = require('@services/category.service');
 
 const { authSeller } = require('../middlewares/auth.mdw');
 
 
-// const S3 = new aws.S3({
+const { USER_KEY, USER_SECRET, BUCKET_NAME } = process.env;
 
-// })
+// MULTER
+const s3Bucket = new Aws.S3({
+  accessKeyId: USER_KEY,
+  secretAccessKey: USER_SECRET,
+  Bucket: BUCKET_NAME,
+  region: "ap-southeast-1"
+});
+var upload = multer({
+  storage: multerS3({
+    s3: s3Bucket,
+    bucket: `${BUCKET_NAME}`,
+    acl: "public-read",
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      const name = file.originalname;
+      const ext = name.substring(name.lastIndexOf("."), name.length);
+      cb(null, `product_imgs/${Date.now().toString()}${ext}`);
+    }
+  })
+});
+
+const multerUploader = upload.single("image");
 
 router.post('/', async (req, res, next) => {
-  const photos = [], name = 'PRODUCT 1', categories = ['5dc5142dc29a4919f4b627db', '5dc514116871a43760772f72'],
-    brand = '5dc11eb91c9d4400008e6be4', price = 102, sizes = ['5dc11fa81c9d4400008e6bf6', '5dc11f9d1c9d4400008e6bf4', '5dc11fa81c9d4400008e6bf6'],
-    colors = ['5dc11f5f1c9d4400008e6bea', '5dc11f681c9d4400008e6bec'], quantity = 10, description = 'jhf hhf kdfkhs hfsk hfsj';
+  const {
+    productPhotos,
+    productName,
+    productCategories,
+    productBrand,
+    productPrice,
+    productSizes,
+    productColors,
+    productQuantity,
+    productDescription } = req.body;
+
+  if (!(productPhotos && productPhotos.length !== 0 && productName
+    && productCategories && productCategories.length !== 0
+    && productBrand && productPrice && productSizes && productSizes.length !== 0
+    && productColors && productColors.length !== 0 && productQuantity)) {
+    return res.status(httpCode.BAD_REQUEST).json({
+      errors: [{
+        msg: 'Field is required!'
+      }]
+    })
+  }
+
+
 
   try {
-    const result = await productService.addNewProduct({ photos, name, categories, brand, sizes, price, colors, quantity, description });
 
-    console.log(result);
+    // //  validate các id có tồn tại trong db hay không?
+    // const [existCategories, existBrand, existSize, existColor] = await Promise.all(
+    //   // [
+    //   // [productCategories.map(async val => await categoryService.findByID(val)),]
 
-    return res.json(result);
+    //   // brandService.getBrandByID(productBrand),
+    //   // productSizes.map(val => sizeService.getSizeByID(val)),
+    //   // productColors.map(val => colorService.getColorByID(val)),
+    //   // ]
+    // )
+
+    const result = await productService.addNewProduct({
+      photos: productPhotos,
+      name: productName,
+      categories: productCategories,
+      brand: productBrand,
+      sizes: productSizes,
+      price: productPrice,
+      colors: productColors,
+      quantity: productQuantity,
+      description: productDescription
+    });
+
+    return res.status(httpCode.OK).json({ _id: result._id });
+
   }
   catch (err) {
     console.log(err);
-    return res.json({ err })
+    return res.status(httpCode.INTERNAL_SERVER_ERROR).json({ err })
   }
 })
 
-router.get('/', authSeller, (req, res, next) => {
-  res.json({
-    a: 'a..'
-  })
-})
+router.post('/avatar', authSeller, (req, res, next) => {
+  multerUploader(req, res, async err => {
+    if (err) {
+      return res.status(httpCode.INTERNAL_SERVER_ERROR).json({
+        status: httpCode.INTERNAL_SERVER_ERROR,
+        errors: [
+          {
+            message: "Cant upload photo right now!"
+          }
+        ]
+      });
+    }
 
-router.post('/avatar', (req, res, next) => {
+    try {
+      // save to db
+      const location = req.file.location;
 
+      return res.status(httpCode.OK).json({
+        data: {
+          location
+        }
+      })
+    } catch (err) {
+      return res.status(httpCode.INTERNAL_SERVER_ERROR).json({
+        errors: [
+          {
+            message: 'Cant upload photo right now!'
+          }
+        ]
+      })
+    }
+  });
 })
 
 module.exports = router;
