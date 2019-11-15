@@ -135,8 +135,6 @@ router.get('/:id/products', async (req, res, next) => {
 
     const totalPage = Math.ceil(totalProducts / limit);
 
-    console.log(result);
-
     return res.status(httpCode.OK).json({ list: result[0], currentPage: page, totalPage: totalPage, isSuccess: true })
   }
   catch (err) {

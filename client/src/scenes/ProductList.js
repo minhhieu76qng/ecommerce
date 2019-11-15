@@ -24,8 +24,17 @@ const ProductList = () => {
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
+
+  // nếu thay đổi categoryID -> reset query
+  // nếu thay đổi page thì vẫn giữ nguyên
+
   useEffect(() => {
-    Axios.get(`/api/categories/${categoryID}/products?page=${page}`)
+    fetchProducts('');
+  }, [categoryID, page]);
+
+  const fetchProducts = (queryString) => {
+    // chuyển đổi queryboject sang string. -. ghép vào link
+    Axios.get(`/api/categories/${categoryID}/products?page=${page}${queryString}`)
       .then(response => {
         setProducts(response.data.list);
         setTotalPage(+response.data.totalPage);
@@ -34,7 +43,11 @@ const ProductList = () => {
       .catch(err => {
         setProducts(null);
       });
-  }, [categoryID, page]);
+  }
+
+  const handleFilter = (queryString) => {
+    fetchProducts(queryString);
+  }
 
   return (
     <>
@@ -42,7 +55,7 @@ const ProductList = () => {
       <Row gutter={20}>
         <Col span={4}>
           <CategoryContainer />
-          <Filter />
+          <Filter handleFilter={handleFilter} />
         </Col>
         <Col span={20}>
           <Row>
