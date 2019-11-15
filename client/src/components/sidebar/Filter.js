@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import uuidv1 from 'uuid/v1';
 import './index.scss';
 import { Collapse, Icon, Button, Checkbox, Slider } from 'antd';
 
 const Filter = () => {
+  const { id: cateID } = useParams();
+
   const [sizes, setSizes] = useState(null);
   const [colors, setColors] = useState(null);
   const [brands, setBrands] = useState(null);
+
+  const [checkedBrands, setCheckedBrands] = useState([]);
 
   // lấy size, color, brand
   // lay size
@@ -51,9 +55,12 @@ const Filter = () => {
           <div>
             {sizes &&
               sizes.map(val => (
-                <Button key={uuidv1()} className='btn-size'>
+                <Link
+                  to={`/categories/${cateID}?size=${val._id}`}
+                  key={val._id}
+                  className='btn-size'>
                   {val.name}
-                </Button>
+                </Link>
               ))}
           </div>
         </Collapse.Panel>
@@ -61,7 +68,9 @@ const Filter = () => {
           <div>
             {colors &&
               colors.map(val => (
-                <Button
+                <Link
+                  to={`/categories/${cateID}?color=${val._id}`}
+                  key={val._id}
                   className='btn-color'
                   style={{ background: `${val.value}` }}
                 />
@@ -74,7 +83,12 @@ const Filter = () => {
               <ul className='list-filter'>
                 {brands.map(val => (
                   <li>
-                    <Checkbox className='checkbox'>{val.name}</Checkbox>
+                    <Checkbox
+                      key={val._id}
+                      c_value={val._id}
+                      className='checkbox'>
+                      {val.name}
+                    </Checkbox>
                   </li>
                 ))}
               </ul>

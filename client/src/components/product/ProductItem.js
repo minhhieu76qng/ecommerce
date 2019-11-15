@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card } from 'antd';
+import { Link } from 'react-router-dom';
 import './index.scss';
 
-const ProductItem = () => {
+const ProductItem = ({ _id, name, price, photo }) => {
   return (
     <Card
       className='product-item'
@@ -11,20 +12,17 @@ const ProductItem = () => {
       style={{ width: 180 }}
       cover={
         <div className='wrapper-img'>
-          <img
-            alt='example'
-            src='https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
-          />
+          <img alt={name} src={photo} />
           <a className='add-cart' href='#'>
             + Quick Shop
           </a>
           <div className='sold-out'>Sold out</div>
         </div>
       }>
-      <a href='#' className='product-title'>
-        Collete Stretch Linen Minidress
-      </a>
-      <div className='product-price'>$60</div>
+      <Link to={`/products/${_id}`} className='product-title'>
+        {name}
+      </Link>
+      <div className='product-price'>${price}</div>
     </Card>
   );
 };

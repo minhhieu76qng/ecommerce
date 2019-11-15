@@ -1,13 +1,40 @@
-import React from 'react';
-import { Row, Col, Select, Form, Pagination } from 'antd';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Select, Form } from 'antd';
+import { useParams, useLocation } from 'react-router-dom';
 import Filter from '../components/sidebar/Filter';
 import ProductItem from '../components/product/ProductItem';
 import PageBreadcrumbContainer from '../containers/PageBreadcrumbContainer';
 import CategoryContainer from '../containers/CategoryContainer';
+import Pagination from '../components/pagination/Pagination';
+import Axios from 'axios';
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 const ProductList = () => {
   const { id: categoryID } = useParams();
+  let page = 1;
+  let query = useQuery();
+  if (query.get('page')) {
+    page = +query.get('page');
+  }
+
+  const [products, setProducts] = useState(null);
+  const [totalPage, setTotalPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    Axios.get(`/api/categories/${categoryID}/products?page=${page}`)
+      .then(response => {
+        setProducts(response.data.list);
+        setTotalPage(+response.data.totalPage);
+        setCurrentPage(+response.data.currentPage);
+      })
+      .catch(err => {
+        setProducts(null);
+      });
+  }, [categoryID, page]);
 
   return (
     <>
@@ -34,19 +61,34 @@ const ProductList = () => {
                   </Select>
                 </Form>
 
-                <Pagination simple defaultCurrent={2} total={50} />
+                {products && products.length !== 0 && (
+                  <Pagination current={currentPage} total={totalPage} />
+                )}
               </div>
             </Col>
           </Row>
 
           <div className='list-product' style={{ marginTop: 15 }}>
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
-            <ProductItem />
+            {(!products || products.length === 0) && (
+              <div
+                style={{
+                  color: 'var(--greyish-two)',
+                  textAlign: 'center',
+                  marginTop: 50,
+                }}>
+                No result found
+              </div>
+            )}
+            {products &&
+              products.map(val => (
+                <ProductItem
+                  key={val._id}
+                  _id={val._id}
+                  name={val.name}
+                  photo={val.photos[0]}
+                  price={val.price}
+                />
+              ))}
           </div>
 
           <Row>
@@ -57,7 +99,9 @@ const ProductList = () => {
                   justifyContent: 'flex-end',
                   marginTop: 20,
                 }}>
-                <Pagination simple defaultCurrent={2} total={50} />
+                {products && products.length !== 0 && (
+                  <Pagination current={currentPage} total={totalPage} />
+                )}
               </div>
             </Col>
           </Row>

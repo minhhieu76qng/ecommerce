@@ -20,7 +20,6 @@ const { Dragger } = Upload;
 const MAX_IMAGES = 4;
 
 const AddProduct = ({ form, planeCategories: categoryList }) => {
-
   document.title = 'Add new product';
 
   const [addProductLoading, setAddProductLoading] = useState(false);
@@ -40,19 +39,19 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
       .then(response => {
         setSizes(response.data.sizes);
       })
-      .catch(err => { });
+      .catch(err => {});
     AuthAxios.CreateInstance()
       .get('/api/brands')
       .then(response => {
         setBrands(response.data.brands);
       })
-      .catch(err => { });
+      .catch(err => {});
     AuthAxios.CreateInstance()
       .get('/api/colors')
       .then(response => {
         setColors(response.data.colors);
       })
-      .catch(err => { });
+      .catch(err => {});
   }, []);
 
   // get leaf categories
@@ -116,7 +115,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
   const handleFormSubmit = event => {
     event.preventDefault();
 
-    validateFields(function (err) {
+    validateFields(function(err) {
       if (uploadedPhotos.length === 0) {
         return message.error('You must upload at least one photo!');
       }
@@ -131,19 +130,19 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
         const productQuantity = getFieldValue('productQuantity');
         const productDescription = getFieldValue('productDescription');
         setAddProductLoading(true);
-        AuthAxios.CreateInstance().post('/api/products', {
-          productPhotos: uploadedPhotos,
-          productName,
-          productCategories,
-          productBrand,
-          productPrice,
-          productSizes,
-          productColors,
-          productQuantity,
-          productDescription
-        })
+        AuthAxios.CreateInstance()
+          .post('/api/products', {
+            productPhotos: uploadedPhotos,
+            productName,
+            productCategories,
+            productBrand,
+            productPrice,
+            productSizes,
+            productColors,
+            productQuantity,
+            productDescription,
+          })
           .then(response => {
-
             message.success('Add new product successful!');
             setAddProductLoading(false);
           })
@@ -154,7 +153,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
           .finally(() => {
             setAddProductLoading(false);
             resetForm();
-          })
+          });
       }
     });
   };
@@ -164,7 +163,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
     setUploadedPhotos([]);
     setPhotos([]);
     resetFields();
-  }
+  };
 
   return (
     <Spin spinning={addProductLoading} tip='Adding...' size='large'>
@@ -172,7 +171,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
         <Row gutter={20} type='flex' align='middle'>
           <Col span={4} className='form-title'>
             Photos
-        </Col>
+          </Col>
           <Col span={16}>
             <div className='upload-imgs'>
               <div className='list_dropzone'>
@@ -205,7 +204,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
               <p className='hint'>
                 You can add up to 8 photos. The 1st photo will be set as cover
                 (main photo).
-            </p>
+              </p>
             </div>
           </Col>
         </Row>
@@ -215,7 +214,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
             <Row gutter={20} type='flex' align='middle' className='form-field'>
               <Col span={4} className='form-title'>
                 Name
-            </Col>
+              </Col>
               <Col span={16}>
                 <Form.Item style={{ marginBottom: 0 }}>
                   {getFieldDecorator('productName', {
@@ -226,7 +225,11 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
                       },
                     ],
                   })(
-                    <Input type='text' placeholder='Product name' size='large' />,
+                    <Input
+                      type='text'
+                      placeholder='Product name'
+                      size='large'
+                    />,
                   )}
                 </Form.Item>
               </Col>
@@ -235,7 +238,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
             <Row gutter={20} type='flex' align='middle' className='form-field'>
               <Col span={4} className='form-title'>
                 Categories
-            </Col>
+              </Col>
               <Col span={16}>
                 <Form.Item style={{ marginBottom: 0 }}>
                   {getFieldDecorator('productCategories', {
@@ -268,7 +271,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
             <Row gutter={20} type='flex' align='middle' className='form-field'>
               <Col span={4} className='form-title'>
                 Brand
-            </Col>
+              </Col>
               <Col span={16}>
                 <Form.Item style={{ marginBottom: 0 }}>
                   {getFieldDecorator('productBrand', {
@@ -287,7 +290,9 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
                       suffixIcon={<Icon type='caret-down' theme='filled' />}>
                       {brands &&
                         brands.map(val => (
-                          <Select.Option key={`${val._id}`} value={`${val._id}`}>
+                          <Select.Option
+                            key={`${val._id}`}
+                            value={`${val._id}`}>
                             {val.name}
                           </Select.Option>
                         ))}
@@ -300,7 +305,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
             <Row gutter={20} type='flex' align='middle' className='form-field'>
               <Col span={4} className='form-title'>
                 Price ($)
-            </Col>
+              </Col>
               <Col span={16}>
                 <Form.Item style={{ marginBottom: 0 }}>
                   {getFieldDecorator('productPrice', {
@@ -310,7 +315,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
                         message: 'Field is required!',
                       },
                       {
-                        validator: function (rule, value, cb) {
+                        validator: function(rule, value, cb) {
                           const pattern = /^\d*\.?\d*$/;
                           if (pattern.test(value)) {
                             return cb();
@@ -327,7 +332,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
             <Row gutter={20} type='flex' align='middle' className='form-field'>
               <Col span={4} className='form-title'>
                 Sizes
-            </Col>
+              </Col>
               <Col span={16}>
                 <Form.Item style={{ marginBottom: 0 }}>
                   {getFieldDecorator('productSizes', {
@@ -347,7 +352,9 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
                       suffixIcon={<Icon type='caret-down' theme='filled' />}>
                       {sizes &&
                         sizes.map(val => (
-                          <Select.Option key={`${val._id}`} value={`${val._id}`}>
+                          <Select.Option
+                            key={`${val._id}`}
+                            value={`${val._id}`}>
                             {val.name}
                           </Select.Option>
                         ))}
@@ -360,7 +367,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
             <Row gutter={20} type='flex' align='middle' className='form-field'>
               <Col span={4} className='form-title'>
                 Colors
-            </Col>
+              </Col>
               <Col span={16}>
                 <Form.Item style={{ marginBottom: 0 }}>
                   {getFieldDecorator('productColors', {
@@ -380,7 +387,9 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
                       suffixIcon={<Icon type='caret-down' theme='filled' />}>
                       {colors &&
                         colors.map(val => (
-                          <Select.Option key={`${val._id}`} value={`${val._id}`}>
+                          <Select.Option
+                            key={`${val._id}`}
+                            value={`${val._id}`}>
                             {val.name}
                           </Select.Option>
                         ))}
@@ -393,7 +402,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
             <Row gutter={20} type='flex' align='middle' className='form-field'>
               <Col span={4} className='form-title'>
                 Quantity
-            </Col>
+              </Col>
               <Col span={16}>
                 <Form.Item style={{ marginBottom: 0 }}>
                   {getFieldDecorator('productQuantity', {
@@ -403,7 +412,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
                         message: 'Field is required!',
                       },
                       {
-                        validator: function (rule, value, cb) {
+                        validator: function(rule, value, cb) {
                           const pattern = /^\d*\.?\d*$/;
                           if (pattern.test(value)) {
                             return cb();
@@ -420,7 +429,7 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
             <Row gutter={20} type='flex' align='middle' className='form-field'>
               <Col span={4} className='form-title'>
                 Description
-            </Col>
+              </Col>
               <Col span={16}>
                 <Form.Item style={{ marginBottom: 0 }}>
                   {getFieldDecorator('productDescription', {
@@ -446,14 +455,19 @@ const AddProduct = ({ form, planeCategories: categoryList }) => {
               <Col
                 span={16}
                 style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button onClick={resetForm} type='button' className='btn-seller bg-white'>Cancle</button>
+                <button
+                  onClick={resetForm}
+                  type='button'
+                  className='btn-seller bg-white'>
+                  Cancle
+                </button>
                 <button
                   type='submit'
                   className='btn-seller bg-orange'
                   style={{ marginLeft: 20 }}
                   onClick={handleFormSubmit}>
                   Complete
-              </button>
+                </button>
               </Col>
             </Row>
           </Form>

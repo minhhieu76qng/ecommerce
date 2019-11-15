@@ -66,17 +66,6 @@ router.post('/', async (req, res, next) => {
 
   try {
 
-    // //  validate các id có tồn tại trong db hay không?
-    // const [existCategories, existBrand, existSize, existColor] = await Promise.all(
-    //   // [
-    //   // [productCategories.map(async val => await categoryService.findByID(val)),]
-
-    //   // brandService.getBrandByID(productBrand),
-    //   // productSizes.map(val => sizeService.getSizeByID(val)),
-    //   // productColors.map(val => colorService.getColorByID(val)),
-    //   // ]
-    // )
-
     const result = await productService.addNewProduct({
       photos: productPhotos,
       name: productName,

@@ -68,16 +68,11 @@ router.get('/:id/categories', async (req, res, next) => {
 
     // nếu cái category này đã có 2 phần tử trong ancestors
     // -> category này là cuối cùng -> trả về cái list với id là parent của nó
-    console.log(cate);
     if (cate.ancestors.length >= 2) {
-      console.log(cate.parent);
       result = await categoryService.findWithParent(cate.parent);
     } else {
-      console.log('b');
       result = await categoryService.findWithParent(parentID);
     }
-
-    console.log(result);
 
     if (!result || !(Array.isArray(result)) || result.length === 0)
       return res.status(httpCode.INTERNAL_SERVER_ERROR).json({ list: null });
@@ -102,18 +97,50 @@ router.get('/:id/categories', async (req, res, next) => {
 router.get('/:id/products', async (req, res, next) => {
   try {
     const id = req.params.id;
+    const page = req.query.page || 1;
 
     let { offset, limit } = req.query;
 
     if (!(offset && limit)) {
-      offset = 0;
-      limit = 20;
+      offset = page - 1;
+      limit = 2;
     }
-    const list = await productService.getProductByCategoryID(id, offset, limit);
 
-    return res.status(httpCode.OK).json({ list, isSuccess: true })
+    // kiểm tra category đó có phải là leaf hay không
+    // nếu là leaf thì lấy trong leaf
+    // ngược lại thì lấy trong ancestors
+
+    const isLeaf = await categoryService.isLeaf(id);
+
+    if (isLeaf === null) {
+      return res.status(httpCode.BAD_REQUEST).json({ list: null });
+    }
+
+    let result = null;
+    let totalProducts = 0;
+
+    if (isLeaf === true) {
+      result = await Promise.all([
+        productService.getProductByCategoryID(id, offset, limit),
+        productService.countProductWithLeaf(id)
+      ])
+      totalProducts = result[1];
+    } else {
+      result = await Promise.all([
+        productService.getProductByAncestor(id, offset, limit),
+        productService.countProductWithAncestors(id)
+      ])
+      totalProducts = result[1][0].total;
+    }
+
+    const totalPage = Math.ceil(totalProducts / limit);
+
+    console.log(result);
+
+    return res.status(httpCode.OK).json({ list: result[0], currentPage: page, totalPage: totalPage, isSuccess: true })
   }
   catch (err) {
+    console.log(err);
     return res.json({ list: null, isSuccess: false });
   }
 })

@@ -187,6 +187,15 @@ const getBreadcrumb = async id => {
   return result;
 };
 
+const isLeaf = async id => {
+  const result = await Category.findById(id);
+
+  if (result.ancestors.length !== 2) {
+    return false;
+  }
+  return true;
+}
+
 const addNew = (name) => {
   const val = new Category({ name: name });
   return val.save();
@@ -202,6 +211,7 @@ const addToCate = id => {
 };
 
 module.exports = {
+  isLeaf,
   getAll,
   findByID,
   findWithParent,

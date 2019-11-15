@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 import './configs/axios';
 import './App.css';
 import './general.scss';
@@ -32,13 +37,21 @@ function App({ extractAndStoreUser, fetchCategories }) {
           <PageLayout path='/products/:id' component={ProductDetail} />
           <PageLayout exact path='/cart' component={Cart} />
           <PageLayout exact path='/' component={Home} />
-          <SellerPrivateRoute path='/seller/orders' component={Order} title='Orders' />
+          <SellerPrivateRoute
+            path='/seller/orders'
+            component={Order}
+            title='Orders'
+          />
           <SellerPrivateRoute
             title='Add product'
             path='/seller/products/add'
             component={AddProductContainer}
           />
-          <SellerPrivateRoute path='/seller/products' component={Product} title='Products' />
+          <SellerPrivateRoute
+            path='/seller/products'
+            component={Product}
+            title='Products'
+          />
           <SellerPrivateRoute path='*'>
             <Redirect to='/seller/products' />
           </SellerPrivateRoute>

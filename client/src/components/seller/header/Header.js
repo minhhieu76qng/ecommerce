@@ -33,11 +33,18 @@ const Header = ({ title }) => {
           lineHeight: 1,
           marginBottom: 0,
           flexGrow: 1,
-          position: 'relative'
+          position: 'relative',
         }}>
         {title}
-        {title === 'Add product' &&
-          <Breadcrumb style={{ fontSize: 14, fontWeight: 500, color: 'var(--charcoal-grey)', position: 'absolute', bottom: '-25px' }}>
+        {title === 'Add product' && (
+          <Breadcrumb
+            style={{
+              fontSize: 14,
+              fontWeight: 500,
+              color: 'var(--charcoal-grey)',
+              position: 'absolute',
+              bottom: '-25px',
+            }}>
             <Breadcrumb.Item>
               <Link to='/seller/products'>Products</Link>
             </Breadcrumb.Item>
@@ -45,7 +52,7 @@ const Header = ({ title }) => {
               <Link to='/seller/products/add'>Add product</Link>
             </Breadcrumb.Item>
           </Breadcrumb>
-        }
+        )}
       </h3>
 
       <div
