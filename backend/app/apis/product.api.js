@@ -39,7 +39,7 @@ var upload = multer({
 
 const multerUploader = upload.single("image");
 
-router.post('/', async (req, res, next) => {
+router.post('/', authSeller, async (req, res, next) => {
   const {
     productPhotos,
     productName,
@@ -74,7 +74,7 @@ router.post('/', async (req, res, next) => {
       sizes: productSizes,
       price: productPrice,
       colors: productColors,
-      quantity: productQuantity,
+      total: productQuantity,
       description: productDescription
     });
 

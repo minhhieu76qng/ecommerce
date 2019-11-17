@@ -14,8 +14,14 @@ const ProductSchema = new Schema({
   sizes: [{ type: mongoose.Types.ObjectId, ref: 'Size' }],
   colors: [{ type: mongoose.Types.ObjectId, ref: 'Color' }],
   quantity: Number,
+  total: Number,
   description: String
-});
+}, { timestamps: true });
+
+ProductSchema.pre('save', function (next) {
+  this.quantity = this.total;
+  next();
+})
 
 const Product = mongoose.model('Product', ProductSchema);
 

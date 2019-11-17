@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Select, Form } from 'antd';
+import { Row, Col, Select, Form, Spin } from 'antd';
 import { useParams, useLocation } from 'react-router-dom';
 import Filter from '../components/sidebar/Filter';
 import ProductItem from '../components/product/ProductItem';
@@ -20,6 +20,7 @@ const ProductList = () => {
     page = +query.get('page');
   }
 
+  const [isFetching, setIsFetching] = useState(false);
   const [products, setProducts] = useState(null);
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,6 +35,7 @@ const ProductList = () => {
 
   const fetchProducts = (queryString) => {
     // chuyển đổi queryboject sang string. -. ghép vào link
+    setIsFetching(true);
     Axios.get(`/api/categories/${categoryID}/products?page=${page}${queryString}`)
       .then(response => {
         setProducts(response.data.list);
@@ -42,11 +44,18 @@ const ProductList = () => {
       })
       .catch(err => {
         setProducts(null);
+      })
+      .finally(() => {
+        setIsFetching(false);
       });
   }
 
   const handleFilter = (queryString) => {
     fetchProducts(queryString);
+  }
+
+  const handleSort = (value) => {
+    console.log(value);
   }
 
   return (
@@ -61,18 +70,16 @@ const ProductList = () => {
           <Row>
             <Col span={24}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Form>
-                  <Select defaultValue='1' style={{ width: 179 }}>
-                    <Select.Option value='1'>Popularity</Select.Option>
-                    <Select.Option value='2'>Name: A - Z</Select.Option>
-                    <Select.Option value='3'>
-                      Price: Lowest to highest
+                <Select defaultValue='priority' style={{ width: 179 }} onChange={handleSort}>
+                  <Select.Option value='priority'>Popularity</Select.Option>
+                  <Select.Option value='az'>Name: A - Z</Select.Option>
+                  <Select.Option value='lowest'>
+                    Price: Lowest to highest
                     </Select.Option>
-                    <Select.Option value='4'>
-                      Price: Highest to lowest
+                  <Select.Option value='highest'>
+                    Price: Highest to lowest
                     </Select.Option>
-                  </Select>
-                </Form>
+                </Select>
 
                 {products && products.length !== 0 && (
                   <Pagination current={currentPage} total={totalPage} />
@@ -82,26 +89,28 @@ const ProductList = () => {
           </Row>
 
           <div className='list-product' style={{ marginTop: 15 }}>
-            {(!products || products.length === 0) && (
-              <div
-                style={{
-                  color: 'var(--greyish-two)',
-                  textAlign: 'center',
-                  marginTop: 50,
-                }}>
-                No result found
+            <Spin spinning={isFetching} delay={500}>
+              {(!products || products.length === 0) && (
+                <div
+                  style={{
+                    color: 'var(--greyish-two)',
+                    textAlign: 'center',
+                    marginTop: 50,
+                  }}>
+                  No result found
               </div>
-            )}
-            {products &&
-              products.map(val => (
-                <ProductItem
-                  key={val._id}
-                  _id={val._id}
-                  name={val.name}
-                  photo={val.photos[0]}
-                  price={val.price}
-                />
-              ))}
+              )}
+              {products &&
+                products.map(val => (
+                  <ProductItem
+                    key={val._id}
+                    _id={val._id}
+                    name={val.name}
+                    photo={val.photos[0]}
+                    price={val.price}
+                  />
+                ))}
+            </Spin>
           </div>
 
           <Row>

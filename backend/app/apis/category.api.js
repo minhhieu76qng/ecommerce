@@ -99,11 +99,13 @@ router.get('/:id/products', async (req, res, next) => {
     const id = req.params.id;
     const page = req.query.page || 1;
 
+    console.log(req.query);
+
     let { offset, limit } = req.query;
 
     if (!(offset && limit)) {
       offset = page - 1;
-      limit = 2;
+      limit = 20;
     }
 
     // kiểm tra category đó có phải là leaf hay không
@@ -119,18 +121,20 @@ router.get('/:id/products', async (req, res, next) => {
     let result = null;
     let totalProducts = 0;
 
-    if (isLeaf === true) {
-      result = await Promise.all([
-        productService.getProductByCategoryID(id, offset, limit),
-        productService.countProductWithLeaf(id)
-      ])
-      totalProducts = result[1];
-    } else {
-      result = await Promise.all([
-        productService.getProductByAncestor(id, offset, limit),
-        productService.countProductWithAncestors(id)
-      ])
-      totalProducts = result[1][0].total;
+    if (result === null) {
+      if (isLeaf === true) {
+        result = await Promise.all([
+          productService.getProductByCategoryID(id, offset, limit, req.query),
+          productService.countProductWithLeaf(id)
+        ])
+        totalProducts = result[1];
+      } else {
+        result = await Promise.all([
+          productService.getProductByAncestor(id, offset, limit, req.query),
+          productService.countProductWithAncestors(id)
+        ])
+        totalProducts = result[1][0].total;
+      }
     }
 
     const totalPage = Math.ceil(totalProducts / limit);

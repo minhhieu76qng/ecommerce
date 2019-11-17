@@ -52,10 +52,10 @@ function App({ extractAndStoreUser, fetchCategories }) {
             component={Product}
             title='Products'
           />
+          <Route exact path='/seller/login' component={SellerLogin} />
           <SellerPrivateRoute path='*'>
             <Redirect to='/seller/products' />
           </SellerPrivateRoute>
-          <Route exact path='/seller/login' component={SellerLogin} />
         </Switch>
       </Router>
     </div>

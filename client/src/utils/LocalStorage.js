@@ -12,6 +12,12 @@ class Token {
     if (!user) {
       return false;
     }
+    const current = new Date().getTime() / 1000;
+
+    if (current > user.exp) {
+      return false;
+    }
+
     return true;
   }
 
@@ -28,6 +34,10 @@ class Token {
   }
 
   getUserFromToken() {
+    if (!this.isValidToken()) {
+      return null;
+    }
+
     const token = localStorage.getItem(this.token_string);
     if (!token) return null;
 

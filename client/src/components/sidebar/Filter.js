@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import classnames from 'classnames';
 import { Collapse, Icon, Checkbox, Slider, Button } from 'antd';
 import axios from 'axios';
 import './index.scss';
@@ -20,7 +21,7 @@ function createQueryString(queryObject) {
 
   if (queryObject.brands && queryObject.brands.length !== 0) {
     queryObject.brands.map(val => {
-      queryString += `&brand=${val}`;
+      queryString += `&brands=${val}`;
     })
   }
 
@@ -40,10 +41,7 @@ function createQueryString(queryObject) {
   return queryString;
 }
 
-
 const Filter = ({ handleFilter }) => {
-  const { id: cateID } = useParams();
-
   const [queryObject, setQueryObject] = useState(initialQuery);
 
 
@@ -162,8 +160,8 @@ const Filter = ({ handleFilter }) => {
               sizes.map(val => (
                 <Button
                   key={val._id}
-                  onClick={() => onButtonSizeClick(val._id)}
-                  className='btn-size'>
+                  className={`btn-size ${val._id === queryObject.size ? 'active' : ''}`}
+                  onClick={() => onButtonSizeClick(val._id)}>
                   {val.name}
                 </Button>
               ))}
@@ -175,8 +173,8 @@ const Filter = ({ handleFilter }) => {
               colors.map(val => (
                 <Button
                   key={val._id}
+                  className={`btn-color ${val._id === queryObject.size ? 'active' : ''}`}
                   onClick={() => onButtonColorClick(val._id)}
-                  className='btn-color'
                   style={{ background: `${val.value}` }}
                 />
               ))}

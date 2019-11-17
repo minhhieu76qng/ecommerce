@@ -2,11 +2,91 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const { Product } = require('../models/product.model');
 const { Category } = require('../models/category.model');
 
-const getProductByCategoryID = (cateID, offset, limit) => {
-  return Product.find({ 'categories': { $in: [cateID] } }).limit(limit).skip(offset * limit);
+const createFilter = filter => {
+  let filterObject = {};
+  if (Object.entries(filter).length === 0 && filter.constructor === Object) {
+    return filterObject;
+  }
+
+  if (filter.size) {
+    // nếu có size -> get size
+    filterObject.sizes = { $in: [ObjectId(filter.size)] };
+  }
+  if (filter.color) {
+    filterObject.colors = { $in: [ObjectId(filter.color)] }
+  }
+  if (filter.brands) {
+    // nếu có size -> get size
+    let temp = [];
+
+    if (!Array.isArray(filter.brands)) {
+      temp.push(ObjectId(filter.brands));
+    } else {
+      temp = filter.brands.map(val => ObjectId(val));
+    }
+
+    filterObject.brand = {
+      $in: temp
+    }
+  }
+  if ((filter.priceFrom === '0' || filter.priceFrom) && filter.priceTo) {
+    const from = Number.parseInt(filter.priceFrom);
+    const to = Number.parseInt(filter.priceTo);
+    if (Number.isInteger(from) && Number.isInteger(to)) {
+      if (from >= 0 && from < to) {
+        // nếu có size -> get size
+        filterObject.price = {
+          $gte: from,
+          $lte: to
+        }
+      }
+    }
+  }
+  if (filter.instock || filter.outstock) {
+    if (!(filter.instock == 'true' && filter.outstock == 'true')) {
+      if (filter.instock == 'true') {
+        filterObject.quantity = {
+          $gt: 0
+        }
+      }
+      if (filter.outstock == 'true') {
+        filterObject.quantity = {
+          $eq: 0
+        }
+      }
+    }
+  } else {
+    // default
+    filterObject.quantity = {
+      $gt: 0
+    }
+  }
+
+  return filterObject;
+}
+
+const getProductByCategoryID = (cateID, offset, limit, filter) => {
+  const filterObject = createFilter(filter);
+  return Product.aggregate([
+    {
+      $match: {
+        'categories': { $in: [ObjectId(cateID)] }
+      }
+    },
+    {
+      $match: filterObject
+    },
+    {
+      $skip: offset * limit
+    },
+    {
+      $limit: limit
+    }
+  ])
 };
 
-const getProductByAncestor = (id, offset, limit) => {
+const getProductByAncestor = (id, offset, limit, filter) => {
+  const filterObject = createFilter(filter);
   return Category.aggregate([
     {
       $match: {
@@ -65,6 +145,9 @@ const getProductByAncestor = (id, offset, limit) => {
         description: { $first: '$description' },
         categories: { $first: '$categories' },
       }
+    },
+    {
+      $match: filterObject
     },
     {
       $skip: limit * offset
