@@ -105,7 +105,7 @@ router.get('/:id/products', async (req, res, next) => {
 
     if (!(offset && limit)) {
       offset = page - 1;
-      limit = 20;
+      limit = 4;
     }
 
     // kiểm tra category đó có phải là leaf hay không
@@ -124,18 +124,17 @@ router.get('/:id/products', async (req, res, next) => {
     if (result === null) {
       if (isLeaf === true) {
         result = await Promise.all([
-          productService.getProductByCategoryID(id, offset, limit, req.query),
-          productService.countProductWithLeaf(id)
+          productService.getProductByCategoryID(id, offset, limit, req.query, req.query.sort),
+          productService.countProductWithLeaf(id, req.query)
         ])
-        totalProducts = result[1];
       } else {
         result = await Promise.all([
-          productService.getProductByAncestor(id, offset, limit, req.query),
-          productService.countProductWithAncestors(id)
+          productService.getProductByAncestor(id, offset, limit, req.query, req.query.sort),
+          productService.countProductWithAncestors(id, req.query)
         ])
-        totalProducts = result[1][0].total;
       }
     }
+    totalProducts = result[1][0].total;
 
     const totalPage = Math.ceil(totalProducts / limit);
 

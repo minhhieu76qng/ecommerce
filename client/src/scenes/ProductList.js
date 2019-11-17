@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Select, Form, Spin } from 'antd';
-import { useParams, useLocation } from 'react-router-dom';
+import { Row, Col, Select, Spin } from 'antd';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
 import Filter from '../components/sidebar/Filter';
 import ProductItem from '../components/product/ProductItem';
 import PageBreadcrumbContainer from '../containers/PageBreadcrumbContainer';
@@ -13,11 +13,20 @@ function useQuery() {
 }
 
 const ProductList = () => {
+
+  const location = useLocation();
+  const history = useHistory();
+
   const { id: categoryID } = useParams();
   let page = 1;
   let query = useQuery();
   if (query.get('page')) {
     page = +query.get('page');
+  }
+
+  let sort = 'popularity';
+  if (query.get('sort')) {
+    sort = query.get('sort');
   }
 
   const [isFetching, setIsFetching] = useState(false);
@@ -31,12 +40,12 @@ const ProductList = () => {
 
   useEffect(() => {
     fetchProducts('');
-  }, [categoryID, page]);
+  }, [categoryID, page, sort]);
 
   const fetchProducts = (queryString) => {
     // chuyển đổi queryboject sang string. -. ghép vào link
     setIsFetching(true);
-    Axios.get(`/api/categories/${categoryID}/products?page=${page}${queryString}`)
+    Axios.get(`/api/categories/${categoryID}/products?page=${page}&sort=${sort}${queryString}`)
       .then(response => {
         setProducts(response.data.list);
         setTotalPage(+response.data.totalPage);
@@ -55,7 +64,17 @@ const ProductList = () => {
   }
 
   const handleSort = (value) => {
-    console.log(value);
+    const query = location.search;
+    let search_params = new URLSearchParams(location.search);
+
+    if (!search_params.has('sort')) {
+      search_params.append('sort', value);
+    } else {
+      search_params.set('sort', value);
+    }
+
+    const path = location.pathname.replace(query, '') + '?' + search_params.toString();
+    history.push(path);
   }
 
   return (
@@ -70,9 +89,9 @@ const ProductList = () => {
           <Row>
             <Col span={24}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Select defaultValue='priority' style={{ width: 179 }} onChange={handleSort}>
-                  <Select.Option value='priority'>Popularity</Select.Option>
-                  <Select.Option value='az'>Name: A - Z</Select.Option>
+                <Select defaultValue={sort} style={{ width: 179 }} onChange={handleSort}>
+                  <Select.Option value='popularity'>Popularity</Select.Option>
+                  <Select.Option value='nameAZ'>Name: A - Z</Select.Option>
                   <Select.Option value='lowest'>
                     Price: Lowest to highest
                     </Select.Option>

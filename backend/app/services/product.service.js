@@ -65,8 +65,34 @@ const createFilter = filter => {
   return filterObject;
 }
 
-const getProductByCategoryID = (cateID, offset, limit, filter) => {
+const createSort = sort => {
+  let sortObject = { difference: -1 };  // default sort la sort theo popularity
+  switch (sort) {
+    case 'nameAZ':
+      sortObject = {
+        'name': 1
+      };
+      break;
+    case 'lowest':
+      sortObject = {
+        'price': 1
+      };
+      break;
+    case 'highest':
+      sortObject = {
+        'price': -1
+      };
+      break;
+    default:
+      sortObject = { difference: -1 };
+  }
+
+  return sortObject;
+}
+
+const getProductByCategoryID = (cateID, offset, limit, filter, sort) => {
   const filterObject = createFilter(filter);
+  const sortObject = createSort(sort);
   return Product.aggregate([
     {
       $match: {
@@ -77,6 +103,24 @@ const getProductByCategoryID = (cateID, offset, limit, filter) => {
       $match: filterObject
     },
     {
+      $project: {
+        _id: '$_id',
+        name: '$name',
+        price: '$price',
+        photos: '$photos',
+        quantity: '$quantity',
+        sizes: '$sizes',
+        colors: '$colors',
+        brand: '$brand',
+        description: '$description',
+        categories: '$categories',
+        difference: { $subtract: ["$total", "$quantity"] }
+      }
+    },
+    {
+      $sort: sortObject
+    },
+    {
       $skip: offset * limit
     },
     {
@@ -85,7 +129,103 @@ const getProductByCategoryID = (cateID, offset, limit, filter) => {
   ])
 };
 
-const getProductByAncestor = (id, offset, limit, filter) => {
+const getProductByAncestor = (id, offset, limit, filter, sort) => {
+  const filterObject = createFilter(filter);
+  const sortObject = createSort(sort);
+  return Category.aggregate([
+    {
+      $match: {
+        'ancestors': { $in: [ObjectId(id)] },
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        size: { $size: '$ancestors' }
+      }
+    },
+    {
+      $match: {
+        size: { $eq: 2 }
+      }
+    },
+    {
+      $lookup: {
+        from: 'products',
+        localField: '_id',
+        foreignField: 'categories',
+        as: 'out'
+      }
+    },
+    {
+      $unwind: {
+        path: "$out",
+        // preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $project: {
+        _id: '$out._id',
+        name: '$out.name',
+        price: '$out.price',
+        photos: '$out.photos',
+        quantity: '$out.quantity',
+        sizes: '$out.sizes',
+        colors: '$out.colors',
+        brand: '$out.brand',
+        description: '$out.description',
+        categories: '$out.categories',
+        difference: { $subtract: ["$out.total", "$out.quantity"] }
+      }
+    },
+    {
+      $group: {
+        _id: '$_id',
+        name: { $first: '$name' },
+        price: { $first: '$price' },
+        photos: { $first: '$photos' },
+        quantity: { $first: '$quantity' },
+        sizes: { $first: '$sizes' },
+        colors: { $first: '$colors' },
+        brand: { $first: '$brand' },
+        description: { $first: '$description' },
+        categories: { $first: '$categories' },
+      }
+    },
+    {
+      $match: filterObject
+    },
+    {
+      $sort: sortObject
+    },
+    {
+      $skip: limit * offset
+    },
+    {
+      $limit: limit
+    }
+  ])
+}
+
+const countProductWithLeaf = (id, filter) => {
+  const filterObject = createFilter(filter);
+  // return Product.where({ 'categories': { $in: [id] } }).countDocuments();
+  return Product.aggregate([
+    {
+      $match: {
+        'categories': { $in: [ObjectId(id)] }
+      }
+    },
+    {
+      $match: filterObject
+    },
+    {
+      $count: 'total'
+    }
+  ])
+}
+
+const countProductWithAncestors = (id, filter) => {
   const filterObject = createFilter(filter);
   return Category.aggregate([
     {
@@ -133,71 +273,7 @@ const getProductByAncestor = (id, offset, limit, filter) => {
       }
     },
     {
-      $group: {
-        _id: '$_id',
-        name: { $first: '$name' },
-        price: { $first: '$price' },
-        photos: { $first: '$photos' },
-        quantity: { $first: '$quantity' },
-        sizes: { $first: '$sizes' },
-        colors: { $first: '$colors' },
-        brand: { $first: '$brand' },
-        description: { $first: '$description' },
-        categories: { $first: '$categories' },
-      }
-    },
-    {
       $match: filterObject
-    },
-    {
-      $skip: limit * offset
-    },
-    {
-      $limit: limit
-    }
-  ])
-}
-
-const countProductWithLeaf = (id) => {
-  return Product.where({ 'categories': { $in: [id] } }).countDocuments();
-}
-
-const countProductWithAncestors = id => {
-  return Category.aggregate([
-    {
-      $match: {
-        'ancestors': { $in: [ObjectId(id)] },
-      }
-    },
-    {
-      $project: {
-        _id: 1,
-        size: { $size: '$ancestors' }
-      }
-    },
-    {
-      $match: {
-        size: { $eq: 2 }
-      }
-    },
-    {
-      $lookup: {
-        from: 'products',
-        localField: '_id',
-        foreignField: 'categories',
-        as: 'out'
-      }
-    },
-    {
-      $unwind: {
-        path: "$out",
-        // preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $project: {
-        _id: '$out._id',
-      }
     },
     {
       $group: {
