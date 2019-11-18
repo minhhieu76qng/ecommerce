@@ -4,10 +4,6 @@ const multer = require('multer');
 const multerS3 = require('multer-s3');
 const Aws = require('aws-sdk');
 const productService = require('@services/product.service');
-const sizeService = require('@services/size.service');
-const brandService = require('@services/brand.service');
-const colorService = require('@services/color.service');
-const categoryService = require('@services/category.service');
 
 const { authSeller } = require('../middlewares/auth.mdw');
 
@@ -38,6 +34,40 @@ var upload = multer({
 });
 
 const multerUploader = upload.single("image");
+
+router.get('/:id', async (req, res, next) => {
+  const { id: productId } = req.params;
+  try {
+    const product = await productService.getProductById(productId);
+
+    return res.status(httpCode.OK).json({
+      product
+    })
+  }
+  catch (err) {
+    console.log(err);
+    return res.status(httpCode.INTERNAL_SERVER_ERROR);
+  }
+})
+
+router.get('/:id/relatedproducts', async (req, res, next) => {
+  const { id: productId } = req.params;
+  try {
+    const products = await productService.getThumbnailAlsoLike(productId, 8);
+
+    return res.status(httpCode.OK).json({
+      _id: productId,
+      products
+    })
+  }
+  catch (err) {
+    console.log(err);
+    return res.status(httpCode.INTERNAL_SERVER_ERROR).json({
+      _id: productId,
+      products: null
+    });
+  }
+})
 
 router.post('/', authSeller, async (req, res, next) => {
   const {

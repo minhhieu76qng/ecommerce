@@ -4,7 +4,7 @@ import './index.scss';
 
 const InputGroup = Input.Group;
 
-const CustomInputNumber = ({ passValue, maxValue, ...props }) => {
+const CustomInputNumber = ({ passValue, maxValue }) => {
   const [value, setValue] = useState(1);
 
   const onDown = () => {

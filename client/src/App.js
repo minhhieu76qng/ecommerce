@@ -19,7 +19,13 @@ import ProductList from './scenes/ProductList';
 import ProductDetail from './scenes/ProductDetail';
 import Cart from './components/cart';
 
-function App({ extractAndStoreUser, fetchCategories }) {
+function App({
+  extractAndStoreUser,
+  fetchCategories,
+  fetchSizes,
+  fetchColors,
+  fetchBrands,
+}) {
   useEffect(() => {
     extractAndStoreUser();
   }, [extractAndStoreUser]);
@@ -27,6 +33,9 @@ function App({ extractAndStoreUser, fetchCategories }) {
   useEffect(() => {
     // fetch menu
     fetchCategories();
+    fetchColors();
+    fetchBrands();
+    fetchSizes();
   }, []);
 
   return (

@@ -1,6 +1,11 @@
 import { connect } from 'react-redux';
 import App from '../App';
 import { extractAndSaveUser } from '../actions/accountAction';
+import {
+  fetchSizes,
+  fetchColors,
+  fetchBrands,
+} from '../actions/productAttributesAction';
 import { fetchCategories } from '../actions/categoryAction';
 
 const mapDispatchToProps = dispatch => {
@@ -10,6 +15,15 @@ const mapDispatchToProps = dispatch => {
     },
     fetchCategories: () => {
       dispatch(fetchCategories());
+    },
+    fetchSizes: () => {
+      dispatch(fetchSizes());
+    },
+    fetchColors: () => {
+      dispatch(fetchColors());
+    },
+    fetchBrands: () => {
+      dispatch(fetchBrands());
     },
   };
 };

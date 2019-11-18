@@ -286,16 +286,67 @@ const countProductWithAncestors = (id, filter) => {
   ])
 }
 
+const getProductById = id => {
+  return Product.findById(id);
+}
+const getProductsInBrand = (brandId, limit) => {
+  if (limit > 0) {
+    return Product.find({ brand: brandId }).limit(limit);
+  }
+  return Product.find({ brand: brandId });
+}
+
 const addNewProduct = product => {
   const pd = new Product(product);
 
   return pd.save();
 };
 
+const getThumbnailAlsoLike = (productId, limit) => {
+  return Product.aggregate([
+    {
+      $match: {
+        '_id': ObjectId(productId)
+      }
+    },
+    {
+      $project: {
+        pCategories: '$categories'
+      }
+    },
+    {
+      $lookup: {
+        from: 'products',
+        localField: 'pCategories',
+        foreignField: 'categories',
+        as: 'out'
+      }
+    },
+    {
+      $unwind: {
+        path: '$out'
+      }
+    },
+    {
+      $limit: limit
+    },
+    {
+      $project: {
+        _id: '$out._id',
+        name: '$out.name',
+        photos: '$out.photos',
+      }
+    }
+  ])
+}
+
 module.exports = {
   countProductWithLeaf,
   countProductWithAncestors,
   getProductByAncestor,
   getProductByCategoryID,
-  addNewProduct
+  getProductById,
+  addNewProduct,
+  getProductsInBrand,
+  getThumbnailAlsoLike
 };

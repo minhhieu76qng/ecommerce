@@ -6,7 +6,7 @@
 .btn-size {
   display: inline-block;
   line-height: 40px;
-  border: solid 1px #808080;
+  border: 1px solid #808080;
   font-size: 14px;
   color: var(--dark-grey);
   border-radius: 0 !important;
@@ -20,7 +20,12 @@
   &:hover {
     background-color: var(--pale-orange);
     color: var(--white);
-    border: 1px solid transparent;
+    border-color: transparent;
+  }
+  &.disable-hover:hover {
+    background-color: inherit;
+    color: inherit;
+    border-color: inherit;
   }
 }
 .btn-size.active {

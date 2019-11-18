@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Select, Spin } from 'antd';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import Filter from '../components/sidebar/Filter';
 import ProductItem from '../components/product/ProductItem';
 import PageBreadcrumbContainer from '../containers/PageBreadcrumbContainer';
 import CategoryContainer from '../containers/CategoryContainer';
 import Pagination from '../components/pagination/Pagination';
 import Axios from 'axios';
+import FilterContainer from '../containers/FilterContainer';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
 const ProductList = () => {
-
   const location = useLocation();
   const history = useHistory();
 
@@ -34,7 +33,6 @@ const ProductList = () => {
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
-
   // nếu thay đổi categoryID -> reset query
   // nếu thay đổi page thì vẫn giữ nguyên
 
@@ -42,10 +40,12 @@ const ProductList = () => {
     fetchProducts('');
   }, [categoryID, page, sort]);
 
-  const fetchProducts = (queryString) => {
+  const fetchProducts = queryString => {
     // chuyển đổi queryboject sang string. -. ghép vào link
     setIsFetching(true);
-    Axios.get(`/api/categories/${categoryID}/products?page=${page}&sort=${sort}${queryString}`)
+    Axios.get(
+      `/api/categories/${categoryID}/products?page=${page}&sort=${sort}${queryString}`,
+    )
       .then(response => {
         setProducts(response.data.list);
         setTotalPage(+response.data.totalPage);
@@ -57,13 +57,13 @@ const ProductList = () => {
       .finally(() => {
         setIsFetching(false);
       });
-  }
+  };
 
-  const handleFilter = (queryString) => {
+  const handleFilter = queryString => {
     fetchProducts(queryString);
-  }
+  };
 
-  const handleSort = (value) => {
+  const handleSort = value => {
     const query = location.search;
     let search_params = new URLSearchParams(location.search);
 
@@ -73,9 +73,10 @@ const ProductList = () => {
       search_params.set('sort', value);
     }
 
-    const path = location.pathname.replace(query, '') + '?' + search_params.toString();
+    const path =
+      location.pathname.replace(query, '') + '?' + search_params.toString();
     history.push(path);
-  }
+  };
 
   return (
     <>
@@ -83,21 +84,24 @@ const ProductList = () => {
       <Row gutter={20}>
         <Col span={4}>
           <CategoryContainer />
-          <Filter handleFilter={handleFilter} />
+          <FilterContainer handleFilter={handleFilter} />
         </Col>
         <Col span={20}>
           <Row>
             <Col span={24}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Select defaultValue={sort} style={{ width: 179 }} onChange={handleSort}>
+                <Select
+                  defaultValue={sort}
+                  style={{ width: 179 }}
+                  onChange={handleSort}>
                   <Select.Option value='popularity'>Popularity</Select.Option>
                   <Select.Option value='nameAZ'>Name: A - Z</Select.Option>
                   <Select.Option value='lowest'>
                     Price: Lowest to highest
-                    </Select.Option>
+                  </Select.Option>
                   <Select.Option value='highest'>
                     Price: Highest to lowest
-                    </Select.Option>
+                  </Select.Option>
                 </Select>
 
                 {products && products.length !== 0 && (
@@ -117,7 +121,7 @@ const ProductList = () => {
                     marginTop: 50,
                   }}>
                   No result found
-              </div>
+                </div>
               )}
               {products &&
                 products.map(val => (

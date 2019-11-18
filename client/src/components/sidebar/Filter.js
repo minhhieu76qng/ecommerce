@@ -5,7 +5,13 @@ import { Collapse, Icon, Checkbox, Slider, Button } from 'antd';
 import axios from 'axios';
 import './index.scss';
 
-const initialQuery = { size: null, color: null, brands: [], price: { from: null, to: null }, available: { instock: null, outstock: null } };
+const initialQuery = {
+  size: null,
+  color: null,
+  brands: [],
+  price: { from: null, to: null },
+  available: { instock: null, outstock: null },
+};
 
 function createQueryString(queryObject) {
   let queryString = '';
@@ -22,14 +28,17 @@ function createQueryString(queryObject) {
   if (queryObject.brands && queryObject.brands.length !== 0) {
     queryObject.brands.map(val => {
       queryString += `&brands=${val}`;
-    })
+    });
   }
 
   if (queryObject.price && queryObject.price.from && queryObject.price.to) {
-    queryString += `&priceFrom=${queryObject.price.from}&priceTo=${queryObject.price.to}`
+    queryString += `&priceFrom=${queryObject.price.from}&priceTo=${queryObject.price.to}`;
   }
 
-  if (queryObject.available && (queryObject.available.instock || queryObject.available.outstock)) {
+  if (
+    queryObject.available &&
+    (queryObject.available.instock || queryObject.available.outstock)
+  ) {
     if (queryObject.available.instock) {
       queryString += `&instock=${true}`;
     }
@@ -41,38 +50,8 @@ function createQueryString(queryObject) {
   return queryString;
 }
 
-const Filter = ({ handleFilter }) => {
+const Filter = ({ sizes, brands, colors, handleFilter }) => {
   const [queryObject, setQueryObject] = useState(initialQuery);
-
-
-  const [sizes, setSizes] = useState(null);
-  const [colors, setColors] = useState(null);
-  const [brands, setBrands] = useState(null);
-
-  // lấy size, color, brand
-  // lay size
-  useEffect(() => {
-    axios
-      .get('/api/brands')
-      .then(response => {
-        setBrands(response.data.brands);
-      })
-      .catch(err => { });
-
-    axios
-      .get('/api/colors')
-      .then(response => {
-        setColors(response.data.colors);
-      })
-      .catch(err => { });
-
-    axios
-      .get('/api/sizes')
-      .then(response => {
-        setSizes(response.data.sizes);
-      })
-      .catch(err => { });
-  }, []);
 
   const onButtonSizeClick = sizeId => {
     const temp = { ...initialQuery, size: sizeId };
@@ -81,7 +60,7 @@ const Filter = ({ handleFilter }) => {
 
     // goi ham handleFilter
     handleFilter(createQueryString(temp));
-  }
+  };
 
   const onButtonColorClick = colorId => {
     const temp = { ...initialQuery, color: colorId };
@@ -90,7 +69,7 @@ const Filter = ({ handleFilter }) => {
 
     // goi ham handleFilter
     handleFilter(createQueryString(temp));
-  }
+  };
 
   const onCheckboxBrandsChange = (event, brandId) => {
     const { checked } = event.target;
@@ -107,14 +86,14 @@ const Filter = ({ handleFilter }) => {
 
     // // goi ham handleFilter
     handleFilter(createQueryString(temp));
-  }
+  };
 
-  const onPriceChange = (value) => {
-    const temp = { ...initialQuery, price: { from: value[0], to: value[1] } }
+  const onPriceChange = value => {
+    const temp = { ...initialQuery, price: { from: value[0], to: value[1] } };
 
     setQueryObject(temp);
     handleFilter(createQueryString(temp));
-  }
+  };
 
   const onCheckboxAvailableChange = event => {
     const availableTemp = { ...queryObject.available };
@@ -140,7 +119,7 @@ const Filter = ({ handleFilter }) => {
 
     // goi ham handleFilter
     handleFilter(createQueryString(temp));
-  }
+  };
 
   return (
     <div className='filter widget-sidebar'>
@@ -160,7 +139,9 @@ const Filter = ({ handleFilter }) => {
               sizes.map(val => (
                 <Button
                   key={val._id}
-                  className={`btn-size ${val._id === queryObject.size ? 'active' : ''}`}
+                  className={`btn-size ${
+                    val._id === queryObject.size ? 'active' : ''
+                  }`}
                   onClick={() => onButtonSizeClick(val._id)}>
                   {val.name}
                 </Button>
@@ -173,7 +154,9 @@ const Filter = ({ handleFilter }) => {
               colors.map(val => (
                 <Button
                   key={val._id}
-                  className={`btn-color ${val._id === queryObject.size ? 'active' : ''}`}
+                  className={`btn-color ${
+                    val._id === queryObject.size ? 'active' : ''
+                  }`}
                   onClick={() => onButtonColorClick(val._id)}
                   style={{ background: `${val.value}` }}
                 />
@@ -218,10 +201,20 @@ const Filter = ({ handleFilter }) => {
           <div style={{ paddingTop: 10 }}>
             <ul className='list-filter'>
               <li>
-                <Checkbox className='checkbox' name='instock' onChange={event => onCheckboxAvailableChange(event)}>In-store</Checkbox>
+                <Checkbox
+                  className='checkbox'
+                  name='instock'
+                  onChange={event => onCheckboxAvailableChange(event)}>
+                  In-store
+                </Checkbox>
               </li>
               <li>
-                <Checkbox className='checkbox' name='outstock' onChange={event => onCheckboxAvailableChange(event)}>Out of stock</Checkbox>
+                <Checkbox
+                  className='checkbox'
+                  name='outstock'
+                  onChange={event => onCheckboxAvailableChange(event)}>
+                  Out of stock
+                </Checkbox>
               </li>
             </ul>
           </div>

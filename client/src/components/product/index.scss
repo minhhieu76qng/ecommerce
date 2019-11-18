@@ -80,29 +80,29 @@
 }
 
 .product-detail {
-  .btn {
-    border: 0;
-    border-radius: 0;
-    font-weight: 700;
-  }
-  .btn-size {
-    border: solid 1px #808080;
-    font-size: 14px;
-    color: var(--dark-grey);
-    border-radius: 0 !important;
-    background-color: #fff;
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    margin-right: 15px;
-    transition: all 0.5s;
+  // .btn {
+  //   border: 0;
+  //   border-radius: 0;
+  //   font-weight: 700;
+  // }
+  // .btn-size {
+  //   border: solid 1px #808080;
+  //   font-size: 14px;
+  //   color: var(--dark-grey);
+  //   border-radius: 0 !important;
+  //   background-color: #fff;
+  //   width: 40px;
+  //   height: 40px;
+  //   text-align: center;
+  //   margin-right: 15px;
+  //   transition: all 0.5s;
 
-    &:hover {
-      background-color: var(--pale-orange);
-      color: var(--white);
-      border: 0;
-    }
-  }
+  //   &:hover {
+  //     background-color: var(--pale-orange);
+  //     color: var(--white);
+  //     border: 0;
+  //   }
+  // }
 
   img {
     width: 100%;
@@ -253,6 +253,10 @@ h5.title {
 
 .also-like {
   margin-bottom: 30px;
+  .ant-card-cover img {
+    height: 194px;
+    object-fit: cover;
+  }
   .ant-card-body {
     padding: 10px 0;
 
