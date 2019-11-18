@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Rate, Button, Divider, Spin } from 'antd';
+import { Row, Col, Rate, Button, Divider, Spin, message, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
-import CustomInputNumber from '../input/CustomInputNumber';
 import Axios from 'axios';
+import CustomInputNumber from '../input/CustomInputNumber';
+import { UserToken } from '../../utils/LocalStorage';
+
+import AuthAxios from '../../utils/AuthAxios';
 
 const initialPurchasedObject = {
   size: null,
   color: null,
-  quantity: null,
+  quantity: 1,
 };
 
-const ProductInfo = ({
-  productId,
-  sizes,
-  colors,
-  brands,
-}) => {
+const ProductInfo = ({ productId, sizes, colors, brands }) => {
   const [purchasedObject, setPurchasedObject] = useState(
     initialPurchasedObject,
   );
@@ -24,31 +22,47 @@ const ProductInfo = ({
   const [productInfo, setProductInfo] = useState(null);
   const [productFromBrand, setProductFormBrand] = useState([]);
 
+  const [mainPicture, setMainPicture] = useState(null);
+
   useEffect(() => {
     setIsFetching(true);
     Axios.get(`/api/products/${productId}`)
-      .then(response => {
-        const brandId = response.data.product.brand;
+      .then(({ data: { product: mainProduct } }) => {
+        if (mainProduct.photos && mainProduct.photos.length > 0) {
+          setMainPicture(mainProduct.photos[0]);
+        }
+
+        setProductInfo(mainProduct);
+
+        // set default cart
+        const tempPurchasedObject = {
+          size:
+            mainProduct.sizes && mainProduct.sizes.length > 0
+              ? mainProduct.sizes[0]
+              : null,
+          color:
+            mainProduct.colors && mainProduct.colors.length > 0
+              ? mainProduct.colors[0]
+              : null,
+          quantity: 1,
+        };
+
+        setPurchasedObject(tempPurchasedObject);
+
+        const brandId = mainProduct.brand;
 
         Axios.get(`/api/brands/${brandId}/products`)
           .then(({ data: { products } }) => {
-            const temp = products.filter(
-              val => val._id !== response.data.product._id,
-            );
+            const temp = products.filter(val => val._id !== mainProduct._id);
             setProductFormBrand(temp);
           })
           .catch(err => { })
           .finally(() => {
             setIsFetching(false);
           });
-
-        setProductInfo(response.data.product);
       })
       .catch(err => { });
-
-
   }, [productId]);
-
 
   // event
   const handleQuantityChange = value => {
@@ -59,9 +73,58 @@ const ProductInfo = ({
     setPurchasedObject(temp);
   };
 
-  const handleColorClick = value => { };
-  const handleSizeClick = value => { };
+  const handleHover = imgSrc => {
+    if (mainPicture !== imgSrc) {
+      setMainPicture(imgSrc);
+    }
+  };
 
+  const handleColorClick = value => {
+    const temp = { ...purchasedObject };
+
+    temp.color = value;
+
+    setPurchasedObject(temp);
+  };
+  const handleSizeClick = value => {
+    const temp = { ...purchasedObject };
+
+    temp.size = value;
+
+    setPurchasedObject(temp);
+  };
+
+  const addProductToCart = () => {
+    if (productInfo.quantity === 0) {
+      return message.error('This product is out of stock now!');
+    }
+    if (purchasedObject.quantity > productInfo.quantity) {
+      return message.error('Your quantity must be less then product quantity!');
+    }
+
+    const user = new UserToken().getUserFromToken();
+
+    if (!user || !user.id) {
+      return message.error('Your are not log in!');
+    }
+
+    AuthAxios.CreateInstance().post(`/api/users/${user.id}/products`, {
+      _id: productId,
+      color: purchasedObject.color,
+      size: purchasedObject.size,
+      quantity: purchasedObject.quantity,
+    })
+      .then(({ data: { added } }) => {
+        message.success('Add product to cart successfully!');
+      })
+      .catch(({ response: { data: { errors } } }) => {
+        errors.map(val => {
+          message.error(val.message);
+        })
+      })
+
+    // goi api. -> luu vao trong cart
+  };
 
   // process data
   let brandName = '';
@@ -82,19 +145,19 @@ const ProductInfo = ({
             {productInfo &&
               productInfo.photos &&
               productInfo.photos.map(imgSrc => (
-                <div className='product-thumbnail'>
+                <div
+                  className='product-thumbnail'
+                  onMouseEnter={() => handleHover(imgSrc)}>
                   <img src={imgSrc} />
                 </div>
               ))}
           </Col>
           <Col span={8}>
-            {productInfo &&
-              productInfo.photos &&
-              productInfo.photos.length >= 1 && (
-                <div className='product-image'>
-                  <img src={productInfo.photos[0]} />
-                </div>
-              )}
+            {productInfo && mainPicture && (
+              <div className='product-image'>
+                <img src={mainPicture} />
+              </div>
+            )}
           </Col>
           <Col span={1} />
           <Col span={9}>
@@ -124,9 +187,14 @@ const ProductInfo = ({
                           return (
                             <Button
                               className={`btn-size ${
-                                purchasedObject.size ? 'active' : ''
+                                purchasedObject.size &&
+                                  purchasedObject.size === sizeDetails[0]._id
+                                  ? 'active'
+                                  : ''
                                 }`}
-                              onClick={() => handleSizeClick(sizeDetails[0]._id)}>
+                              onClick={() =>
+                                handleSizeClick(sizeDetails[0]._id)
+                              }>
                               {sizeDetails[0].name}
                             </Button>
                           );
@@ -148,13 +216,20 @@ const ProductInfo = ({
                         if (colorDetails.length > 0) {
                           const value = colorDetails[0].value;
                           return (
-                            <Button
-                              className={`btn-color ${
-                                purchasedObject.color ? 'active' : ''
-                                }`}
-                              style={{ background: `${value}` }}
-                              onClick={() => handleColorClick(colorDetails[0]._id)}
-                            />
+                            <Tooltip title={colorDetails[0].name}>
+                              <Button
+                                className={`btn-color ${
+                                  purchasedObject.color &&
+                                    purchasedObject.color === colorDetails[0]._id
+                                    ? 'active'
+                                    : ''
+                                  }`}
+                                style={{ background: `${value}` }}
+                                onClick={() =>
+                                  handleColorClick(colorDetails[0]._id)
+                                }
+                              />
+                            </Tooltip>
                           );
                         } else {
                           return <></>;
@@ -174,7 +249,12 @@ const ProductInfo = ({
                   </div>
                 </div>
 
-                <Button className='field btn' size='large' block type='primary'>
+                <Button
+                  className='field btn'
+                  size='large'
+                  block
+                  type='primary'
+                  onClick={addProductToCart}>
                   Add to cart
                 </Button>
               </div>

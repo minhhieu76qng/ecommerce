@@ -6,13 +6,11 @@ import AlsoLike from '../components/product/AlsoLike';
 import ProductInfoContainer from '../containers/ProductInfoContainer';
 
 const ProductDetail = () => {
-
   const { id: productId } = useParams();
-
 
   return (
     <>
-      <PageBreadcrumb />
+      {/* <PageBreadcrumb /> */}
       <ProductInfoContainer productId={productId} />
       <ProductReview />
       <AlsoLike productId={productId} />
