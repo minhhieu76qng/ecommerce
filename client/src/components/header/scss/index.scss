@@ -3,14 +3,14 @@
   // justify-content: space-between;
   padding: 21px 0 14px;
   position: relative;
-  font-family: "Montserrat";
+  font-family: 'Montserrat';
 
   a {
     color: inherit;
   }
 
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     left: -99999px;
     right: -99999px;
@@ -76,7 +76,7 @@
       height: 35px;
       border-radius: 100px;
       border: solid 1px var(--pale-orange);
-      font-family: "Montserrat", sans-serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 14px;
       font-weight: bold;
       font-stretch: normal;
@@ -108,7 +108,7 @@
   position: relative;
 
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     left: -99999px;
     right: -99999px;
@@ -175,10 +175,11 @@ button {
   width: 270px;
   max-width: 270px;
   .cart-button {
+    margin: 0;
     display: block;
     font-size: 14px;
     font-weight: 700;
-    font-family: "Montserrat";
+    font-family: 'Montserrat';
     color: var(--pale-orange);
     text-align: center;
     width: 100%;
@@ -194,8 +195,12 @@ button {
 
   .product-in-cart {
     .product-img {
+      text-align: center;
       img {
-        max-width: 100%;
+        display: inline-block;
+        max-width: 60px;
+        max-height: 60px;
+        object-fit: contain;
       }
     }
 

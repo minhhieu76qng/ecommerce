@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Badge, Avatar, Dropdown, Menu, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import searchIcon from './img/cart.svg';
 import { UserToken } from '../../utils/LocalStorage';
 const userToken = new UserToken();
 
-const TopHeader = ({ user, openLogin, openRegister, logOut }) => {
+const TopHeader = ({ user, cart, sizes, colors, fetchCart, openLogin, openRegister, logOut }) => {
   const handleLogOut = () => {
     userToken.removeToken();
     logOut();
   };
+
+  useEffect(() => {
+    fetchCart();
+  }, [])
 
   const menu = (
     <Menu className='menu-account'>
@@ -27,29 +31,50 @@ const TopHeader = ({ user, openLogin, openRegister, logOut }) => {
 
   const menuCart = (
     <Menu className='menu-cart'>
-      <Menu.Item>
-        <div className='product-in-cart'>
-          <Row>
-            <Col span={6}>
-              <div className='product-img'>
-                <img src='https://vn-test-11.slatic.net/p/ao-khoac-chong-nang-1721-1147282-817cf933e9cdb8344594c2c5eb7b024f-catalog.jpg_340x340q80.jpg_.webp' />
-              </div>
-            </Col>
-            <Col span={18}>
-              <div className='product-detail'>
-                <Link to='/product' className='title'>
-                  New Balance Men's Street Backpack
-                </Link>
 
-                <div className='description'>
-                  <div className='price'>$485</div>
-                  <div>S&#8226; Black&#8226;1pcs</div>
-                </div>
+      {cart && cart.map(productItem => {
+
+        let color = null;
+        colors.map(colorItem => {
+          if (colorItem._id === productItem.color) {
+            color = colorItem.name;
+          }
+        })
+
+        let size = null;
+        sizes.map(sizeItem => {
+          if (sizeItem._id === productItem.size) {
+            size = sizeItem.name;
+          }
+        })
+
+        return (
+          <Menu.Item key={productItem._id}>
+            <Link to={`/products/${productItem._id}`}>
+              <div className='product-in-cart'>
+                <Row>
+                  <Col span={6}>
+                    <div className='product-img'>
+                      <img src={productItem.photos[0]} />
+                    </div>
+                  </Col>
+                  <Col span={18}>
+                    <div className='product-detail'>
+                      <p className='title'>{productItem.name}</p>
+
+                      <div className='description'>
+                        <div className='price'>${productItem.price}</div>
+                        <div>{size}&#8226; {color}&#8226;1pcs</div>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
               </div>
-            </Col>
-          </Row>
-        </div>
-      </Menu.Item>
+            </Link>
+          </Menu.Item>
+        )
+      })}
+
       <Menu.Item>
         <Link to='/cart' className='reset-button cart-button'>
           View cart
@@ -78,8 +103,8 @@ const TopHeader = ({ user, openLogin, openRegister, logOut }) => {
               {user && user.avatar ? (
                 <Avatar size={35} icon='home' />
               ) : (
-                <Avatar size={35} icon='user' />
-              )}
+                  <Avatar size={35} icon='user' />
+                )}
             </a>
           </Dropdown>
         )}
@@ -107,7 +132,7 @@ const TopHeader = ({ user, openLogin, openRegister, logOut }) => {
         )}
 
         <Dropdown overlay={menuCart} trigger={['click']}>
-          <Badge count={3} style={{ backgroundColor: '#ffa15f' }}>
+          <Badge count={cart && cart.length >= 0 ? cart.length : 0} style={{ backgroundColor: '#ffa15f' }}>
             <button className='reset-button'>
               <img src={searchIcon} />
             </button>

@@ -34,8 +34,8 @@ const AlsoLike = ({ productId }) => {
 
       <Row gutter={20} style={{ marginTop: 20 }}>
         {isFetching &&
-          sketelon.map(() => (
-            <Col span={3}>
+          sketelon.map(val => (
+            <Col key={val} span={3}>
               <Card className='also-like' bordered={false} hoverable={true}>
                 <Skeleton loading={true} active />
               </Card>
@@ -45,7 +45,7 @@ const AlsoLike = ({ productId }) => {
         {!isFetching &&
           relatedProducts &&
           relatedProducts.map(val => (
-            <Col span={3}>
+            <Col span={3} key={val._id}>
               {val.photos.length > 0 && (
                 <Link className='title' to={`/products/${val._id}`}>
                   <Card

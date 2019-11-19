@@ -3,7 +3,7 @@ import { Row, Col, Rate, Button, Divider, Spin, message, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
 import CustomInputNumber from '../input/CustomInputNumber';
-import { UserToken } from '../../utils/LocalStorage';
+import uuidv1 from 'uuid/v1';
 
 import AuthAxios from '../../utils/AuthAxios';
 
@@ -102,13 +102,7 @@ const ProductInfo = ({ productId, sizes, colors, brands }) => {
       return message.error('Your quantity must be less then product quantity!');
     }
 
-    const user = new UserToken().getUserFromToken();
-
-    if (!user || !user.id) {
-      return message.error('Your are not log in!');
-    }
-
-    AuthAxios.CreateInstance().post(`/api/users/${user.id}/products`, {
+    AuthAxios.CreateInstance().post('/api/cart/products', {
       _id: productId,
       color: purchasedObject.color,
       size: purchasedObject.size,
@@ -145,7 +139,7 @@ const ProductInfo = ({ productId, sizes, colors, brands }) => {
             {productInfo &&
               productInfo.photos &&
               productInfo.photos.map(imgSrc => (
-                <div
+                <div key={uuidv1()}
                   className='product-thumbnail'
                   onMouseEnter={() => handleHover(imgSrc)}>
                   <img src={imgSrc} />
@@ -186,6 +180,7 @@ const ProductInfo = ({ productId, sizes, colors, brands }) => {
                         if (sizeDetails.length > 0) {
                           return (
                             <Button
+                              key={sizeId}
                               className={`btn-size ${
                                 purchasedObject.size &&
                                   purchasedObject.size === sizeDetails[0]._id
@@ -198,8 +193,6 @@ const ProductInfo = ({ productId, sizes, colors, brands }) => {
                               {sizeDetails[0].name}
                             </Button>
                           );
-                        } else {
-                          return <></>;
                         }
                       })}
                   </div>
@@ -216,7 +209,7 @@ const ProductInfo = ({ productId, sizes, colors, brands }) => {
                         if (colorDetails.length > 0) {
                           const value = colorDetails[0].value;
                           return (
-                            <Tooltip title={colorDetails[0].name}>
+                            <Tooltip key={colorId} title={colorDetails[0].name}>
                               <Button
                                 className={`btn-color ${
                                   purchasedObject.color &&
@@ -231,8 +224,6 @@ const ProductInfo = ({ productId, sizes, colors, brands }) => {
                               />
                             </Tooltip>
                           );
-                        } else {
-                          return <></>;
                         }
                       })}
                   </div>
@@ -276,14 +267,12 @@ const ProductInfo = ({ productId, sizes, colors, brands }) => {
                   productFromBrand.map(val => {
                     if (val.photos.length > 0) {
                       return (
-                        <Link to={`/products/${val._id}`}>
+                        <Link key={val._id} to={`/products/${val._id}`}>
                           <div className='product-thumbnail'>
                             <img src={val.photos[0]} />
                           </div>
                         </Link>
                       );
-                    } else {
-                      return <></>;
                     }
                   })}
               </div>

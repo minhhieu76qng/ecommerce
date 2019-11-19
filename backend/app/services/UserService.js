@@ -57,10 +57,6 @@ const generateToken = user => {
   return jwt.sign(payload, JWTSECRET, { expiresIn: '1d' });
 };
 
-const addToCart = (userId, product) => {
-  return User.updateOne({ _id: userId }, { $push: { cart: product } })
-}
-
 module.exports = {
   findById,
   createUser,
@@ -69,5 +65,4 @@ module.exports = {
   findUserByEmail,
   comparePassword,
   generateToken,
-  addToCart
 };
