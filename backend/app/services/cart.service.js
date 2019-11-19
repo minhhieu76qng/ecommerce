@@ -3,7 +3,7 @@ const { User } = require('../models/user.model.js');
 
 const addToCart = (userId, product) => {
   let temp = product;
-  temp._id = ObjectId(product._id);
+  temp.productId = ObjectId(product.productId);
   return User.updateOne({ _id: userId }, { $push: { cart: temp } })
 }
 
@@ -25,6 +25,7 @@ const getCart = userId => {
     {
       $project: {
         _id: '$cart._id',
+        productId: '$cart.productId',
         size: '$cart.size',
         color: '$cart.color',
         quantity: '$cart.quantity',
@@ -33,7 +34,7 @@ const getCart = userId => {
     {
       $lookup: {
         from: 'products',
-        localField: '_id',
+        localField: 'productId',
         foreignField: '_id',
         as: 'out'
       }
@@ -44,6 +45,7 @@ const getCart = userId => {
     {
       $project: {
         _id: '$_id',
+        productId: '$productId',
         name: '$out.name',
         photos: '$out.photos',
         price: '$out.price',
@@ -58,7 +60,7 @@ const getCart = userId => {
 
 const updateProductInCart = (userId, product) => {
   const temp = product;
-  temp._id = ObjectId(product._id);
+  temp.productId = ObjectId(product.productId);
   return User.updateOne({ _id: userId, 'cart._id': temp._id }, {
     $set: {
       // 'cart.$.size': product.size,
@@ -69,11 +71,11 @@ const updateProductInCart = (userId, product) => {
   })
 }
 
-const removeProductInCart = (userId, productId) => {
+const removeProductInCart = (userId, cartItemId) => {
   return User.updateOne({ _id: userId }, {
     $pull: {
       cart: {
-        '_id': ObjectId(productId)
+        '_id': cartItemId
       }
     }
   })

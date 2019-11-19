@@ -4,9 +4,11 @@ import CustomInputNumber from '../input/CustomInputNumber';
 import AuthAxios from '../../utils/AuthAxios';
 
 const CartItem = ({ product, sizes, colors, fetchCart }) => {
+  console.log(product);
   const handleQuantityChange = val => {
     const temp = {
       _id: product._id,
+      productId: product.productId,
       size: product.size,
       color: product.color,
       quantity: val,
@@ -31,9 +33,9 @@ const CartItem = ({ product, sizes, colors, fetchCart }) => {
       });
   };
 
-  const handleRemoveProduct = productId => {
+  const handleRemoveProduct = () => {
     AuthAxios.CreateInstance()
-      .delete(`/api/cart/products/${productId}`)
+      .delete(`/api/cart/products/${product._id}`)
       .then(({ data: { isUpdated } }) => {
         if (isUpdated) {
           message.success('Remove product successfully!');

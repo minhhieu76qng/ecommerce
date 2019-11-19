@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Rate, Button, Divider, Spin, message, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
-import CustomInputNumber from '../input/CustomInputNumber';
+import short from 'short-uuid';
 import uuidv1 from 'uuid/v1';
+import CustomInputNumber from '../input/CustomInputNumber';
 
 import AuthAxios from '../../utils/AuthAxios';
 
@@ -56,12 +57,12 @@ const ProductInfo = ({ productId, sizes, colors, brands, fetchCart }) => {
             const temp = products.filter(val => val._id !== mainProduct._id);
             setProductFormBrand(temp);
           })
-          .catch(err => {})
+          .catch(err => { })
           .finally(() => {
             setIsFetching(false);
           });
       })
-      .catch(err => {});
+      .catch(err => { });
   }, [productId]);
 
   // event
@@ -104,7 +105,8 @@ const ProductInfo = ({ productId, sizes, colors, brands, fetchCart }) => {
 
     AuthAxios.CreateInstance()
       .post('/api/cart/products', {
-        _id: productId,
+        _id: short().new(),
+        productId: productId,
         color: purchasedObject.color,
         size: purchasedObject.size,
         quantity: purchasedObject.quantity,
@@ -186,10 +188,10 @@ const ProductInfo = ({ productId, sizes, colors, brands, fetchCart }) => {
                               key={sizeId}
                               className={`btn-size ${
                                 purchasedObject.size &&
-                                purchasedObject.size === sizeDetails[0]._id
+                                  purchasedObject.size === sizeDetails[0]._id
                                   ? 'active'
                                   : ''
-                              }`}
+                                }`}
                               onClick={() =>
                                 handleSizeClick(sizeDetails[0]._id)
                               }>
@@ -216,10 +218,10 @@ const ProductInfo = ({ productId, sizes, colors, brands, fetchCart }) => {
                               <Button
                                 className={`btn-color ${
                                   purchasedObject.color &&
-                                  purchasedObject.color === colorDetails[0]._id
+                                    purchasedObject.color === colorDetails[0]._id
                                     ? 'active'
                                     : ''
-                                }`}
+                                  }`}
                                 style={{ background: `${value}` }}
                                 onClick={() =>
                                   handleColorClick(colorDetails[0]._id)
@@ -238,6 +240,7 @@ const ProductInfo = ({ productId, sizes, colors, brands, fetchCart }) => {
                       <CustomInputNumber
                         passValue={handleQuantityChange}
                         maxValue={productInfo.quantity}
+                        defaultValue={1}
                       />
                     )}
                   </div>

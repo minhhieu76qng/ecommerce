@@ -58,7 +58,7 @@ const TopHeader = ({
 
           return (
             <Menu.Item key={productItem._id}>
-              <Link to={`/products/${productItem._id}`}>
+              <Link to={`/products/${productItem.productId}`}>
                 <div className='product-in-cart'>
                   <Row>
                     <Col span={6}>
@@ -71,7 +71,7 @@ const TopHeader = ({
                         <p className='title'>{productItem.name}</p>
 
                         <div className='description'>
-                          <div className='price'>${productItem.price}</div>
+                          <div className='price'>${productItem.price * productItem.quantity}</div>
                           <div>
                             {size}&#8226; {color}&#8226;1pcs
                           </div>
@@ -113,8 +113,8 @@ const TopHeader = ({
               {user && user.avatar ? (
                 <Avatar size={35} icon='home' />
               ) : (
-                <Avatar size={35} icon='user' />
-              )}
+                  <Avatar size={35} icon='user' />
+                )}
             </a>
           </Dropdown>
         )}

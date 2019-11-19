@@ -14,6 +14,10 @@ const Cart = ({ list, isFetching, fetchCart }) => {
     0,
   );
 
+  const handleCheckout = () => {
+
+  }
+
   return (
     <Spin spinning={isFetching}>
       <div id='cart'>
@@ -78,7 +82,8 @@ const Cart = ({ list, isFetching, fetchCart }) => {
                   className='btn'
                   type='danger'
                   size='large'
-                  style={{ marginTop: 20 }}>
+                  style={{ marginTop: 20 }}
+                  onClick={handleCheckout}>
                   Check out
                 </Button>
               </>

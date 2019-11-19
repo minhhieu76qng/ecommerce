@@ -26,7 +26,7 @@ router.post('/products', authUser, async (req, res, next) => {
   const product = req.body;
 
   // require cac field
-  if (!(product._id && product.quantity >= 1 && product.color && product.size)) {
+  if (!(product._id && product.productId && product.quantity >= 1 && product.color && product.size)) {
     return res.status(httpCode.BAD_REQUEST).json({
       errors: [{
         message: 'Fields are required!'
@@ -36,7 +36,7 @@ router.post('/products', authUser, async (req, res, next) => {
 
 
   // kiem tra xem product co nam trong danh sach san pham khong
-  const existProduct = await productService.getProductById(product._id);
+  const existProduct = await productService.getProductById(product.productId);
 
   if (!existProduct) {
     return res.status(httpCode.NOT_FOUND).json({
@@ -97,8 +97,8 @@ router.patch('/products/:id', authUser, async (req, res, next) => {
     })
   }
 
-  const { id: productId } = req.params;
-  if (productId !== product._id) {
+  const { id: cartItemId } = req.params;
+  if (cartItemId !== product._id) {
     return res.status(httpCode.BAD_REQUEST).json({
       errors: [{
         message: 'Product ID does not match with api!'
@@ -110,7 +110,7 @@ router.patch('/products/:id', authUser, async (req, res, next) => {
     // kiem tra product co ton tai hay khong
     const result = await cartService.updateProductInCart(userId, product);
 
-    if (result.n <= 0) {
+    if (result.nModified <= 0) {
       return res.status(httpCode.NOT_MODIFIED).json({
         isUpdated: false
       })
@@ -128,20 +128,18 @@ router.patch('/products/:id', authUser, async (req, res, next) => {
 
 // delete 1 item trong cart
 router.delete('/products/:id', authUser, async (req, res, next) => {
-  const { id: productId } = req.params;
+  const { id: cartItemId } = req.params;
   const { _id: userId } = req.user;
 
   try {
     // kiem tra product co ton tai hay khong
-    const result = await cartService.removeProductInCart(userId, productId);
+    const result = await cartService.removeProductInCart(userId, cartItemId);
 
-    if (result.n <= 0) {
+    if (result.nModified <= 0) {
       return res.status(httpCode.NOT_MODIFIED).json({
         isUpdated: false
       })
     }
-
-    console.log(result);
 
     return res.status(httpCode.OK).json({
       isUpdated: true
