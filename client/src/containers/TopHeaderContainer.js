@@ -15,7 +15,7 @@ const mapStateToProps = state => {
     user: state.account.user,
     sizes: state.productAttributes.sizes,
     colors: state.productAttributes.colors,
-    cart: state.cart.list
+    cart: state.cart.list,
   };
 };
 
@@ -33,7 +33,7 @@ const mapDispatchToProps = dispatch => {
     },
     fetchCart: () => {
       dispatch(fetchCart());
-    }
+    },
   };
 };
 

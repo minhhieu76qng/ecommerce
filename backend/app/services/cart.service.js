@@ -56,8 +56,33 @@ const getCart = userId => {
   ])
 }
 
+const updateProductInCart = (userId, product) => {
+  const temp = product;
+  temp._id = ObjectId(product._id);
+  return User.updateOne({ _id: userId, 'cart._id': temp._id }, {
+    $set: {
+      // 'cart.$.size': product.size,
+      // 'cart.$.color': product.color,
+      // 'cart.$.quantity': product.quantity,
+      'cart.$': temp,
+    }
+  })
+}
+
+const removeProductInCart = (userId, productId) => {
+  return User.updateOne({ _id: userId }, {
+    $pull: {
+      cart: {
+        '_id': ObjectId(productId)
+      }
+    }
+  })
+}
+
 
 module.exports = {
   addToCart,
-  getCart
+  getCart,
+  updateProductInCart,
+  removeProductInCart
 };

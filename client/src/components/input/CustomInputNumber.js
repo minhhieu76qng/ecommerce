@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Input, Button, Row, Col, InputNumber } from 'antd';
+import { Input, Button, InputNumber } from 'antd';
 import './index.scss';
 
 const InputGroup = Input.Group;
 
-const CustomInputNumber = ({ passValue, maxValue }) => {
-  const [value, setValue] = useState(1);
+const CustomInputNumber = ({ passValue, maxValue, defaultValue = 1 }) => {
+  const [value, setValue] = useState(defaultValue);
 
   const onDown = () => {
     let temp = 0;
@@ -42,7 +42,7 @@ const CustomInputNumber = ({ passValue, maxValue }) => {
         style={{ width: '40%' }}
         min={1}
         max={maxValue}
-        defaultValue={1}
+        defaultValue={defaultValue}
       />
       <Button onClick={onUp} style={{ width: '20%' }}>
         +

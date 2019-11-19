@@ -5,7 +5,16 @@ import searchIcon from './img/cart.svg';
 import { UserToken } from '../../utils/LocalStorage';
 const userToken = new UserToken();
 
-const TopHeader = ({ user, cart, sizes, colors, fetchCart, openLogin, openRegister, logOut }) => {
+const TopHeader = ({
+  user,
+  cart,
+  sizes,
+  colors,
+  fetchCart,
+  openLogin,
+  openRegister,
+  logOut,
+}) => {
   const handleLogOut = () => {
     userToken.removeToken();
     logOut();
@@ -13,7 +22,7 @@ const TopHeader = ({ user, cart, sizes, colors, fetchCart, openLogin, openRegist
 
   useEffect(() => {
     fetchCart();
-  }, [])
+  }, []);
 
   const menu = (
     <Menu className='menu-account'>
@@ -31,49 +40,50 @@ const TopHeader = ({ user, cart, sizes, colors, fetchCart, openLogin, openRegist
 
   const menuCart = (
     <Menu className='menu-cart'>
+      {cart &&
+        cart.map(productItem => {
+          let color = null;
+          colors.map(colorItem => {
+            if (colorItem._id === productItem.color) {
+              color = colorItem.name;
+            }
+          });
 
-      {cart && cart.map(productItem => {
+          let size = null;
+          sizes.map(sizeItem => {
+            if (sizeItem._id === productItem.size) {
+              size = sizeItem.name;
+            }
+          });
 
-        let color = null;
-        colors.map(colorItem => {
-          if (colorItem._id === productItem.color) {
-            color = colorItem.name;
-          }
-        })
-
-        let size = null;
-        sizes.map(sizeItem => {
-          if (sizeItem._id === productItem.size) {
-            size = sizeItem.name;
-          }
-        })
-
-        return (
-          <Menu.Item key={productItem._id}>
-            <Link to={`/products/${productItem._id}`}>
-              <div className='product-in-cart'>
-                <Row>
-                  <Col span={6}>
-                    <div className='product-img'>
-                      <img src={productItem.photos[0]} />
-                    </div>
-                  </Col>
-                  <Col span={18}>
-                    <div className='product-detail'>
-                      <p className='title'>{productItem.name}</p>
-
-                      <div className='description'>
-                        <div className='price'>${productItem.price}</div>
-                        <div>{size}&#8226; {color}&#8226;1pcs</div>
+          return (
+            <Menu.Item key={productItem._id}>
+              <Link to={`/products/${productItem._id}`}>
+                <div className='product-in-cart'>
+                  <Row>
+                    <Col span={6}>
+                      <div className='product-img'>
+                        <img src={productItem.photos[0]} />
                       </div>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-            </Link>
-          </Menu.Item>
-        )
-      })}
+                    </Col>
+                    <Col span={18}>
+                      <div className='product-detail'>
+                        <p className='title'>{productItem.name}</p>
+
+                        <div className='description'>
+                          <div className='price'>${productItem.price}</div>
+                          <div>
+                            {size}&#8226; {color}&#8226;1pcs
+                          </div>
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
+              </Link>
+            </Menu.Item>
+          );
+        })}
 
       <Menu.Item>
         <Link to='/cart' className='reset-button cart-button'>
@@ -103,8 +113,8 @@ const TopHeader = ({ user, cart, sizes, colors, fetchCart, openLogin, openRegist
               {user && user.avatar ? (
                 <Avatar size={35} icon='home' />
               ) : (
-                  <Avatar size={35} icon='user' />
-                )}
+                <Avatar size={35} icon='user' />
+              )}
             </a>
           </Dropdown>
         )}
@@ -132,7 +142,9 @@ const TopHeader = ({ user, cart, sizes, colors, fetchCart, openLogin, openRegist
         )}
 
         <Dropdown overlay={menuCart} trigger={['click']}>
-          <Badge count={cart && cart.length >= 0 ? cart.length : 0} style={{ backgroundColor: '#ffa15f' }}>
+          <Badge
+            count={cart && cart.length >= 0 ? cart.length : 0}
+            style={{ backgroundColor: '#ffa15f' }}>
             <button className='reset-button'>
               <img src={searchIcon} />
             </button>

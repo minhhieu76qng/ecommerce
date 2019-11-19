@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const httpCode = require('http-status-codes');
 require('module-alias/register');
 require('./configs/passport');
 require('./configs/mongoose');
@@ -23,5 +24,13 @@ app.get('/d', (req, res, next) => {
 });
 
 app.use('/api', require('./apis/index.api'));
+
+app.use((req, res, next) => {
+  return res.status(httpCode.NOT_FOUND).json({
+    errors: [{
+      message: 'Api not found!'
+    }]
+  })
+})
 
 module.exports = app;

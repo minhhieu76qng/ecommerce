@@ -13,7 +13,7 @@ const initialPurchasedObject = {
   quantity: 1,
 };
 
-const ProductInfo = ({ productId, sizes, colors, brands }) => {
+const ProductInfo = ({ productId, sizes, colors, brands, fetchCart }) => {
   const [purchasedObject, setPurchasedObject] = useState(
     initialPurchasedObject,
   );
@@ -56,12 +56,12 @@ const ProductInfo = ({ productId, sizes, colors, brands }) => {
             const temp = products.filter(val => val._id !== mainProduct._id);
             setProductFormBrand(temp);
           })
-          .catch(err => { })
+          .catch(err => {})
           .finally(() => {
             setIsFetching(false);
           });
       })
-      .catch(err => { });
+      .catch(err => {});
   }, [productId]);
 
   // event
@@ -102,20 +102,22 @@ const ProductInfo = ({ productId, sizes, colors, brands }) => {
       return message.error('Your quantity must be less then product quantity!');
     }
 
-    AuthAxios.CreateInstance().post('/api/cart/products', {
-      _id: productId,
-      color: purchasedObject.color,
-      size: purchasedObject.size,
-      quantity: purchasedObject.quantity,
-    })
+    AuthAxios.CreateInstance()
+      .post('/api/cart/products', {
+        _id: productId,
+        color: purchasedObject.color,
+        size: purchasedObject.size,
+        quantity: purchasedObject.quantity,
+      })
       .then(({ data: { added } }) => {
         message.success('Add product to cart successfully!');
+        fetchCart();
       })
       .catch(({ response: { data: { errors } } }) => {
         errors.map(val => {
           message.error(val.message);
-        })
-      })
+        });
+      });
 
     // goi api. -> luu vao trong cart
   };
@@ -139,7 +141,8 @@ const ProductInfo = ({ productId, sizes, colors, brands }) => {
             {productInfo &&
               productInfo.photos &&
               productInfo.photos.map(imgSrc => (
-                <div key={uuidv1()}
+                <div
+                  key={uuidv1()}
                   className='product-thumbnail'
                   onMouseEnter={() => handleHover(imgSrc)}>
                   <img src={imgSrc} />
@@ -183,10 +186,10 @@ const ProductInfo = ({ productId, sizes, colors, brands }) => {
                               key={sizeId}
                               className={`btn-size ${
                                 purchasedObject.size &&
-                                  purchasedObject.size === sizeDetails[0]._id
+                                purchasedObject.size === sizeDetails[0]._id
                                   ? 'active'
                                   : ''
-                                }`}
+                              }`}
                               onClick={() =>
                                 handleSizeClick(sizeDetails[0]._id)
                               }>
@@ -213,10 +216,10 @@ const ProductInfo = ({ productId, sizes, colors, brands }) => {
                               <Button
                                 className={`btn-color ${
                                   purchasedObject.color &&
-                                    purchasedObject.color === colorDetails[0]._id
+                                  purchasedObject.color === colorDetails[0]._id
                                     ? 'active'
                                     : ''
-                                  }`}
+                                }`}
                                 style={{ background: `${value}` }}
                                 onClick={() =>
                                   handleColorClick(colorDetails[0]._id)

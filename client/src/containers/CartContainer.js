@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
-import ProductInfo from '../components/product/ProductInfo';
+import Cart from '../components/cart';
 import { fetchCart } from '../actions/cartAction';
 
 const mapStateToProps = state => {
   return {
-    sizes: state.productAttributes.sizes,
-    colors: state.productAttributes.colors,
-    brands: state.productAttributes.brands,
+    isFetching: state.cart.isFetching,
+    list: state.cart.list,
   };
 };
 
@@ -21,4 +20,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ProductInfo);
+)(Cart);

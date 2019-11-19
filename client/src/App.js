@@ -17,7 +17,7 @@ import Order from './components/seller/order/Order';
 import AddProductContainer from './containers/AddProductContainer';
 import ProductList from './scenes/ProductList';
 import ProductDetail from './scenes/ProductDetail';
-import Cart from './components/cart';
+import CartContainer from './containers/CartContainer';
 
 function App({
   extractAndStoreUser,
@@ -44,7 +44,7 @@ function App({
         <Switch>
           <PageLayout path='/categories/:id' component={ProductList} />
           <PageLayout path='/products/:id' component={ProductDetail} />
-          <PageLayout exact path='/cart' component={Cart} />
+          <PageLayout exact path='/cart' component={CartContainer} />
           <PageLayout exact path='/' component={Home} />
           <SellerPrivateRoute
             path='/seller/orders'

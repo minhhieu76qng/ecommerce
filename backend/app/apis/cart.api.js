@@ -82,4 +82,75 @@ router.post('/products', authUser, async (req, res, next) => {
   }
 })
 
+// update 1 item trong cart
+router.patch('/products/:id', authUser, async (req, res, next) => {
+
+  const { product } = req.body;
+
+  const { _id: userId } = req.user;
+
+  if (!product) {
+    return res.status(httpCode.FORBIDDEN).json({
+      errors: [{
+        message: 'Payload is not found!'
+      }]
+    })
+  }
+
+  const { id: productId } = req.params;
+  if (productId !== product._id) {
+    return res.status(httpCode.BAD_REQUEST).json({
+      errors: [{
+        message: 'Product ID does not match with api!'
+      }]
+    })
+  }
+
+  try {
+    // kiem tra product co ton tai hay khong
+    const result = await cartService.updateProductInCart(userId, product);
+
+    if (result.n <= 0) {
+      return res.status(httpCode.NOT_MODIFIED).json({
+        isUpdated: false
+      })
+    }
+
+    return res.status(httpCode.OK).json({
+      isUpdated: true
+    })
+  }
+  catch (err) {
+    console.log(err);
+    return res.status(httpCode.INTERNAL_SERVER_ERROR);
+  }
+})
+
+// delete 1 item trong cart
+router.delete('/products/:id', authUser, async (req, res, next) => {
+  const { id: productId } = req.params;
+  const { _id: userId } = req.user;
+
+  try {
+    // kiem tra product co ton tai hay khong
+    const result = await cartService.removeProductInCart(userId, productId);
+
+    if (result.n <= 0) {
+      return res.status(httpCode.NOT_MODIFIED).json({
+        isUpdated: false
+      })
+    }
+
+    console.log(result);
+
+    return res.status(httpCode.OK).json({
+      isUpdated: true
+    })
+  }
+  catch (err) {
+    console.log(err);
+    return res.status(httpCode.INTERNAL_SERVER_ERROR);
+  }
+})
+
 module.exports = router;
