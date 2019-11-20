@@ -30,7 +30,6 @@ const addSingleOrder = async (userId, cartItem) => {
   try {
     // lay san pham
     const product = await productService.getProductById(cartItem.productId);
-    console.log(product);
     if (!product.sizes.includes(cartItem.size)) {
       return {
         isAdded: false,
@@ -154,7 +153,7 @@ const addListOrder = async (userId) => {
   const failedTask = [];
 
   productsInCart.map(val => {
-    if (!completedTask.includes(val.cartItemId)) {
+    if (completedTask.findIndex(cpTask => cpTask.cartItemId !== val.cartItemId)) {
       failedTask.push({
         cartItemId: val.cartItemId,
         orderId: val.orderId,

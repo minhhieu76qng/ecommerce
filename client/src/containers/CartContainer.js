@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Cart from '../components/cart';
-import { fetchCart } from '../actions/cartAction';
+import { fetchCart, setIsFetching } from '../actions/cartAction';
 
 const mapStateToProps = state => {
   return {
@@ -15,6 +15,9 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchCart: () => {
       dispatch(fetchCart());
+    },
+    setFetching: isFetching => {
+      dispatch(setIsFetching(isFetching));
     },
   };
 };

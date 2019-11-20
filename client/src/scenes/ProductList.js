@@ -133,6 +133,7 @@ const ProductList = () => {
                     price={val.price}
                     sizes={val.sizes}
                     colors={val.colors}
+                    isOutStock={val.quantity === 0}
                   />
                 ))}
             </Spin>

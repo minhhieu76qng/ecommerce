@@ -7,8 +7,6 @@ const InputGroup = Input.Group;
 const CustomInputNumber = ({ passValue, maxValue, defaultValue = 1 }) => {
   const [value, setValue] = useState(defaultValue);
 
-  console.log('a');
-
   const onDown = () => {
     let temp = 0;
     if (value <= 1) {

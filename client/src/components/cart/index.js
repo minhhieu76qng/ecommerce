@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { Row, Col, Button, Divider, Spin, Skeleton, message } from 'antd';
+import { Row, Col, Button, Divider, Spin, Skeleton, message, Popconfirm } from 'antd';
 import './index.scss';
 import CartItemContainer from '../../containers/CartItemContainer';
 import AuthAxios from '../../utils/AuthAxios';
 
-const Cart = ({ list, isFetching, sizes, colors, fetchCart }) => {
+const Cart = ({ list, isFetching, fetchCart, setFetching }) => {
   useEffect(() => {
     fetchCart();
   }, []);
@@ -22,13 +22,21 @@ const Cart = ({ list, isFetching, sizes, colors, fetchCart }) => {
       return message.error('Your cart is empty!');
     }
 
-    AuthAxios.CreateInstance().post('/api/order')
-      .then(response => {
-        console.log(response);
+    setFetching(true);
+
+    AuthAxios.CreateInstance().post('/api/orders')
+      .then(({ data: { completedTask, failedTask } }) => {
+        // console.log(response.data);
+        // hiển thị list sản phẩm thành công và thất bại
+        message.success('Your order has been placed!')
       })
       .catch(err => {
         console.log(err.response);
-      });
+      })
+      .finally(() => {
+        setFetching(true);
+        fetchCart();
+      })
   }
 
   return (
@@ -90,15 +98,25 @@ const Cart = ({ list, isFetching, sizes, colors, fetchCart }) => {
                     </div>
                   </div>
                 </Skeleton>
-                <Button
-                  block
-                  className='btn'
-                  type='danger'
-                  size='large'
-                  style={{ marginTop: 20 }}
-                  onClick={handleCheckout}>
-                  Check out
+                <Popconfirm
+                  title="Are you sure check out these orders?"
+                  onConfirm={handleCheckout}
+                  // onCancel={cancel}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button
+                    block
+                    className='btn'
+                    type='danger'
+                    size='large'
+                    style={{ marginTop: 20 }}
+                  // onClick={handleCheckout}
+                  >
+                    Check out
                 </Button>
+                </Popconfirm>
+
               </>
             )}
           </Col>

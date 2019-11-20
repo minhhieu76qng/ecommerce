@@ -5,7 +5,7 @@ import './index.scss';
 import short from 'short-uuid';
 import AuthAxios from '../../utils/AuthAxios';
 
-const ProductItem = ({ _id, name, price, photo, sizes, colors, fetchCart }) => {
+const ProductItem = ({ _id, name, price, photo, sizes, colors, isOutStock, fetchCart }) => {
 
   const addToCart = (event) => {
     event.preventDefault();
@@ -39,7 +39,8 @@ const ProductItem = ({ _id, name, price, photo, sizes, colors, fetchCart }) => {
           <div className='wrapper-img'>
             <img alt={name} src={photo} />
             <button className='reset-button add-cart' onClick={addToCart}>+ Quick Shop</button>
-            <div className='sold-out'>Sold out</div>
+            {isOutStock && <div className='sold-out'>Sold out</div>}
+
           </div>
         }>
         <p className='product-title'>{name}</p>
