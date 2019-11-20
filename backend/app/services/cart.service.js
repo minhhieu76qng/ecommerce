@@ -63,9 +63,6 @@ const updateProductInCart = (userId, product) => {
   temp.productId = ObjectId(product.productId);
   return User.updateOne({ _id: userId, 'cart._id': temp._id }, {
     $set: {
-      // 'cart.$.size': product.size,
-      // 'cart.$.color': product.color,
-      // 'cart.$.quantity': product.quantity,
       'cart.$': temp,
     }
   })

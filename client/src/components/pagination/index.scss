@@ -1,0 +1,21 @@
+.pagination {
+  .button-link {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    border: solid 1px var(--white-three);
+    background-color: var(--white);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--charcoal-grey);
+    text-align: center;
+    transition: all 0.4s;
+
+    &.active {
+      border: solid 1px var(--pale-orange);
+      background-color: var(--pale-orange);
+      color: #fff;
+    }
+  }
+}

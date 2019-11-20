@@ -21,7 +21,7 @@ const columns = [
   {
     title: 'Date added',
     dataIndex: 'Date added',
-    key: 'Date added',
+    key: 'date_added',
   },
   {
     title: 'Profit ($)',
@@ -68,7 +68,7 @@ const Product = () => {
         </div>
       </div>
       <div className='product_table'>
-        <Table columns={columns} />
+        <Table className='table' columns={columns} />
       </div>
     </div>
   );

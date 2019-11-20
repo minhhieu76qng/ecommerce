@@ -22,12 +22,13 @@ export function fetchCart() {
     AuthAxios.CreateInstance()
       .get('/api/cart')
       .then(({ data: { cart: list } }) => {
+        console.log(list);
         dispatch(setCart(list));
       })
       .catch(({ response: { data: { errors } } }) => {
         dispatch(setErrors(errors));
       })
-      .finally(function() {
+      .finally(function () {
         dispatch(setIsFetching(false));
       });
   };

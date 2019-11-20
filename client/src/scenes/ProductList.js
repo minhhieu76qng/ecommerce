@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Select, Spin } from 'antd';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import ProductItem from '../components/product/ProductItem';
 import PageBreadcrumbContainer from '../containers/PageBreadcrumbContainer';
 import CategoryContainer from '../containers/CategoryContainer';
 import Pagination from '../components/pagination/Pagination';
 import Axios from 'axios';
 import FilterContainer from '../containers/FilterContainer';
+import ProductItemContainer from '../containers/ProductItemContainer';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -125,12 +125,14 @@ const ProductList = () => {
               )}
               {products &&
                 products.map(val => (
-                  <ProductItem
+                  <ProductItemContainer
                     key={val._id}
                     _id={val._id}
                     name={val.name}
                     photo={val.photos[0]}
                     price={val.price}
+                    sizes={val.sizes}
+                    colors={val.colors}
                   />
                 ))}
             </Spin>

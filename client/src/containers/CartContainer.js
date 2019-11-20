@@ -6,6 +6,8 @@ const mapStateToProps = state => {
   return {
     isFetching: state.cart.isFetching,
     list: state.cart.list,
+    sizes: state.productAttributes.sizes,
+    colors: state.productAttributes.colors,
   };
 };
 

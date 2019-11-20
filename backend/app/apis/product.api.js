@@ -151,4 +151,26 @@ router.post('/avatar', authSeller, (req, res, next) => {
   });
 })
 
+router.get('/', async (req, res, next) => {
+  const defaultSort = 'dateAdd';
+
+  const page = req.query.page || 1;
+
+  const offset = page - 1, limit = 10;
+
+
+  try {
+    const result = await productService.getAllProduct(defaultSort, limit, offset);
+
+    return res.status(httpCode.OK).json({
+      products: result
+    })
+  }
+  catch (err) {
+    console.log(err);
+
+    return res.status(httpCode.INTERNAL_SERVER_ERROR);
+  }
+})
+
 module.exports = router;

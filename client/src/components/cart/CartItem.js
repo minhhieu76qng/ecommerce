@@ -4,7 +4,6 @@ import CustomInputNumber from '../input/CustomInputNumber';
 import AuthAxios from '../../utils/AuthAxios';
 
 const CartItem = ({ product, sizes, colors, fetchCart }) => {
-  console.log(product);
   const handleQuantityChange = val => {
     const temp = {
       _id: product._id,

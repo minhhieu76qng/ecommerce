@@ -99,8 +99,6 @@ router.get('/:id/products', async (req, res, next) => {
     const id = req.params.id;
     const page = req.query.page || 1;
 
-    console.log(req.query);
-
     let { offset, limit } = req.query;
 
     if (!(offset && limit)) {

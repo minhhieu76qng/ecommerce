@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { Row, Col, Button, Divider, Spin, Skeleton } from 'antd';
+import { Row, Col, Button, Divider, Spin, Skeleton, message } from 'antd';
 import './index.scss';
 import CartItemContainer from '../../containers/CartItemContainer';
+import AuthAxios from '../../utils/AuthAxios';
 
-const Cart = ({ list, isFetching, fetchCart }) => {
+const Cart = ({ list, isFetching, sizes, colors, fetchCart }) => {
   useEffect(() => {
     fetchCart();
   }, []);
@@ -14,8 +15,20 @@ const Cart = ({ list, isFetching, fetchCart }) => {
     0,
   );
 
+
   const handleCheckout = () => {
 
+    if (!list || list.length === 0) {
+      return message.error('Your cart is empty!');
+    }
+
+    AuthAxios.CreateInstance().post('/api/order')
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+        console.log(err.response);
+      });
   }
 
   return (

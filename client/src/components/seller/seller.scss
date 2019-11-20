@@ -60,3 +60,30 @@
     margin-left: 20px;
   }
 }
+
+.table {
+  .ant-table {
+    border: none;
+  }
+  .ant-table-thead {
+    border-bottom: 1px solid var(--white-three);
+    padding: 0 15px;
+    line-height: 40px;
+    .ant-table-column-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--greyish);
+      text-transform: uppercase;
+    }
+
+    .ant-table-row-cell-break-word {
+      background-color: #fff;
+    }
+  }
+
+  .ant-table-tbody {
+    .ant-table-row:nth-child(2n) {
+      background-color: var(--white-two);
+    }
+  }
+}

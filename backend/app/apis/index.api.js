@@ -8,5 +8,6 @@ router.use('/sizes', require('./size.api'));
 router.use('/colors', require('./color.api'));
 router.use('/brands', require('./brand.api'));
 router.use('/cart', require('./cart.api'));
+router.use('/orders', require('./order.api'));
 
 module.exports = router;
