@@ -20,7 +20,7 @@ const Login = ({
 
   const handleSubmit = event => {
     event.preventDefault();
-    validateFields(function(err) {
+    validateFields(function (err) {
       if (!err) {
         // submit
         const email = getFieldValue('email');
@@ -52,7 +52,7 @@ const Login = ({
                     message: 'Field is required!',
                   },
                   {
-                    validator: function(rules, value, cb) {
+                    validator: function (rules, value, cb) {
                       const pattern = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
                       if (!pattern.test(value)) {
                         return cb('Email is not valid!');
@@ -112,7 +112,7 @@ const Login = ({
               onClick={handleSubmit}>
               Log In
             </Button>
-            openRegister
+
             <div className='bottom-form'>
               <div className='text'>
                 Don't have an account?{' '}

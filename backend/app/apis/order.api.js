@@ -6,6 +6,26 @@ const orderService = require('../services/order.service');
 
 
 router.get('/', authSeller, async (req, res, next) => {
+  let page = req.query.page || 1;
+  let limit = req.query.limit || 10;
+
+  if (!Number.isInteger(page)) {
+    page = 1;
+  }
+
+  if (!Number.isInteger(limit)) {
+    limit = 10;
+  }
+
+  const offset = page - 1;
+
+  const orders = await orderService.getAllOrders(limit, offset);
+
+  return res.status(httpCode.OK).json({
+    orders
+  })
+
+
 
 })
 

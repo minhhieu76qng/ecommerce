@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models/user.model.js');
+const mailService = require('./mail.service');
 
 const SALT = 10;
 
@@ -29,7 +30,33 @@ const createUser = async (name, email, password) => {
 
   const user = new User({ name, email, password: hash });
 
-  return await user.save();
+  const result = await user.save();
+
+  if (!result) {
+    return null;
+  }
+
+  let count = 0;
+  let sent = false;
+
+  do {
+    const verificationMail = await mailService.sendVerifyEmail({ _id: result._id, email: result.email });
+
+    sent = verificationMail.isSent;
+
+    if (verificationMail.code && verificationMail.code === 'EAUTH') {
+      isSent = false;
+      break;
+    }
+
+    count++;
+  }
+  while (!sent && count < 3);
+
+  return {
+    isSent: sent,
+    user: result
+  }
 };
 
 const findUserByEmail = email => {
@@ -52,10 +79,37 @@ const generateToken = user => {
     isSeller: user.isSeller
   };
 
-  const JWTSECRET = process.env.JWTSECRET || 'secret_string';
+  const JWTSECRET = process.env.JWTSECRET;
 
   return jwt.sign(payload, JWTSECRET, { expiresIn: '1d' });
 };
+
+
+const verifyEmail = async (token) => {
+  const JWTSECRET = process.env.JWTSECRET;
+  const user = jwt.verify(token, JWTSECRET);
+
+  if (!(user && user._id)) {
+    return {
+      _id: user._id,
+      isVerified: false
+    }
+  }
+
+  const result = await User.updateOne({ _id: user._id }, { isVerified: true });
+
+  if (!(result && result.nModified > 0)) {
+    return {
+      _id: user._id,
+      isVerified: false
+    }
+  }
+
+  return {
+    _id: user._id,
+    isVerified: true
+  }
+}
 
 module.exports = {
   findById,
@@ -65,4 +119,5 @@ module.exports = {
   findUserByEmail,
   comparePassword,
   generateToken,
+  verifyEmail,
 };

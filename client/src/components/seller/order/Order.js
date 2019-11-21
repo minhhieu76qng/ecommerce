@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Select, Icon, Table, Tag } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import './index.scss';
@@ -108,6 +108,11 @@ const Order = () => {
   if (query.get('page')) {
     page = +query.get('page');
   }
+
+  // fetch api để get danh sách các order
+  useEffect(() => {
+
+  }, [])
 
 
   return (

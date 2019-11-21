@@ -26,12 +26,13 @@ const Cart = ({ list, isFetching, fetchCart, setFetching }) => {
 
     AuthAxios.CreateInstance().post('/api/orders')
       .then(({ data: { completedTask, failedTask } }) => {
-        // console.log(response.data);
         // hiển thị list sản phẩm thành công và thất bại
         message.success('Your order has been placed!')
       })
-      .catch(err => {
-        console.log(err.response);
+      .catch(({ response: { data: { errors } } }) => {
+        errors.map(val => {
+          message.error(val.message)
+        })
       })
       .finally(() => {
         setFetching(true);

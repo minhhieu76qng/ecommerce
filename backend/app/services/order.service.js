@@ -168,6 +168,21 @@ const addListOrder = async (userId) => {
   };
 }
 
+const getAllOrders = async (limit, offset) => {
+  const orders = await Order.aggregate([
+    {
+      $skip: offset * limit
+    },
+    {
+      $limit: limit,
+
+    }
+  ])
+
+  return orders;
+}
+
 module.exports = {
-  addListOrder
+  addListOrder,
+  getAllOrders
 };

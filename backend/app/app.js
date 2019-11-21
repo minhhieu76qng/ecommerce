@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const httpCode = require('http-status-codes');
+const exphbs = require('express-handlebars');
+
 require('module-alias/register');
 require('./configs/passport');
 require('./configs/mongoose');
@@ -12,6 +14,9 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.engine('hbs', exphbs());
+app.set('view engine', 'hbs');
+app.set('views', `${__dirname}\\views`);
 
 app.get('/', (req, res, next) => {
   res.end('dd');

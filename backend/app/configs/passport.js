@@ -2,7 +2,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const JWTStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
-const userService = require('@services/UserService');
+const userService = require('@services/user.service');
 
 const { JWTSECRET } = process.env;
 
@@ -17,6 +17,10 @@ const LS = new LocalStrategy(
 
       if (!user) {
         return done(null, false, { message: 'Incorrect email!' });
+      }
+
+      if (!user.isVerified) {
+        return done(null, false, { message: 'Your account is not verified! Please check your mail and follow our instruction!' })
       }
 
       // compare password

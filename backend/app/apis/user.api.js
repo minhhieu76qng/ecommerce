@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const httpCode = require('http-status-codes');
-const userService = require('@services/UserService.js');
+const userService = require('@services/user.service.js');
 
 router.get('/', (req, res, next) => {
   res.json({
@@ -69,9 +69,9 @@ router.post('/', async (req, res, next) => {
 
     return res.status(httpCode.CREATED).json({
       user: {
-        id: result._id,
-        email: result.email,
-        name: result.name,
+        id: result.user._id,
+        email: result.user.email,
+        name: result.user.name,
       },
       success: {
         message: 'Create user successfully!',
@@ -88,5 +88,25 @@ router.post('/', async (req, res, next) => {
     });
   }
 });
+
+router.get('/verification/:token', async (req, res, next) => {
+  const { token } = req.params;
+
+  const result = await userService.verifyEmail(token);
+
+  if (!result.isVerified) {
+    return res.status(httpCode.OK).render('redirect', {
+      layout: false,
+      isVerified: false,
+      message: 'Account is not verified! Please contact to admin to fix it.'
+    })
+  }
+
+  return res.status(httpCode.OK).render('redirect', {
+    layout: false,
+    isVerified: false,
+    message: 'Account is verified!'
+  })
+})
 
 module.exports = router;

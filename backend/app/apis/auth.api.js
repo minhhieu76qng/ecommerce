@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const httpCode = require('http-status-codes');
 const passport = require('passport');
-const userService = require('@services/UserService.js');
+const userService = require('@services/user.service.js');
 
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', { session: false }, (error, user, info) => {

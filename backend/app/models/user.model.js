@@ -16,6 +16,10 @@ const UserSchema = new Schema({
   cart: {
     type: Array,
     default: []
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
   }
 });
 
