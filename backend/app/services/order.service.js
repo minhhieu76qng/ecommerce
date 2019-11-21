@@ -3,12 +3,12 @@ const cartService = require('../services/cart.service');
 const sizeService = require('../services/size.service');
 const colorService = require('../services/color.service');
 const { Order } = require('../models/order.model');
-
+const { createSortObject } = require('../helpers/order.helper');
 
 const orderStatus = {
   pending: 'PENDING',
   completed: 'COMPLETED',
-  canceled: 'CANCELED'
+  canceled: 'CANCELED',
 };
 
 function createId(length) {
@@ -21,41 +21,43 @@ function createId(length) {
   return result;
 }
 
-const getAllOrder = () => {
-
-}
+const getAllOrder = () => {};
 
 const addSingleOrder = async (userId, cartItem) => {
-
   try {
     // lay san pham
     const product = await productService.getProductById(cartItem.productId);
     if (!product.sizes.includes(cartItem.size)) {
       return {
         isAdded: false,
-        errors: [{
-          message: 'Product not contain your order size!'
-        }]
-      }
+        errors: [
+          {
+            message: 'Product not contain your order size!',
+          },
+        ],
+      };
     }
 
     if (!product.colors.includes(cartItem.color)) {
       return {
         isAdded: false,
-        errors: [{
-          message: 'Product not contain your order color!'
-        }]
-      }
+        errors: [
+          {
+            message: 'Product not contain your order color!',
+          },
+        ],
+      };
     }
-
 
     if (cartItem.quantity > product.quantity) {
       return {
         isAdded: false,
-        errors: [{
-          message: 'The quantity of products is not enough for your order!'
-        }]
-      }
+        errors: [
+          {
+            message: 'The quantity of products is not enough for your order!',
+          },
+        ],
+      };
     }
 
     const sizes = await sizeService.getSizes();
@@ -78,8 +80,8 @@ const addSingleOrder = async (userId, cartItem) => {
       quantity: cartItem.quantity,
       price: cartItem.price,
       status: orderStatus.pending,
-      productId: product._id
-    }
+      productId: product._id,
+    };
 
     const order = new Order(orderObject);
 
@@ -90,15 +92,20 @@ const addSingleOrder = async (userId, cartItem) => {
     if (!orderResult) {
       return {
         isAdded: false,
-        errors: [{
-          message: 'Cant add new order!'
-        }]
-      }
+        errors: [
+          {
+            message: 'Cant add new order!',
+          },
+        ],
+      };
     }
 
     // tru san pham trong product
     const newQuantity = product.quantity - orderObject.quantity;
-    await productService.updateProductQuantity(orderObject.productId, newQuantity);
+    await productService.updateProductQuantity(
+      orderObject.productId,
+      newQuantity,
+    );
 
     // remove trong cart
     await cartService.removeProductInCart(userId, cartItem._id);
@@ -107,34 +114,34 @@ const addSingleOrder = async (userId, cartItem) => {
       isAdded: true,
       cartItemId: cartItem._id,
       orderId: orderResult.orderId,
-      productId: orderResult.productId
-    }
-  }
-  catch (err) {
+      productId: orderResult.productId,
+    };
+  } catch (err) {
     console.log(err);
     return {
       isAdded: false,
-    }
+    };
   }
-}
+};
 
-const addListOrder = async (userId) => {
-
+const addListOrder = async userId => {
   // lay san pham trong gio hang
   const productsInCart = await cartService.getCart(userId);
 
   if (productsInCart.length === 0) {
     return {
       isAdded: false,
-      errors: [{
-        message: 'Cart is empty!'
-      }]
-    }
+      errors: [
+        {
+          message: 'Cart is empty!',
+        },
+      ],
+    };
   }
 
   const result = await Promise.all(
-    productsInCart.map(val => addSingleOrder(userId, val))
-  )
+    productsInCart.map(val => addSingleOrder(userId, val)),
+  );
 
   // tìm những sản phẩm đã thêm được.
 
@@ -146,43 +153,81 @@ const addListOrder = async (userId) => {
         cartItemId: val.cartItemId,
         orderId: val.orderId,
         productId: val.productId,
-      })
+      });
     }
-  })
+  });
 
   const failedTask = [];
 
   productsInCart.map(val => {
-    if (completedTask.findIndex(cpTask => cpTask.cartItemId !== val.cartItemId)) {
+    if (
+      completedTask.findIndex(cpTask => cpTask.cartItemId !== val.cartItemId)
+    ) {
       failedTask.push({
         cartItemId: val.cartItemId,
         orderId: val.orderId,
         productId: val.productId,
-      })
+      });
     }
-  })
+  });
 
   return {
     completedTask,
-    failedTask
+    failedTask,
   };
-}
+};
 
-const getAllOrders = async (limit, offset) => {
-  const orders = await Order.aggregate([
+const getOrders = async (limit, offset, sort) => {
+  const sortObject = createSortObject(sort);
+
+  const result = await Order.aggregate([
     {
-      $skip: offset * limit
+      $sort: sortObject,
+    },
+    {
+      $skip: offset * limit,
     },
     {
       $limit: limit,
+    },
+  ]);
 
-    }
-  ])
+  return result;
+};
 
-  return orders;
-}
+const countAll = async () => {
+  try {
+    const result = await Order.aggregate([
+      {
+        $count: 'total',
+      },
+    ]);
+
+    return result[0].total;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const getAllOrders = async (limit, offset, sort) => {
+  // dem so luong order
+  try {
+    const result = await Promise.all([
+      getOrders(limit, offset, sort),
+      countAll(),
+    ]);
+
+    return {
+      orders: result[0],
+      total: result[1],
+    };
+  } catch (err) {
+    return null;
+  }
+};
 
 module.exports = {
   addListOrder,
-  getAllOrders
+  getAllOrders,
 };

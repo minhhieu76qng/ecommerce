@@ -82,8 +82,19 @@
   }
 
   .ant-table-tbody {
+    .ant-table-row {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.43;
+      color: var(--charcoal-grey);
+    }
     .ant-table-row:nth-child(2n) {
       background-color: var(--white-two);
+
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.43;
+      color: var(--charcoal-grey);
     }
   }
 }

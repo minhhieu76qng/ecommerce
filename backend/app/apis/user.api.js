@@ -2,17 +2,6 @@ const router = require('express').Router();
 const httpCode = require('http-status-codes');
 const userService = require('@services/user.service.js');
 
-router.get('/', (req, res, next) => {
-  res.json({
-    a: 'a',
-  });
-});
-router.get('/:id', (req, res, next) => {
-  res.json({
-    a: 'a',
-  });
-});
-
 router.post('/', async (req, res, next) => {
   const { name, email, password } = req.body;
 
