@@ -9,23 +9,20 @@ const CustomInputNumber = ({ passValue, maxValue, defaultValue = 1 }) => {
 
   const onDown = () => {
     let temp = 0;
-    if (value <= 1) {
-      temp = 1;
-    } else {
-      temp = value - 1;
-    }
+    if (value === 1) return;
+    temp = value - 1;
     setValue(temp);
     passValue(temp);
   };
 
   const onUp = () => {
-    let temp = 0;
-    if (value >= maxValue) {
-      temp = maxValue;
-    } else {
-      temp = value + 1;
-    }
+    let temp = 0
+
+    if (value === maxValue) return;
+
+    temp = value + 1;
     setValue(temp);
+
     passValue(temp);
   };
 

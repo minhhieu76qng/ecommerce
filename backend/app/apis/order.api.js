@@ -61,7 +61,7 @@ router.post('/', authSeller, async (req, res, next) => {
   }
 });
 
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:id', authSeller, async (req, res, next) => {
   const { id } = req.params;
   const { newStatus } = req.body;
 

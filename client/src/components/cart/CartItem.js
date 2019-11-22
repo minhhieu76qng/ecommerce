@@ -5,6 +5,10 @@ import AuthAxios from '../../utils/AuthAxios';
 
 const CartItem = ({ product, sizes, colors, fetchCart }) => {
   const handleQuantityChange = val => {
+
+    if (val > product.total) {
+      return message.error('The quantity of products is not enough for your order!')
+    }
     const temp = {
       _id: product._id,
       productId: product.productId,

@@ -135,6 +135,8 @@ const ProductInfo = ({ productId, sizes, colors, brands, fetchCart }) => {
     });
   }
 
+  console.log(productInfo);
+
   return (
     <div className='product-detail'>
       <Row gutter={20}>

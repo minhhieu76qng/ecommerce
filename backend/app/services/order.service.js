@@ -103,10 +103,10 @@ const addSingleOrder = async (userId, cartItem) => {
     }
 
     // tru san pham trong product
-    const newQuantity = product.quantity - orderObject.quantity;
-    await productService.updateProductQuantity(
+
+    await productService.incProductQuantity(
       orderObject.productId,
-      newQuantity,
+      -orderObject.quantity,
     );
 
     // remove trong cart

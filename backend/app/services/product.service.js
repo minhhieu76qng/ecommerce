@@ -291,7 +291,7 @@ const updateProductQuantity = async (productId, newQuantity) => {
 
 const incProductQuantity = async (productId, amount) => {
   try {
-    const resutl = await Product.updateOne({ _id: productId }, { $inc: { quantity: amount } });
+    const result = await Product.updateOne({ _id: productId }, { $inc: { quantity: amount } });
 
     if (result.nModified === 0) {
       return {
@@ -328,6 +328,14 @@ const getAllProductsWithSold = async (limit, offset, sort) => {
       }
     },
     {
+      $unwind: '$out'
+    },
+    {
+      $match: {
+        'out.status': 'COMPLETED'
+      }
+    },
+    {
       $project: {
         _id: 1,
         photo: { $arrayElemAt: ['$photos', 0] },
@@ -339,9 +347,6 @@ const getAllProductsWithSold = async (limit, offset, sort) => {
       }
     },
     {
-      $unwind: '$out'
-    },
-    {
       $group: {
         _id: '$_id',
         photo: { $first: '$photo' },
@@ -349,9 +354,15 @@ const getAllProductsWithSold = async (limit, offset, sort) => {
         total: { $first: '$total' },
         sold: {
           $sum: '$out.quantity'
+        },
+        totalProfit: {
+          $sum: {
+            $multiply: ['$out.quantity', '$out.price']
+          }
         }
       }
     }
+
   ])
 
   return result;
