@@ -3,7 +3,7 @@ const httpCode = require('http-status-codes');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const Aws = require('aws-sdk');
-const productService = require('@services/product.service');
+const productService = require('../services/product.service');
 
 const { authSeller } = require('../middlewares/auth.mdw');
 
@@ -160,7 +160,7 @@ router.get('/', async (req, res, next) => {
 
 
   try {
-    const result = await productService.getAllProduct(defaultSort, limit, offset);
+    const result = await productService.getAllProductsWithSold(limit, offset, {});
 
     return res.status(httpCode.OK).json({
       products: result
@@ -172,5 +172,6 @@ router.get('/', async (req, res, next) => {
     return res.status(httpCode.INTERNAL_SERVER_ERROR);
   }
 })
+
 
 module.exports = router;

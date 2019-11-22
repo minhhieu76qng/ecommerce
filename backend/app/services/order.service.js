@@ -245,6 +245,16 @@ const updateOrderStatus = async (_id, newStatus) => {
 
     const result = await Order.updateOne({ _id }, { status: newStatus });
 
+    if (newStatus === orderStatus.canceled) {
+      // nếu cancel thì cần tăng lại số lượng trong bảng product
+
+      const currentOrder = await Order.findById(_id);
+
+      const quantity = currentOrder.quantity;
+
+      const { isUpdated } = await productService.incProductQuantity(currentOrder.productId, quantity);
+    }
+
     if (!result || result.nModified === 0) {
       return {
         _id,

@@ -281,27 +281,27 @@ const Order = () => {
             padding: '30px 20px',
           }}>
           {orderList && orderList.length > 0 && (
-            <div>
-              Show {limit * (page - 1) + 1} to{' '}
-              {limit * page > totalOrders ? totalOrders : limit * page} of{' '}
-              {totalOrders} entries
+            <>
+              <div>
+                Show {limit * (page - 1) + 1} to{' '}
+                {limit * page > totalOrders ? totalOrders : limit * page} of{' '}
+                {totalOrders} entries
             </div>
+              <div className='pagination' style={{ display: 'flex' }}>
+                <Select defaultValue={limit} value={limit} style={{ width: 60, marginRight: 20 }} suffixIcon={<Icon type='caret-down' />} onChange={(value) => setLimit(value)}>
+                  <Select.Option value={10}>10</Select.Option>
+                  <Select.Option value={20}>20</Select.Option>
+                  <Select.Option value={30}>30</Select.Option>
+                </Select>
+
+                <Paginatev2
+                  totalItems={totalOrders}
+                  itemsPerPage={limit}
+                  currentPage={page}
+                />
+              </div>
+            </>
           )}
-          <div className='pagination' style={{ display: 'flex' }}>
-            <Select defaultValue={limit} value={limit} style={{ width: 60, marginRight: 20 }} suffixIcon={<Icon type='caret-down' />} onChange={(value) => setLimit(value)}>
-              <Select.Option value={10}>10</Select.Option>
-              <Select.Option value={20}>20</Select.Option>
-              <Select.Option value={30}>30</Select.Option>
-            </Select>
-            {/* {totalOrders > limit && (
-              
-            )} */}
-            <Paginatev2
-              totalItems={totalOrders}
-              itemsPerPage={limit}
-              currentPage={page}
-            />
-          </div>
         </div>
       </div>
     </div>

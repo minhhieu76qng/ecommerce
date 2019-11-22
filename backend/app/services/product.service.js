@@ -2,6 +2,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const { Product } = require('../models/product.model');
 const { Category } = require('../models/category.model');
 const { createFilter, createSort, createSortInSellerProduct } = require('../helpers/product.helper');
+const _ = require('lodash');
 
 const getProductByCategoryID = (cateID, offset, limit, filter, sort) => {
   const filterObject = createFilter(filter);
@@ -253,21 +254,21 @@ const getThumbnailAlsoLike = (productId, limit) => {
   ])
 }
 
-const getAllProduct = (sort, limit, offset) => {
-  const sortObject = createSortInSellerProduct(sort);
+// const getAllProduct = (sort, limit, offset) => {
+//   const sortObject = createSortInSellerProduct(sort);
 
-  return Product.aggregate([
-    {
-      $sort: sortObject
-    },
-    {
-      $skip: offset * limit
-    },
-    {
-      $limit: limit
-    }
-  ])
-}
+//   return Product.aggregate([
+//     {
+//       $sort: sortObject
+//     },
+//     {
+//       $skip: offset * limit
+//     },
+//     {
+//       $limit: limit
+//     }
+//   ])
+// }
 
 const updateProductQuantity = async (productId, newQuantity) => {
   if (newQuantity < 0) {
@@ -288,6 +289,74 @@ const updateProductQuantity = async (productId, newQuantity) => {
   }
 }
 
+const incProductQuantity = async (productId, amount) => {
+  try {
+    const resutl = await Product.updateOne({ _id: productId }, { $inc: { quantity: amount } });
+
+    if (result.nModified === 0) {
+      return {
+        isUpdated: false
+      }
+    }
+
+    return {
+      isUpdated: true
+    }
+  }
+  catch (err) {
+    console.log(err);
+    return {
+      isUpdated: false
+    }
+  }
+}
+
+const getAllProductsWithSold = async (limit, offset, sort) => {
+  const result = await Product.aggregate([
+    {
+      $skip: offset * limit
+    },
+    {
+      $limit: limit
+    },
+    {
+      $lookup: {
+        from: 'orders',
+        localField: '_id',
+        foreignField: 'productId',
+        as: 'out'
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        photo: { $arrayElemAt: ['$photos', 0] },
+        name: 1,
+        total: 1,
+        createdAt: 1,
+        'out.quantity': 1,
+        'out.price': 1,
+      }
+    },
+    {
+      $unwind: '$out'
+    },
+    {
+      $group: {
+        _id: '$_id',
+        photo: { $first: '$photo' },
+        name: { $first: '$name' },
+        total: { $first: '$total' },
+        sold: {
+          $sum: '$out.quantity'
+        }
+      }
+    }
+  ])
+
+  return result;
+}
+
 module.exports = {
   countProductWithLeaf,
   countProductWithAncestors,
@@ -297,6 +366,8 @@ module.exports = {
   addNewProduct,
   getProductsInBrand,
   getThumbnailAlsoLike,
-  getAllProduct,
-  updateProductQuantity
+  // getAllProduct,
+  updateProductQuantity,
+  incProductQuantity,
+  getAllProductsWithSold
 };
