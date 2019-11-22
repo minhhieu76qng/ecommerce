@@ -61,4 +61,33 @@ router.post('/', authSeller, async (req, res, next) => {
   }
 });
 
+router.patch('/:id', async (req, res, next) => {
+  const { id } = req.params;
+  const { newStatus } = req.body;
+
+  if (!(newStatus && _.isString(newStatus))) {
+    return res.status(httpCode.BAD_REQUEST).json({
+      errors: [{
+        message: 'Missing status field!'
+      }]
+    })
+  }
+
+  const result = await orderService.updateOrderStatus(id, newStatus);
+
+  if (!result.isUpdated) {
+    return res.status(result.code || httpCode.INTERNAL_SERVER_ERROR).json({
+      _id: result._id,
+      newStatus: result.newStatus,
+      errors: result.errors
+    })
+  }
+
+  return res.status(httpCode.OK).json({
+    _id: result._id,
+    newStatus: result.newStatus,
+    success: result.success
+  })
+})
+
 module.exports = router;

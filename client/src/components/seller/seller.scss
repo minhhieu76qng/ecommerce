@@ -55,6 +55,17 @@
   color: #fff !important;
 }
 
+.btn-seller {
+  &.default {
+    background-color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.43;
+    text-align: center;
+    color: var(--charcoal-grey);
+  }
+}
+
 .product_widgets {
   & > * {
     margin-left: 20px;

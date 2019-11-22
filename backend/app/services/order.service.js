@@ -5,6 +5,8 @@ const colorService = require('../services/color.service');
 const { Order } = require('../models/order.model');
 const { createSortObject } = require('../helpers/order.helper');
 
+const httpCode = require('http-status-codes');
+
 const orderStatus = {
   pending: 'PENDING',
   completed: 'COMPLETED',
@@ -21,7 +23,7 @@ function createId(length) {
   return result;
 }
 
-const getAllOrder = () => {};
+const getAllOrder = () => { };
 
 const addSingleOrder = async (userId, cartItem) => {
   try {
@@ -227,7 +229,58 @@ const getAllOrders = async (limit, offset, sort) => {
   }
 };
 
+const updateOrderStatus = async (_id, newStatus) => {
+  try {
+    if (!(newStatus === orderStatus.completed || newStatus === orderStatus.canceled)) {
+      return {
+        _id,
+        newStatus,
+        errors: [{
+          message: 'Status is not valid!'
+        }],
+        isUpdated: false,
+        code: httpCode.BAD_REQUEST
+      }
+    }
+
+    const result = await Order.updateOne({ _id }, { status: newStatus });
+
+    if (!result || result.nModified === 0) {
+      return {
+        _id,
+        newStatus,
+        errors: [{
+          message: 'Cant update order status!'
+        }],
+        isUpdated: false,
+        code: httpCode.INTERNAL_SERVER_ERROR
+      }
+    }
+
+    return {
+      _id,
+      newStatus,
+      success: {
+        message: 'Update successful!'
+      },
+      isUpdated: true
+    }
+  }
+  catch (err) {
+    console.log(err);
+    return {
+      _id,
+      newStatus,
+      errors: [{
+        message: 'Cant update order status!'
+      }],
+      isUpdated: false,
+      code: httpCode.INTERNAL_SERVER_ERROR
+    }
+  }
+}
 module.exports = {
   addListOrder,
   getAllOrders,
+  updateOrderStatus
 };

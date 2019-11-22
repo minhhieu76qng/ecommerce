@@ -30,6 +30,13 @@
   .action-box {
     position: relative;
     display: inline-block;
+
+    &.disable {
+      .action-menu {
+        display: none;
+      }
+    }
+
     .action-title {
       cursor: pointer;
       font-size: 14px;
